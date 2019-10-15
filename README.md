@@ -7,5 +7,8 @@ supercomputer.
 
 This repository has the next directories:
 
-- dask_launch
+- dask-cuda-batch
+
+dask-cuda-batch directory  includes scripts to execute NVIDIA Rapids workloads with dask-cuda in batch mode
+
 
