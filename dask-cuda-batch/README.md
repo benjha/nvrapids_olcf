@@ -14,9 +14,9 @@ additional dask-cuda-workers are spawn by submitting new batch jobs.
 You might need to adapt these steps according to your needs, but it is desirable not to run dask-scheduler nor
 dask-cuda-workers in SUMMIT's login nodes.
 
-### Step 1. 
+### Step 1. Launching the dask-scheduler and dask-cuda-workers
 
-The next script launches the dask-scheduler in a batch node and two dask-cuda-workers in two compute nodes:
+The next script launches the dask-scheduler in a batch node and two dask-cuda-workers in two compute nodes, 
 
 ```
 #!/usr/bin/env bash
@@ -48,6 +48,8 @@ jsrun -c 42 -g 6 -n 2 -r 1 -a 1 dask-cuda-worker --scheduler-file $MEMBERWORK/ge
 
 #### NOTES
 
+DASK-cuda cluster connection information will be stored in `my-scheduler-gpu.json` file. See Step 2 for further instructions.
+
 For a detailed explanation of dask-scheduler options, consult the next link:
 
 https://docs.dask.org/en/stable/setup/cli.html
@@ -61,4 +63,44 @@ $dask-cuda-worker --help
 For a detailed explanation of jsrun options, consult the next link:
 
 https://www.olcf.ornl.gov/for-users/system-user-guides/summit/summit-user-guide/#running-jobs
+
+## Step 2. Get your code know about the DASK-cuda cluster
+
+Once the script in Step 1. has passed through the  SUMMIT's batch queue and is running. You can submit your workload to the
+DASK-cuda cluster by calling your script, in this example, from the login node:
+
+```
+$python verify_dask_cuda_worker.py
+```
+
+Your python script, in this case `verify_dask_cuda_worker.py`, should include the next python lines to connect to the DASK scheduler:
+
+```
+import os
+from dask.distributed import Client
+
+if __name__ == '__main__': 
+    file = os.getenv('MEMBERWORK') + '/gen119/my-scheduler-gpu.json'
+    print (file)
+    client = Client(scheduler_file=file)
+    print("client information ",client)
+    print("Done!") 
+
+```
+
+After executing `verify_dask_cuda_worker.py` script, you output should be similar to this:
+
+```
+$python verify_dask_cuda_worker.py 
+client information  <Client: scheduler='tcp://10.41.0.44:8786' processes=12 cores=72>
+Done!
+```
+
+#### NOTES
+
+Likely, your workload will require some compute intensive activity before connecting to the DASK-cuda cluster, thus is important
+for you to consider to run your python script in a batch job.
+
+### Step 3. Adapting DASK-cuda cluster dynamically
+
 
