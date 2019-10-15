@@ -14,7 +14,9 @@ additional dask-cuda-workers are spawn by submitting new batch jobs.
 You might need to adapt these steps according to your needs, but it is desirable not to run dask-scheduler nor
 dask-cuda-workers in SUMMIT's login nodes.
 
-Step 1. The next script launches the dask-scheduler in a batch node and two dask-cuda-workers in two compute nodes:
+### Step 1. 
+
+The next script launches the dask-scheduler in a batch node and two dask-cuda-workers in two compute nodes:
 
 ```
 #!/usr/bin/env bash
@@ -44,7 +46,7 @@ jsrun -c 42 -g 6 -n 2 -r 1 -a 1 dask-cuda-worker --scheduler-file $MEMBERWORK/ge
 
 ```
 
-### NOTES
+#### NOTES
 
 For a detailed explanation of dask-scheduler options, consult the next link:
 
