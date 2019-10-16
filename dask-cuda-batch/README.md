@@ -16,7 +16,7 @@ dask-cuda-workers in SUMMIT's login nodes.
 
 ### Step 1. Launching the dask-scheduler and dask-cuda-workers
 
-The next script launches the dask-scheduler in a batch node and two dask-cuda-workers in two compute nodes, 
+`launch_dask_cuda_cluster.lsf` script launches the dask-scheduler in a batch node and two dask-cuda-workers in two compute nodes, 
 
 ```
 #!/usr/bin/env bash
@@ -108,7 +108,7 @@ for you to consider to run your python script in a batch job.
 
 It is possible to grow and shrink Dask clusters based on current use. However, in contrast to the automatic  method, you can grow your dask-cuda cluster by submitting additional batch jobs after Step 1. is completed or shrink it by manually killing your running jobs accordingly.
 
-An example script to add two new workers to your dask-cuda cluster is next:
+`launch_dask_cuda_workers.lsf` script to add two new workers to your dask-cuda cluster is next:
 
 ```
 #!/usr/bin/env bash

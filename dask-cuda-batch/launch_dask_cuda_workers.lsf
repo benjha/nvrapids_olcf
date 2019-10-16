@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-#BSUB -P STF011
+#BSUB -P ABC123
 #BSUB -W 1:00
 #BSUB -alloc_flags "gpumps"
-#BSUB -nnodes 1
+#BSUB -nnodes 2
 #BSUB -J dask_cuda_worker
 #BSUB -o dask_cuda_worker.o%J
 #BSUB -e dask_cuda_worker.e%J
@@ -18,4 +18,4 @@ export PATH=/gpfs/alpine/proj-shared/gen119/gcc_6.4.0/anaconda3/bin:$PATH
 export NUMBAPRO_NVVM=/sw/summit/cuda/10.1.168/nvvm/lib64/libnvvm.so
 export NUMBAPRO_LIBDEVICE=/sw/summit/cuda/10.1.168/nvvm/libdevice
 
-jsrun -c 42 -g 6 -n 1 -r 1 -a 1 dask-cuda-worker --scheduler-file $MEMBERWORK/gen119/my-scheduler-gpu.json  --local-directory $MEMBERWORK/gen119  --nthreads 1 --memory-limit 100GB --device-memory-limit 16GB  --death-timeout 60 --interface ib0
+jsrun -c 42 -g 6 -n 2 -r 1 -a 1 dask-cuda-worker --scheduler-file $MEMBERWORK/gen119/my-scheduler-gpu.json  --local-directory $MEMBERWORK/gen119  --nthreads 1 --memory-limit 100GB --device-memory-limit 16GB  --death-timeout 60 --interface ib0
