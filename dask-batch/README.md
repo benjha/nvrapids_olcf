@@ -94,7 +94,7 @@ if __name__ == '__main__':
     print("Done!") 
 ```
 
-After executing `verify_dask_cuda_worker.py` script, your output should be similar to this:
+After executing `verify_dask_cluster.py` script, your output should be similar to this:
 
 ```
 $python verify_dask_worker.py
@@ -104,7 +104,7 @@ Done!
 
 #### NOTES
 
-Likely, your workload will require some compute intensive activity before connecting to the DASK-cuda cluster, thus is important for you to consider to run your python script using a batch job.
+Likely, your workload will require some compute intensive activity before connecting to the DASK cluster, thus is important for you to consider to run your python script using a batch job.
 
 ### Step 3. Growing the DASK-cuda cluster
 
