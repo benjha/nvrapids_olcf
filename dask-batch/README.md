@@ -15,7 +15,7 @@ dask-workers in SUMMIT's login nodes.
 
 ### Step 1. Launching the dask-scheduler and dask-workers
 
-`launch_dask_cluster.lsf` script launches the dask-scheduler in a batch node and two dask-workers in two compute nodes:
+`launch_dask_cluster.lsf` script launches the dask-scheduler in a batch node and four dask-workers in two compute nodes:
 
 ```
 #!/usr/bin/env bash
@@ -72,4 +72,75 @@ Further discussion on this topic can be found in:
 https://stackoverflow.com/questions/15639779/why-does-multiprocessing-use-only-a-single-core-after-i-import-numpy
 
 `test_affinity.py` is a simple python script to test CPU Affinity.
+
+### Step 2. Get your code know about the DASK cluster
+
+Once the script in Step 1. has passed through the SUMMIT's batch queue and is running. You can submit your workload to the DASK cluster by calling your script, in this example, from the login node:
+
+```
+$python verify_dask_cluster.py
+```
+
+Your python script, in this case `verify_dask_cluster.py`, should include the next python lines to connect to the DASK scheduler:
+
+```
+import os
+from dask.distributed import Client
+
+if __name__ == '__main__': 
+    file = os.getenv('MEMBERWORK') + '/gen119/my-scheduler.json'
+    client = Client(scheduler_file=file)
+    print("client information ",client)
+    print("Done!") 
+```
+
+After executing `verify_dask_cuda_worker.py` script, your output should be similar to this:
+
+```
+$python verify_dask_worker.py
+client information  <Client: scheduler='tcp://10.41.0.45:8786' processes=4 cores=168>
+Done!
+```
+
+#### NOTES
+
+Likely, your workload will require some compute intensive activity before connecting to the DASK-cuda cluster, thus is important for you to consider to run your python script using a batch job.
+
+### Step 3. Growing the DASK-cuda cluster
+
+It is possible to grow and shrink Dask clusters based on current use. However, in contrast to DASK's built-in adaptive  method, you can grow your DASK cluster by submitting additional batch jobs after Step 1. is completed or shrink it by manually killing your running jobs accordingly.
+
+`launch_dask_workers.lsf` script adds two new workers to your DASK cluster:
+
+```
+#!/usr/bin/env bash
+
+#BSUB -P ABC123
+#BSUB -W 1:00
+#BSUB -alloc_flags "gpumps"
+#BSUB -nnodes 2
+#BSUB -J dask_worker
+#BSUB -o dask_worker.o%J
+#BSUB -e dask_worker.e%J
+JOB_ID=${LSB_JOBID%.*}
+
+module load gcc/6.4.0
+module load cuda/10.1.168
+module load cmake/3.14.2
+module load boost/1.66.0
+module load netlib-lapack/3.8.0
+
+export PATH=/gpfs/alpine/proj-shared/gen119/gcc_6.4.0/anaconda3/bin:$PATH
+export NUMBAPRO_NVVM=/sw/summit/cuda/10.1.168/nvvm/lib64/libnvvm.so
+export NUMBAPRO_LIBDEVICE=/sw/summit/cuda/10.1.168/nvvm/libdevice
+
+jsrun -c 42 -g 6 -n 2 -r 1 -a 1 --bind rs dask-worker --scheduler-file $MEMBERWORK/gen119/my-scheduler.json --nthreads 42  --memory-limit 512GB  --nanny --death-timeout 60 --interface ib0 --local-directory $MEMBERWORK/gen119/worker
+```
+
+
+#### NOTES
+
+Consider OLCF's scheduling policy when submitting jobs. Smaller jobs may be dispachted first than larger ones. For more information, consult the next link:
+
+https://www.olcf.ornl.gov/for-users/system-user-guides/summit/summit-user-guide/#scheduling-policy
 

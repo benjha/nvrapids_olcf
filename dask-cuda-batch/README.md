@@ -62,7 +62,7 @@ $dask-cuda-worker --help
 
 For a detailed explanation of jsrun options, consult the next link:
 
-https://www.olcf.ornl.gov/for-users/system-user-guides/summit/summit-user-guide/#running-jobs
+https://www.olcf.ornl.gov/for-users/system-user-guides/summit/summit-user-guide/#job-launcher-(jsrun)
 
 NUMBAPRO_NVVM and NUMBAPRO_LIBDEVICE where set to help Numba find libnvvm using SUMMIT's CUDA installation.
 
@@ -73,10 +73,10 @@ Once the script in Step 1. has passed through the  SUMMIT's batch queue and is r
 DASK-cuda cluster by calling your script, in this example, from the login node:
 
 ```
-$python verify_dask_cuda_worker.py
+$python verify_dask_cuda_cluster.py
 ```
 
-Your python script, in this case `verify_dask_cuda_worker.py`, should include the next python lines to connect to the DASK scheduler:
+Your python script, in this case `verify_dask_cuda_cluster.py`, should include the next python lines to connect to the DASK scheduler:
 
 ```
 import os
@@ -84,14 +84,13 @@ from dask.distributed import Client
 
 if __name__ == '__main__': 
     file = os.getenv('MEMBERWORK') + '/gen119/my-scheduler-gpu.json'
-    print (file)
     client = Client(scheduler_file=file)
     print("client information ",client)
     print("Done!") 
 
 ```
 
-After executing `verify_dask_cuda_worker.py` script, you output should be similar to this:
+After executing `verify_dask_cuda_worker.py` script, your output should be similar to this:
 
 ```
 $python verify_dask_cuda_worker.py 
@@ -108,7 +107,7 @@ for you to consider to run your python script in a batch job.
 
 It is possible to grow and shrink Dask clusters based on current use. However, in contrast to the automatic  method, you can grow your dask-cuda cluster by submitting additional batch jobs after Step 1. is completed or shrink it by manually killing your running jobs accordingly.
 
-`launch_dask_cuda_workers.lsf` script to add two new workers to your dask-cuda cluster is next:
+`launch_dask_cuda_workers.lsf` script adds two new workers to your dask-cuda cluster:
 
 ```
 #!/usr/bin/env bash
