@@ -64,6 +64,9 @@ For a detailed explanation of jsrun options, consult the next link:
 
 https://www.olcf.ornl.gov/for-users/system-user-guides/summit/summit-user-guide/#running-jobs
 
+NUMBAPRO_NVVM and NUMBAPRO_LIBDEVICE where set to help Numba find libnvvm using SUMMIT's CUDA installation.
+
+
 ## Step 2. Get your code know about the DASK-cuda cluster
 
 Once the script in Step 1. has passed through the  SUMMIT's batch queue and is running. You can submit your workload to the
@@ -101,6 +104,36 @@ Done!
 Likely, your workload will require some compute intensive activity before connecting to the DASK-cuda cluster, thus is important
 for you to consider to run your python script in a batch job.
 
-### Step 3. Adapting DASK-cuda cluster dynamically
+### Step 3. Growing the DASK-cuda cluster
+
+It is possible to grow and shrink Dask clusters based on current use. However, in contrast to the automatic  method, you can grow your dask-cuda cluster by submitting additional batch jobs after Step 1. is completed or shrink it by manually killing your running jobs accordingly.
+
+An example script to add two new workers to your dask-cuda cluster is next:
+
+```
+#!/usr/bin/env bash
+#BSUB -P ABC123
+#BSUB -W 1:00
+#BSUB -alloc_flags "gpumps"
+#BSUB -nnodes 2
+#BSUB -J dask_cuda_worker
+#BSUB -o dask_cuda_worker.o%J
+#BSUB -e dask_cuda_worker.e%J
+JOB_ID=${LSB_JOBID%.*}
+
+module load gcc/6.4.0
+module load cuda/10.1.168
+module load cmake/3.14.2
+module load boost/1.66.0
+module load netlib-lapack/3.8.0
+
+export PATH=/gpfs/alpine/proj-shared/gen119/gcc_6.4.0/anaconda3/bin:$PATH
+export NUMBAPRO_NVVM=/sw/summit/cuda/10.1.168/nvvm/lib64/libnvvm.so
+export NUMBAPRO_LIBDEVICE=/sw/summit/cuda/10.1.168/nvvm/libdevice
+
+jsrun -c 42 -g 6 -n 2 -r 1 -a 1 dask-cuda-worker --scheduler-file $MEMBERWORK/gen119/my-scheduler-gpu.json  --local-directory $MEMBERWORK/gen119  --nthreads 1 --memory-limit 100GB --device-memory-limit 16GB  --death-timeout 60 --interface ib0
+```
+
+
 
 
