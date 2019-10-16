@@ -4,7 +4,7 @@ The next instructions applies to NVIDIA Rapids ver. 0.9 and are intended for SUM
 they can be used by other projects by changing the directory paths accordingly.
 
 Running NVIDIA Rapids distributed workloads requires a DASK-cuda cluster. Setting up a DASK-cuda cluster in SUMMIT
-needs three components: dask-cuda-scheduler, dask-cuda-workers and python calls in your python script to
+needs three components: dask-scheduler, dask-cuda-workers and python calls in your python script to
 connect to the DASK-cuda cluster.
 
 The next steps describe one of several ways to launch a dask-cuda cluster in SUMMIT using its custom LSF scheduler. 
@@ -136,7 +136,7 @@ jsrun -c 42 -g 6 -n 2 -r 1 -a 1 dask-cuda-worker --scheduler-file $MEMBERWORK/ge
 
 #### NOTES
 
-Consider OLCF's scheduling policy when submitting jobs. Smaller jobs might dispachted first than larger ones. For more information, consult the next link:
+Consider OLCF's scheduling policy when submitting jobs. Smaller jobs may be dispachted first than larger ones. For more information, consult the next link:
 
 https://www.olcf.ornl.gov/for-users/system-user-guides/summit/summit-user-guide/#scheduling-policy
 
