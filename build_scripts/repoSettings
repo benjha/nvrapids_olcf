@@ -22,3 +22,5 @@ UCXPY_REPO=https://github.com/rapidsai/ucx-py.git
 UCXPY_BRANCH=branch-0.11
 CYPHERPARSER_REPO=https://github.com/cleishm/libcypher-parser.git
 CYPHERPARSER_BRANCH=master
+ARROW_REPO=https://github.com/apache/arrow.git
+ARROW_BRANCH=apache-arrow-0.15.0

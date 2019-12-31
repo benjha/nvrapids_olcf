@@ -7,3 +7,6 @@
     --with-avx --with-cuda=$CUDA_DIR \
     --with-verbs='/usr' \
     --with-rc --with-ud --with-dc --with-mlx5-dv
+
+make -j${PARALLEL_LEVEL}
+#make install

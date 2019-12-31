@@ -125,6 +125,14 @@ if (( ${NUMARGS} == 0 )) || hasArg libcuml || hasArg prims || hasArg bench; then
     mkdir -p ${LIBCUML_BUILD_DIR}
     cd ${LIBCUML_BUILD_DIR}
 
+#          -DBUILD_CUML_TESTS=OFF \
+#          -DBUILD_CUML_MG_TESTS=OFF \
+#          -DBUILD_CUML_EXAMPLES=OFF \
+#          -DBUILD_CUML_BENCH=OFF \
+#          -DBUILD_CUML_PRIMS_TESTS=OFF \
+#          -DBUILD_PRIMS_TESTS=OFF \
+
+
     cmake -DCMAKE_INSTALL_PREFIX=${INSTALL_PREFIX} \
           -DCMAKE_CXX11_ABI=${BUILD_ABI} \
           -DBLAS_LIBRARIES=${CUDA_DIR}/lib64/libnvblas.so \
@@ -133,11 +141,7 @@ if (( ${NUMARGS} == 0 )) || hasArg libcuml || hasArg prims || hasArg bench; then
           -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
           -DBUILD_CUML_C_LIBRARY=ON \
           -DBUILD_CUML_STD_COMMS=ON \
-          -DWITH_UCX=ON \
-	  -DBUILD_CUML_TESTS=OFF \
-	  -DBUILD_CUML_EXAMPLES=OFF \
-          -DBUILD_CUML_BENCH=OFF \
-          -DBUILD_CUML_PRIMS_BENCH=OFF \
+          -DWITH_UCX=OFF \
           -DBUILD_CUML_MPI_COMMS=OFF \
           -DPARALLEL_LEVEL=${PARALLEL_LEVEL} \
           -DNCCL_PATH=${INSTALL_PREFIX} \
@@ -150,6 +154,7 @@ fi
 MAKE_TARGETS=
 if hasArg libcuml; then
     MAKE_TARGETS="${MAKE_TARGETS}cuml++ cuml ml ml_mg"
+
 fi
 if hasArg prims; then
     MAKE_TARGETS="${MAKE_TARGETS} prims"
