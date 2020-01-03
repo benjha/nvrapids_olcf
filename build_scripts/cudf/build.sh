@@ -124,6 +124,10 @@ if (( ${NUMARGS} == 0 )) || hasArg libnvstrings; then
     cmake -DCMAKE_INSTALL_PREFIX=${INSTALL_PREFIX} \
           -DBUILD_TESTING=OFF -DBUILD_TESTS=OFF \
           -DCMAKE_CXX11_ABI=ON \
+          -DARROW_INCLUDE_DIR=${CONDA_PREFIX}/include \
+          -DARROW_CUDA_LIB=${CONDA_PREFIX}/lib/libarrow_cuda.so \
+          -DARROW_LIB=${CONDA_PREFIX}/lib/libarrow.so \
+          -DFLATBUFFERS_INCLUDE_DIR=${CONDA_PREFIX}/include \
           ${GPU_ARCH} \
           -DCMAKE_BUILD_TYPE=${BUILD_TYPE} ..
     if [[ ${INSTALL_TARGET} != "" ]]; then

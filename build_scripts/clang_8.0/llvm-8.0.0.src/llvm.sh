@@ -1,5 +1,10 @@
 #!/bin/bash
 
+REPODIR=$(cd $(dirname $0); pwd)
+LLVM_BUILD_DIR=${REPODIR}/build
+
+mkdir -p ${LLVM_BUILD_DIR}
+cd  ${LLVM_BUILD_DIR}
 
 cmake ..                                        \
   -DCMAKE_C_COMPILER=gcc			\
@@ -15,3 +20,6 @@ cmake ..                                        \
   -DLLVM_HOST_TRIPLE="powerpc64le-linux-rhel-7.6" \
   -DPYTHON_EXECUTABLE=$CONDA_PREFIX/bin/python3.7 \
   ..
+
+make -j${PARALLEL_LEVEL}
+make install
