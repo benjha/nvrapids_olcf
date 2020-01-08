@@ -1,5 +1,6 @@
 #!/bin/bash
 
+./autogen.sh
 ./configure --prefix=$CONDA_PREFIX \
     --enable-compiler-opt \
     --enable-optimizations \

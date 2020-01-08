@@ -15,5 +15,4 @@ THRIFT_BUILD_DIR=${REPODIR}
     --enable-shared --enable-static \
     --enable-tests=no --enable-tutorial=no
 
-make -j${PARALLEL_LEVEL}
-cp -r lib/cpp/src/thrift ${CONDA_PREFIX}/include
+make -j 4
