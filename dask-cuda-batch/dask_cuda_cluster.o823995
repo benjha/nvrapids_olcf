@@ -1,0 +1,23 @@
+
+------------------------------------------------------------
+Sender: LSF System <lsfadmin@batch2>
+Subject: Job 823995: <dask_cuda_cluster> in cluster <summit> Exited
+
+Job <dask_cuda_cluster> was submitted from host <login2> by user <benjha> in cluster <summit> at Thu Jan  9 17:28:05 2020
+Job was executed on host(s) <1*batch2>, in queue <batch>, as user <benjha> in cluster <summit> at Thu Jan  9 17:28:12 2020
+                            <42*c01n02>
+                            <42*c01n03>
+</ccs/home/benjha> was used as the home directory.
+</ccs/home/benjha/summit/config_scripts/nvrapids_olcf/dask-cuda-batch> was used as the working directory.
+Started at Thu Jan  9 17:28:12 2020
+Terminated at Thu Jan  9 18:28:32 2020
+Results reported at Thu Jan  9 18:28:32 2020
+
+The output (if any) is above this job summary.
+
+
+
+PS:
+
+Read file <dask_cuda_cluster.e823995> for stderr output of this job.
+

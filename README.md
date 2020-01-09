@@ -7,12 +7,16 @@ supercomputer.
 
 This repository has the next directories:
 
+- build-scripts
+
+build-scripts directory includes scripts to build from source NVIDIA Rapids in SUMMIT.
+
 - dask-batch
 
-dask-batch directory includes scripts to execute DASK distributed workloads in batch mode
+dask-batch directory includes scripts to execute DASK distributed workloads in batch mode.
 
 - dask-cuda-batch
 
-dask-cuda-batch directory  includes scripts to execute NVIDIA Rapids workloads with dask-cuda in batch mode
+dask-cuda-batch directory  includes scripts to execute NVIDIA Rapids workloads with dask-cuda in batch mode.
 
 
