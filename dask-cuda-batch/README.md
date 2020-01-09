@@ -47,7 +47,7 @@ dask-cuda-workers in SUMMIT's login nodes.
 
 ### Step 1. Launching the dask-scheduler and dask-cuda-workers
 
-`launch_dask_cuda_cluster.lsf` script launches the dask-scheduler in a batch node and two dask-cuda-workers in two compute nodes, 
+`launch_dask_cuda_cluster.lsf` script launches the dask-scheduler in a batch node and twelve dask-cuda-workers in two compute nodes. 
 
 ```
 #!/usr/bin/env bash
@@ -58,22 +58,17 @@ dask-cuda-workers in SUMMIT's login nodes.
 #BSUB -J dask_cuda_worker
 #BSUB -o dask_cuda_worker.o%J
 #BSUB -e dask_cuda_worker.e%J
-JOB_ID=${LSB_JOBID%.*}
+
+PROJ_ID=stf011
 
 module load gcc/6.4.0
 module load cuda/10.1.168
-module load cmake/3.14.2
-module load boost/1.66.0
-module load netlib-lapack/3.8.0
 
-export PATH=/gpfs/alpine/proj-shared/gen119/gcc_6.4.0/anaconda3/bin:$PATH
-export NUMBAPRO_NVVM=/sw/summit/cuda/10.1.168/nvvm/lib64/libnvvm.so
-export NUMBAPRO_LIBDEVICE=/sw/summit/cuda/10.1.168/nvvm/libdevice
+export PATH=$WORLDWORK/stf011/nvrapids_0.11_gcc_6.4.0/bin:$PATH
 
-hostname
-dask-scheduler --interface ib0 --scheduler-file $MEMBERWORK/gen119/my-scheduler-gpu.json --local-directory $MEMBERWORK/gen119 &
+dask-scheduler --interface ib0 --scheduler-file $MEMBERWORK/$PROJ_ID/my-scheduler-gpu.json --local-directory $MEMBERWORK/$PROJ_ID &
 
-jsrun -c 42 -g 6 -n 2 -r 1 -a 1 dask-cuda-worker --scheduler-file $MEMBERWORK/gen119/my-scheduler-gpu.json  --local-directory $MEMBERWORK/gen119  --nthreads 1 --memory-limit 100GB --device-memory-limit 16GB  --death-timeout 60 --interface ib0
+jsrun -c 42 -g 6 -n 2 -r 1 -a 1 dask-cuda-worker --scheduler-file $MEMBERWORK/$PROJ_ID/my-scheduler-gpu.json  --local-directory $MEMBERWORK/$PROJ_ID  --nthreads 1 --memory-limit 100GB --device-memory-limit 16GB  --death-timeout 60 --interface ib0  --enable-infiniband --enable-nvlink
 
 ```
 
@@ -138,10 +133,11 @@ for you to consider to run your python script in a batch job.
 
 It is possible to grow and shrink Dask clusters based on current use. However, in contrast to the automatic  method, you can grow your dask-cuda cluster by submitting additional batch jobs after Step 1. is completed or shrink it by manually killing your running jobs accordingly.
 
-`launch_dask_cuda_workers.lsf` script adds two new workers to your dask-cuda cluster:
+`launch_dask_cuda_workers.lsf` script adds twelve new workers to your dask-cuda cluster:
 
 ```
 #!/usr/bin/env bash
+
 #BSUB -P ABC123
 #BSUB -W 1:00
 #BSUB -alloc_flags "gpumps"
@@ -149,19 +145,15 @@ It is possible to grow and shrink Dask clusters based on current use. However, i
 #BSUB -J dask_cuda_worker
 #BSUB -o dask_cuda_worker.o%J
 #BSUB -e dask_cuda_worker.e%J
-JOB_ID=${LSB_JOBID%.*}
+
+PROJ_ID=stf011
 
 module load gcc/6.4.0
 module load cuda/10.1.168
-module load cmake/3.14.2
-module load boost/1.66.0
-module load netlib-lapack/3.8.0
 
-export PATH=/gpfs/alpine/proj-shared/gen119/gcc_6.4.0/anaconda3/bin:$PATH
-export NUMBAPRO_NVVM=/sw/summit/cuda/10.1.168/nvvm/lib64/libnvvm.so
-export NUMBAPRO_LIBDEVICE=/sw/summit/cuda/10.1.168/nvvm/libdevice
+export PATH=$WORLDWORK/stf011/nvrapids_0.11_gcc_6.4.0/bin:$PATH
 
-jsrun -c 42 -g 6 -n 2 -r 1 -a 1 dask-cuda-worker --scheduler-file $MEMBERWORK/gen119/my-scheduler-gpu.json  --local-directory $MEMBERWORK/gen119  --nthreads 1 --memory-limit 100GB --device-memory-limit 16GB  --death-timeout 60 --interface ib0
+jsrun -c 42 -g 6 -n 2 -r 1 -a 1 dask-cuda-worker --scheduler-file $MEMBERWORK/$PROJ_ID/my-scheduler-gpu.json  --local-directory $MEMBERWORK/$PROJ_ID  --nthreads 1 --memory-limit 100GB --device-memory-limit 16GB  --death-timeout 60 --interface ib0 --enable-infiniband --enable-nvlink
 ```
 
 #### NOTES
