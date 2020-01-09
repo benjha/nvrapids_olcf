@@ -1,0 +1,191 @@
+distributed.nanny - INFO -         Start Nanny at: 'tcp://10.41.16.67:46421'
+distributed.nanny - INFO -         Start Nanny at: 'tcp://10.41.16.67:33815'
+distributed.nanny - INFO -         Start Nanny at: 'tcp://10.41.16.67:41415'
+distributed.nanny - INFO -         Start Nanny at: 'tcp://10.41.16.67:45005'
+distributed.nanny - INFO -         Start Nanny at: 'tcp://10.41.16.68:40307'
+distributed.nanny - INFO -         Start Nanny at: 'tcp://10.41.16.67:39375'
+distributed.nanny - INFO -         Start Nanny at: 'tcp://10.41.16.67:41129'
+distributed.nanny - INFO -         Start Nanny at: 'tcp://10.41.16.68:42417'
+distributed.nanny - INFO -         Start Nanny at: 'tcp://10.41.16.68:39137'
+distributed.nanny - INFO -         Start Nanny at: 'tcp://10.41.16.68:46275'
+distributed.nanny - INFO -         Start Nanny at: 'tcp://10.41.16.68:41977'
+distributed.nanny - INFO -         Start Nanny at: 'tcp://10.41.16.68:46085'
+distributed.diskutils - INFO - Found stale lock file and directory '/gpfs/alpine/scratch/benjha/stf011/worker-4yha8pc7', purging
+distributed.preloading - INFO - Import preload module: dask_cuda.initialize
+distributed.diskutils - INFO - Found stale lock file and directory '/gpfs/alpine/scratch/benjha/stf011/worker-dddtg7ik', purging
+distributed.preloading - INFO - Import preload module: dask_cuda.initialize
+distributed.preloading - INFO - Import preload module: dask_cuda.initialize
+distributed.preloading - INFO - Import preload module: dask_cuda.initialize
+distributed.diskutils - INFO - Found stale lock file and directory '/gpfs/alpine/scratch/benjha/stf011/worker-ugynya7x', purging
+distributed.diskutils - INFO - Found stale lock file and directory '/gpfs/alpine/scratch/benjha/stf011/worker-9vhqpckj', purging
+distributed.diskutils - INFO - Found stale lock file and directory '/gpfs/alpine/scratch/benjha/stf011/worker-67yowkrx', purging
+distributed.preloading - INFO - Import preload module: dask_cuda.initialize
+distributed.diskutils - INFO - Found stale lock file and directory '/gpfs/alpine/scratch/benjha/stf011/worker-vx9zl8fa', purging
+distributed.preloading - INFO - Import preload module: dask_cuda.initialize
+distributed.diskutils - INFO - Found stale lock file and directory '/gpfs/alpine/scratch/benjha/stf011/worker-27koy9k_', purging
+distributed.preloading - INFO - Import preload module: dask_cuda.initialize
+distributed.preloading - INFO - Import preload module: dask_cuda.initialize
+distributed.preloading - INFO - Import preload module: dask_cuda.initialize
+distributed.diskutils - INFO - Found stale lock file and directory '/gpfs/alpine/scratch/benjha/stf011/worker-7k28g0dm', purging
+distributed.diskutils - INFO - Found stale lock file and directory '/gpfs/alpine/scratch/benjha/stf011/worker-c2r66wi2', purging
+distributed.preloading - INFO - Import preload module: dask_cuda.initialize
+distributed.diskutils - INFO - Found stale lock file and directory '/gpfs/alpine/scratch/benjha/stf011/worker-s_tf581x', purging
+distributed.diskutils - INFO - Found stale lock file and directory '/gpfs/alpine/scratch/benjha/stf011/worker-5qz22alu', purging
+distributed.preloading - INFO - Import preload module: dask_cuda.initialize
+distributed.preloading - INFO - Import preload module: dask_cuda.initialize
+distributed.worker - INFO -       Start worker at:    tcp://10.41.16.68:34927
+distributed.worker - INFO -          Listening to:    tcp://10.41.16.68:34927
+distributed.worker - INFO -          dashboard at:          10.41.16.68:46227
+distributed.worker - INFO - Waiting to connect to:      tcp://10.41.0.42:8786
+distributed.worker - INFO - -------------------------------------------------
+distributed.worker - INFO -               Threads:                          1
+distributed.worker - INFO -                Memory:                  100.00 GB
+distributed.worker - INFO -       Local Directory: /gpfs/alpine/scratch/benjha/stf011/worker-dddtg7ik
+distributed.worker - INFO - Starting Worker plugin <dask_cuda.utils.CPUAffinity object at 0x20001ab36-61586752-26ae-40f6-a6c4-d7eaf77b0af8
+distributed.worker - INFO - -------------------------------------------------
+distributed.worker - INFO -         Registered to:      tcp://10.41.0.42:8786
+distributed.worker - INFO - -------------------------------------------------
+distributed.core - INFO - Starting established connection
+distributed.worker - INFO -       Start worker at:    tcp://10.41.16.67:46289
+distributed.worker - INFO -          Listening to:    tcp://10.41.16.67:46289
+distributed.worker - INFO -          dashboard at:          10.41.16.67:40707
+distributed.worker - INFO - Waiting to connect to:      tcp://10.41.0.42:8786
+distributed.worker - INFO - -------------------------------------------------
+distributed.worker - INFO -               Threads:                          1
+distributed.worker - INFO -                Memory:                  100.00 GB
+distributed.worker - INFO -       Local Directory: /gpfs/alpine/scratch/benjha/stf011/worker-ugynya7x
+distributed.worker - INFO - Starting Worker plugin <dask_cuda.utils.CPUAffinity object at 0x20001ab35-46994be9-472f-49b5-ac25-e5a905577d88
+distributed.worker - INFO - -------------------------------------------------
+distributed.worker - INFO -       Start worker at:    tcp://10.41.16.67:34195
+distributed.worker - INFO -          Listening to:    tcp://10.41.16.67:34195
+distributed.worker - INFO -          dashboard at:          10.41.16.67:38871
+distributed.worker - INFO - Waiting to connect to:      tcp://10.41.0.42:8786
+distributed.worker - INFO - -------------------------------------------------
+distributed.worker - INFO -               Threads:                          1
+distributed.worker - INFO -                Memory:                  100.00 GB
+distributed.worker - INFO -       Local Directory: /gpfs/alpine/scratch/benjha/stf011/worker-9vhqpckj
+distributed.worker - INFO - Starting Worker plugin <dask_cuda.utils.CPUAffinity object at 0x20001ab35-2ce4364f-e013-4b00-845a-bd07f1caf6b7
+distributed.worker - INFO - -------------------------------------------------
+distributed.worker - INFO -       Start worker at:    tcp://10.41.16.67:45879
+distributed.worker - INFO -          Listening to:    tcp://10.41.16.67:45879
+distributed.worker - INFO -          dashboard at:          10.41.16.67:45171
+distributed.worker - INFO - Waiting to connect to:      tcp://10.41.0.42:8786
+distributed.worker - INFO - -------------------------------------------------
+distributed.worker - INFO -               Threads:                          1
+distributed.worker - INFO -                Memory:                  100.00 GB
+distributed.worker - INFO -       Local Directory: /gpfs/alpine/scratch/benjha/stf011/worker-67yowkrx
+distributed.worker - INFO - Starting Worker plugin <dask_cuda.utils.CPUAffinity object at 0x20001ab35-19ff76fd-5326-4d90-a185-31dfe77286e0
+distributed.worker - INFO - -------------------------------------------------
+distributed.worker - INFO -       Start worker at:    tcp://10.41.16.68:37735
+distributed.worker - INFO -          Listening to:    tcp://10.41.16.68:37735
+distributed.worker - INFO -          dashboard at:          10.41.16.68:36569
+distributed.worker - INFO - Waiting to connect to:      tcp://10.41.0.42:8786
+distributed.worker - INFO - -------------------------------------------------
+distributed.worker - INFO -               Threads:                          1
+distributed.worker - INFO -                Memory:                  100.00 GB
+distributed.worker - INFO -       Local Directory: /gpfs/alpine/scratch/benjha/stf011/worker-vx9zl8fa
+distributed.worker - INFO - Starting Worker plugin <dask_cuda.utils.CPUAffinity object at 0x20001ab36-d5b8b528-3d83-4e65-be74-39cac9a5e9e4
+distributed.worker - INFO - -------------------------------------------------
+distributed.worker - INFO -         Registered to:      tcp://10.41.0.42:8786
+distributed.worker - INFO - -------------------------------------------------
+distributed.core - INFO - Starting established connection
+distributed.worker - INFO -         Registered to:      tcp://10.41.0.42:8786
+distributed.worker - INFO - -------------------------------------------------
+distributed.core - INFO - Starting established connection
+distributed.worker - INFO -         Registered to:      tcp://10.41.0.42:8786
+distributed.worker - INFO - -------------------------------------------------
+distributed.core - INFO - Starting established connection
+distributed.worker - INFO -       Start worker at:    tcp://10.41.16.68:40967
+distributed.worker - INFO -          Listening to:    tcp://10.41.16.68:40967
+distributed.worker - INFO -          dashboard at:          10.41.16.68:42821
+distributed.worker - INFO - Waiting to connect to:      tcp://10.41.0.42:8786
+distributed.worker - INFO - -------------------------------------------------
+distributed.worker - INFO -               Threads:                          1
+distributed.worker - INFO -                Memory:                  100.00 GB
+distributed.worker - INFO -       Local Directory: /gpfs/alpine/scratch/benjha/stf011/worker-7k28g0dm
+distributed.worker - INFO - Starting Worker plugin <dask_cuda.utils.CPUAffinity object at 0x20001ab36-0296ed8d-db51-4b0a-8a2d-cda2d904dbeb
+distributed.worker - INFO - -------------------------------------------------
+distributed.worker - INFO -       Start worker at:    tcp://10.41.16.67:37521
+distributed.worker - INFO -          Listening to:    tcp://10.41.16.67:37521
+distributed.worker - INFO -          dashboard at:          10.41.16.67:33861
+distributed.worker - INFO - Waiting to connect to:      tcp://10.41.0.42:8786
+distributed.worker - INFO - -------------------------------------------------
+distributed.worker - INFO -               Threads:                          1
+distributed.worker - INFO -                Memory:                  100.00 GB
+distributed.worker - INFO -       Local Directory: /gpfs/alpine/scratch/benjha/stf011/worker-27koy9k_
+distributed.worker - INFO - Starting Worker plugin <dask_cuda.utils.CPUAffinity object at 0x20001ab35-ff18cb4a-b2c1-4f44-9326-511f644c5754
+distributed.worker - INFO - -------------------------------------------------
+distributed.worker - INFO -         Registered to:      tcp://10.41.0.42:8786
+distributed.worker - INFO - -------------------------------------------------
+distributed.core - INFO - Starting established connection
+distributed.worker - INFO -       Start worker at:    tcp://10.41.16.68:43511
+distributed.worker - INFO -          Listening to:    tcp://10.41.16.68:43511
+distributed.worker - INFO -          dashboard at:          10.41.16.68:45235
+distributed.worker - INFO - Waiting to connect to:      tcp://10.41.0.42:8786
+distributed.worker - INFO - -------------------------------------------------
+distributed.worker - INFO -               Threads:                          1
+distributed.worker - INFO -                Memory:                  100.00 GB
+distributed.worker - INFO -       Local Directory: /gpfs/alpine/scratch/benjha/stf011/worker-s_tf581x
+distributed.worker - INFO - Starting Worker plugin <dask_cuda.utils.CPUAffinity object at 0x20001ab36-f42e588b-e532-436c-9f94-f218c0bcca46
+distributed.worker - INFO - -------------------------------------------------
+distributed.worker - INFO -       Start worker at:    tcp://10.41.16.68:44605
+distributed.worker - INFO -          Listening to:    tcp://10.41.16.68:44605
+distributed.worker - INFO -          dashboard at:          10.41.16.68:34431
+distributed.worker - INFO - Waiting to connect to:      tcp://10.41.0.42:8786
+distributed.worker - INFO - -------------------------------------------------
+distributed.worker - INFO -               Threads:                          1
+distributed.worker - INFO -                Memory:                  100.00 GB
+distributed.worker - INFO -       Local Directory: /gpfs/alpine/scratch/benjha/stf011/worker-c2r66wi2
+distributed.worker - INFO - Starting Worker plugin <dask_cuda.utils.CPUAffinity object at 0x20001ab36-256fed56-72fc-4f9e-a876-496b670b3a03
+distributed.worker - INFO - -------------------------------------------------
+distributed.worker - INFO -         Registered to:      tcp://10.41.0.42:8786
+distributed.worker - INFO - -------------------------------------------------
+distributed.core - INFO - Starting established connection
+distributed.worker - INFO -         Registered to:      tcp://10.41.0.42:8786
+distributed.worker - INFO - -------------------------------------------------
+distributed.core - INFO - Starting established connection
+distributed.worker - INFO -       Start worker at:    tcp://10.41.16.67:39195
+distributed.worker - INFO -          Listening to:    tcp://10.41.16.67:39195
+distributed.worker - INFO -          dashboard at:          10.41.16.67:34689
+distributed.worker - INFO - Waiting to connect to:      tcp://10.41.0.42:8786
+distributed.worker - INFO - -------------------------------------------------
+distributed.worker - INFO -               Threads:                          1
+distributed.worker - INFO -                Memory:                  100.00 GB
+distributed.worker - INFO -       Local Directory: /gpfs/alpine/scratch/benjha/stf011/worker-5qz22alu
+distributed.worker - INFO - Starting Worker plugin <dask_cuda.utils.CPUAffinity object at 0x20001ab35-dfc75707-35d4-478b-b3b1-419e2dbe44d2
+distributed.worker - INFO - -------------------------------------------------
+distributed.worker - INFO -       Start worker at:    tcp://10.41.16.67:43963
+distributed.worker - INFO -          Listening to:    tcp://10.41.16.67:43963
+distributed.worker - INFO -          dashboard at:          10.41.16.67:43635
+distributed.worker - INFO - Waiting to connect to:      tcp://10.41.0.42:8786
+distributed.worker - INFO - -------------------------------------------------
+distributed.worker - INFO -               Threads:                          1
+distributed.worker - INFO -                Memory:                  100.00 GB
+distributed.worker - INFO -       Local Directory: /gpfs/alpine/scratch/benjha/stf011/worker-8hrssn6z
+distributed.worker - INFO - Starting Worker plugin <dask_cuda.utils.CPUAffinity object at 0x20001ab35-185b2895-0f05-4258-9cc5-98cb45898605
+distributed.worker - INFO - -------------------------------------------------
+distributed.worker - INFO -       Start worker at:    tcp://10.41.16.68:33171
+distributed.worker - INFO -          Listening to:    tcp://10.41.16.68:33171
+distributed.worker - INFO -          dashboard at:          10.41.16.68:42213
+distributed.worker - INFO - Waiting to connect to:      tcp://10.41.0.42:8786
+distributed.worker - INFO - -------------------------------------------------
+distributed.worker - INFO -               Threads:                          1
+distributed.worker - INFO -                Memory:                  100.00 GB
+distributed.worker - INFO -       Local Directory: /gpfs/alpine/scratch/benjha/stf011/worker-bd_hut8o
+distributed.worker - INFO - Starting Worker plugin <dask_cuda.utils.CPUAffinity object at 0x20001ab36-4ffcf67b-1954-4fbc-a2ae-56d27cb1f951
+distributed.worker - INFO - -------------------------------------------------
+distributed.worker - INFO -         Registered to:      tcp://10.41.0.42:8786
+distributed.worker - INFO - -------------------------------------------------
+distributed.core - INFO - Starting established connection
+distributed.worker - INFO -         Registered to:      tcp://10.41.0.42:8786
+distributed.worker - INFO - -------------------------------------------------
+distributed.core - INFO - Starting established connection
+distributed.worker - INFO -         Registered to:      tcp://10.41.0.42:8786
+distributed.worker - INFO - -------------------------------------------------
+distributed.core - INFO - Starting established connection
+distributed.worker - INFO -         Registered to:      tcp://10.41.0.42:8786
+distributed.worker - INFO - -------------------------------------------------
+distributed.core - INFO - Starting established connection
+distributed.worker - INFO -         Registered to:      tcp://10.41.0.42:8786
+distributed.worker - INFO - -------------------------------------------------
+distributed.core - INFO - Starting established connection
