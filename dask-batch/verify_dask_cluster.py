@@ -6,3 +6,4 @@ if __name__ == '__main__':
     client = Client(scheduler_file=file)
     print("client information ",client)
     print("Done!") 
+    client.shutdown ()
