@@ -1,7 +1,38 @@
-## Instructions
+# Instructions
 
-The next instructions applies to NVIDIA Rapids ver. 0.9 and are intended for SUMMIT's users in GEN119 project, however
-they can be used by other projects by changing the directory paths accordingly.
+The next instructions applies to NVIDIA Rapids ver. 0.11 and are intended for any SUMMIT's user, however you need to 
+modify the scripts according to your project ID.
+
+## Conda environment for DASK and NVIDIA Rapids users
+
+DASK and NVIDIA Rapids has been deployed in a conda enviroment available in:
+
+```
+$WORLDWORK/stf011/nvrapids_0.11_gcc_6.4.0
+```
+
+You can activate this environment by first loading the next modules:
+
+```
+module load gcc/6.4.0
+module load cuda/10.1.168
+module load python/3.7.0-anaconda3-5.3.0
+```
+
+and then use the ```source activate``` command:
+
+```
+source activate /gpfs/alpine/world-shared/stf011/nvrapids_0.11_gcc_6.4.0
+```
+
+to deactivate the environment type:
+
+```
+source deactivate
+
+```
+
+## Running a DASK cluster in SUMMIT
 
 Running DASK distributed workloads requires a DASK cluster. Setting up a DASK cluster in SUMMIT needs three components: 
 dask-scheduler, dask--workers and python calls in your python script to connect to the DASK cluster.

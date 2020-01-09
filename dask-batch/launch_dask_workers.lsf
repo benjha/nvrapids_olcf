@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-#BSUB -P ABC123
+#BSUB -P STF011
 #BSUB -W 1:00
 #BSUB -alloc_flags "gpumps"
 #BSUB -nnodes 2
