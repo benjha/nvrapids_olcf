@@ -65,7 +65,7 @@ PROJ_ID=stf011
 module load gcc/6.4.0
 module load cuda/10.1.168
 
-export PATH=$WORLDWORK/$PROJ_ID/nvrapids_0.11_gcc_6.4.0/bin:$PATH
+export PATH=$WORLDWORK/stf011/nvrapids_0.11_gcc_6.4.0/bin:$PATH
 
 dask-scheduler --interface ib0 --scheduler-file $MEMBERWORK/$PROJ_ID/my-scheduler.json --local-directory $MEMBERWORK/$PROJ_ID/scheduler &
 
@@ -104,7 +104,9 @@ https://stackoverflow.com/questions/15639779/why-does-multiprocessing-use-only-a
 
 ### Step 2. Get your code know about the DASK cluster
 
-Once the script in Step 1. has passed through the SUMMIT's batch queue and is running. You can submit your workload to the DASK cluster by calling your script, in this example, from the login node:
+Once the script in Step 1. has passed through the SUMMIT's batch queue and is running, you can submit your workload to the DASK cluster. 
+
+First you need to activate the conda environment as explained above, the you can call your script, in this example, from the login node:
 
 ```
 $python verify_dask_cluster.py
@@ -117,10 +119,12 @@ import os
 from dask.distributed import Client
 
 if __name__ == '__main__': 
-    file = os.getenv('MEMBERWORK') + '/gen119/my-scheduler.json'
+    file = os.getenv('MEMBERWORK') + '/PROJ_ID/my-scheduler.json'
     client = Client(scheduler_file=file)
     print("client information ",client)
     print("Done!") 
+#Next line will shutdown the DASK Cluster and eventually the LSF jobs
+#    client.shutdown ()
 ```
 
 After executing `verify_dask_cluster.py` script, your output should be similar to this:
@@ -144,26 +148,23 @@ It is possible to grow and shrink Dask clusters based on current use. However, i
 ```
 #!/usr/bin/env bash
 
-#BSUB -P ABC123
+#BSUB -P STF011
 #BSUB -W 1:00
 #BSUB -alloc_flags "gpumps"
 #BSUB -nnodes 2
 #BSUB -J dask_worker
 #BSUB -o dask_worker.o%J
 #BSUB -e dask_worker.e%J
+
 JOB_ID=${LSB_JOBID%.*}
+PROJ_ID=stf011
 
 module load gcc/6.4.0
 module load cuda/10.1.168
-module load cmake/3.14.2
-module load boost/1.66.0
-module load netlib-lapack/3.8.0
 
-export PATH=/gpfs/alpine/proj-shared/gen119/gcc_6.4.0/anaconda3/bin:$PATH
-export NUMBAPRO_NVVM=/sw/summit/cuda/10.1.168/nvvm/lib64/libnvvm.so
-export NUMBAPRO_LIBDEVICE=/sw/summit/cuda/10.1.168/nvvm/libdevice
+export PATH=$WORLDWORK/stf011/nvrapids_0.11_gcc_6.4.0/bin:$PATH
 
-jsrun -c 42 -g 6 -n 2 -r 1 -a 1 --bind rs dask-worker --scheduler-file $MEMBERWORK/gen119/my-scheduler.json --nthreads 42  --memory-limit 512GB  --nanny --death-timeout 60 --interface ib0 --local-directory $MEMBERWORK/gen119/worker
+jsrun -c 42 -g 6 -n 2 -r 1 -a 1 --bind rs dask-worker --scheduler-file $MEMBERWORK/$PROJ_ID/my-scheduler.json --nthreads 42  --memory-limit 512GB  --nanny --death-timeout 60 --interface ib0 --local-directory $MEMBERWORK/$PROJ_ID/worker
 ```
 
 

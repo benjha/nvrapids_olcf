@@ -14,7 +14,7 @@ PROJ_ID=stf011
 module load gcc/6.4.0
 module load cuda/10.1.168
 
-export PATH=$WORLDWORK/$PROJ_ID/nvrapids_0.11_gcc_6.4.0/bin:$PATH
+export PATH=$WORLDWORK/stf011/nvrapids_0.11_gcc_6.4.0/bin:$PATH
 
 dask-scheduler --interface ib0 --scheduler-file $MEMBERWORK/$PROJ_ID/my-scheduler.json --local-directory $MEMBERWORK/$PROJ_ID/scheduler &
 

@@ -14,6 +14,6 @@ PROJ_ID=stf011
 module load gcc/6.4.0
 module load cuda/10.1.168
 
-export PATH=$WORLDWORK/$PROJ_ID/nvrapids_0.11_gcc_6.4.0/bin:$PATH
+export PATH=$WORLDWORK/stf011/nvrapids_0.11_gcc_6.4.0/bin:$PATH
 
 jsrun -c 42 -g 6 -n 2 -r 1 -a 1 --bind rs dask-worker --scheduler-file $MEMBERWORK/$PROJ_ID/my-scheduler.json --nthreads 42  --memory-limit 512GB  --nanny --death-timeout 60 --interface ib0 --local-directory $MEMBERWORK/$PROJ_ID/worker
