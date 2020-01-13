@@ -1,0 +1,93 @@
+
+Lmod is automatically replacing "xl/16.1.1-3" with "gcc/6.4.0".
+
+
+Due to MODULEPATH changes, the following have been reloaded:
+  1) spectrum-mpi/10.3.0.1-20190611
+
+distributed.scheduler - INFO - -----------------------------------------------
+distributed.nanny - INFO -         Start Nanny at: 'ucx://10.41.21.214:40667'
+distributed.nanny - INFO -         Start Nanny at: 'ucx://10.41.21.213:51011'
+distributed.nanny - INFO -         Start Nanny at: 'ucx://10.41.21.215:46651'
+distributed.nanny - INFO -         Start Nanny at: 'ucx://10.41.21.221:42767'
+distributed.scheduler - INFO - Local Directory: /gpfs/alpine/scratch/benjha/stf011/scheduler
+distributed.scheduler - INFO - -----------------------------------------------
+distributed.scheduler - INFO - Clear task state
+distributed.worker - INFO -       Start worker at:   ucx://10.41.21.214:57045
+distributed.worker - INFO -          Listening to:   ucx://10.41.21.214:57045
+distributed.worker - INFO -          dashboard at:         10.41.21.214:42375
+distributed.worker - INFO -       Start worker at:   ucx://10.41.21.215:45225
+distributed.worker - INFO - Waiting to connect to:      ucx://10.41.0.43:8786
+distributed.worker - INFO - -------------------------------------------------
+distributed.worker - INFO -          Listening to:   ucx://10.41.21.215:45225
+distributed.worker - INFO -       Start worker at:   ucx://10.41.21.221:41103
+distributed.worker - INFO -               Threads:                         42
+distributed.worker - INFO -       Start worker at:   ucx://10.41.21.213:35219
+distributed.worker - INFO -          Listening to:   ucx://10.41.21.221:41103
+distributed.worker - INFO -          dashboard at:         10.41.21.221:42447
+distributed.worker - INFO -                Memory:                  512.00 GB
+distributed.worker - INFO - Waiting to connect to:      ucx://10.41.0.43:8786
+distributed.worker - INFO - -------------------------------------------------
+distributed.worker - INFO -          Listening to:   ucx://10.41.21.213:35219
+distributed.worker - INFO -          dashboard at:         10.41.21.213:46191
+distributed.worker - INFO -       Local Directory: /gpfs/alpine/scratch/benjha/stf011/worker/worker-mm3fx3vj
+distributed.worker - INFO -          dashboard at:         10.41.21.215:44129
+distributed.worker - INFO -               Threads:                         42
+distributed.worker - INFO - -------------------------------------------------
+distributed.worker - INFO -                Memory:                  512.00 GB
+distributed.worker - INFO - Waiting to connect to:      ucx://10.41.0.43:8786
+distributed.worker - INFO - Waiting to connect to:      ucx://10.41.0.43:8786
+distributed.worker - INFO - -------------------------------------------------
+distributed.worker - INFO -       Local Directory: /gpfs/alpine/scratch/benjha/stf011/worker/worker-4mwg3dci
+distributed.worker - INFO - -------------------------------------------------
+distributed.worker - INFO - -------------------------------------------------
+distributed.worker - INFO -               Threads:                         42
+distributed.worker - INFO -                Memory:                  512.00 GB
+distributed.worker - INFO -               Threads:                         42
+distributed.worker - INFO -       Local Directory: /gpfs/alpine/scratch/benjha/stf011/worker/worker-31sutadz
+distributed.worker - INFO - -------------------------------------------------
+distributed.worker - INFO -                Memory:                  512.00 GB
+distributed.worker - INFO -       Local Directory: /gpfs/alpine/scratch/benjha/stf011/worker/worker-izeqj_p7
+distributed.worker - INFO - -------------------------------------------------
+distributed.scheduler - INFO -   Scheduler at:     ucx://10.41.0.44:8786
+distributed.scheduler - INFO -   dashboard at:           10.41.0.44:8787
+distributed.worker - INFO - Waiting to connect to:      ucx://10.41.0.43:8786
+distributed.worker - INFO - Waiting to connect to:      ucx://10.41.0.43:8786
+distributed.worker - INFO - Waiting to connect to:      ucx://10.41.0.43:8786
+distributed.worker - INFO - Waiting to connect to:      ucx://10.41.0.43:8786
+distributed.worker - INFO - Waiting to connect to:      ucx://10.41.0.43:8786
+distributed.worker - INFO - Waiting to connect to:      ucx://10.41.0.43:8786
+distributed.worker - INFO - Waiting to connect to:      ucx://10.41.0.43:8786
+distributed.worker - INFO - Waiting to connect to:      ucx://10.41.0.43:8786
+distributed.worker - INFO - Waiting to connect to:      ucx://10.41.0.43:8786
+distributed.worker - INFO - Waiting to connect to:      ucx://10.41.0.43:8786
+distributed.worker - INFO - Waiting to connect to:      ucx://10.41.0.43:8786
+distributed.worker - INFO - Waiting to connect to:      ucx://10.41.0.43:8786
+distributed.worker - INFO - Waiting to connect to:      ucx://10.41.0.43:8786
+distributed.worker - INFO - Waiting to connect to:      ucx://10.41.0.43:8786
+distributed.worker - INFO - Waiting to connect to:      ucx://10.41.0.43:8786
+distributed.worker - INFO - Waiting to connect to:      ucx://10.41.0.43:8786
+distributed.worker - INFO - Waiting to connect to:      ucx://10.41.0.43:8786
+distributed.worker - INFO - Waiting to connect to:      ucx://10.41.0.43:8786
+distributed.worker - INFO - Waiting to connect to:      ucx://10.41.0.43:8786
+distributed.worker - INFO - Waiting to connect to:      ucx://10.41.0.43:8786
+distributed.nanny - INFO - Closing Nanny at 'ucx://10.41.21.214:40667'
+distributed.nanny - INFO - Closing Nanny at 'ucx://10.41.21.221:42767'
+distributed.nanny - INFO - Closing Nanny at 'ucx://10.41.21.213:51011'
+distributed.nanny - INFO - Closing Nanny at 'ucx://10.41.21.215:46651'
+distributed.worker - INFO - Stopping worker at ucx://10.41.21.221:41103
+distributed.worker - INFO - Closed worker has not yet started: None
+distributed.worker - INFO - Stopping worker at ucx://10.41.21.214:57045
+distributed.worker - INFO - Closed worker has not yet started: None
+distributed.worker - INFO - Stopping worker at ucx://10.41.21.213:35219
+distributed.worker - INFO - Closed worker has not yet started: None
+distributed.worker - INFO - Stopping worker at ucx://10.41.21.215:45225
+distributed.worker - INFO - Closed worker has not yet started: None
+distributed.dask_worker - INFO - Timed out starting worker
+distributed.dask_worker - INFO - End worker
+distributed.dask_worker - INFO - Timed out starting worker
+distributed.dask_worker - INFO - Timed out starting worker
+distributed.dask_worker - INFO - End worker
+distributed.dask_worker - INFO - End worker
+distributed.dask_worker - INFO - Timed out starting worker
+distributed.dask_worker - INFO - End worker

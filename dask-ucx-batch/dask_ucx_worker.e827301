@@ -1,0 +1,250 @@
+
+Lmod is automatically replacing "xl/16.1.1-3" with "gcc/6.4.0".
+
+
+Due to MODULEPATH changes, the following have been reloaded:
+  1) spectrum-mpi/10.3.0.1-20190611
+
+distributed.nanny - INFO -         Start Nanny at: 'ucx://10.41.13.167:52127'
+distributed.nanny - INFO -         Start Nanny at: 'ucx://10.41.13.168:35493'
+distributed.diskutils - INFO - Found stale lock file and directory '/gpfs/alpine/scratch/benjha/stf011/worker/worker-rkrahbjw', purging
+distributed.diskutils - INFO - Found stale lock file and directory '/gpfs/alpine/scratch/benjha/stf011/worker/worker-rkrahbjw', purging
+distributed.diskutils - ERROR - Failed to remove '/gpfs/alpine/scratch/benjha/stf011/worker/worker-rkrahbjw' (failed in <built-in function lstat>): [Errno 2] No such file or directory: '/gpfs/alpine/scratch/benjha/stf011/worker/worker-rkrahbjw'
+distributed.worker - INFO -       Start worker at:   ucx://10.41.13.168:34531
+distributed.worker - INFO -          Listening to:   ucx://10.41.13.168:34531
+distributed.worker - INFO -          dashboard at:         10.41.13.168:44525
+distributed.worker - INFO - Waiting to connect to:      ucx://10.41.0.43:8786
+distributed.worker - INFO - -------------------------------------------------
+distributed.worker - INFO -               Threads:                         42
+distributed.worker - INFO -                Memory:                  512.00 GB
+distributed.worker - INFO -       Local Directory: /gpfs/alpine/scratch/benjha/stf011/worker/worker-8zsu7w87
+distributed.worker - INFO - -------------------------------------------------
+distributed.worker - INFO -       Start worker at:   ucx://10.41.13.167:36169
+distributed.worker - INFO -          Listening to:   ucx://10.41.13.167:36169
+distributed.worker - INFO -          dashboard at:         10.41.13.167:34993
+distributed.worker - INFO - Waiting to connect to:      ucx://10.41.0.43:8786
+distributed.worker - INFO - -------------------------------------------------
+distributed.worker - INFO -               Threads:                         42
+distributed.worker - INFO -                Memory:                  512.00 GB
+distributed.worker - INFO -       Local Directory: /gpfs/alpine/scratch/benjha/stf011/worker/worker-ia2s_hdc
+distributed.worker - INFO - -------------------------------------------------
+distributed.worker - INFO -         Registered to:      ucx://10.41.0.43:8786
+distributed.worker - INFO - -------------------------------------------------
+distributed.core - INFO - Starting established connection
+distributed.worker - INFO -         Registered to:      ucx://10.41.0.43:8786
+distributed.worker - INFO - -------------------------------------------------
+distributed.core - INFO - Starting established connection
+[f07n08:1157 :0:1285] ib_mlx5_log.c:139  Transport retry count exceeded on mlx5_1:1/IB (synd 0x15 vend 0x81 hw_synd 0/0)
+[f07n08:1157 :0:1285] ib_mlx5_log.c:139  RC QP 0x2bc80 wqe[945]: SEND --e [inl len 18]
+
+/gpfs/alpine/proj-shared/stf011/benjha/rapids_build_0.11/build/ucx/src/ucs/debug/assert.c: [ ucs_fatal_error_message() ]
+      ...
+       30     }
+       31 
+       32     ucs_handle_error(message_buf);
+==>    33     abort();
+       34 }
+       35 
+       36 void ucs_fatal_error_format(const char *file, unsigned line,
+
+==== backtrace (tid:   1285) ====
+ 0 0x0000000000054fe8 ucs_fatal_error_message()  /gpfs/alpine/proj-shared/stf011/benjha/rapids_build_0.11/build/ucx/src/ucs/debug/assert.c:33
+ 1 0x000000000005a93c ucs_log_default_handler()  /gpfs/alpine/proj-shared/stf011/benjha/rapids_build_0.11/build/ucx/src/ucs/debug/log.c:140
+ 2 0x000000000005aab0 ucs_log_dispatch()  /gpfs/alpine/proj-shared/stf011/benjha/rapids_build_0.11/build/ucx/src/ucs/debug/log.c:191
+ 3 0x00000000000204e8 uct_ib_mlx5_completion_with_err()  /gpfs/alpine/proj-shared/stf011/benjha/rapids_build_0.11/build/ucx/src/uct/ib/mlx5/ib_mlx5_log.c:132
+ 4 0x000000000003e618 uct_rc_mlx5_iface_handle_failure()  /gpfs/alpine/proj-shared/stf011/benjha/rapids_build_0.11/build/ucx/src/uct/ib/rc/accel/rc_mlx5_iface.c:216
+ 5 0x0000000000021978 uct_ib_mlx5_check_completion()  /gpfs/alpine/proj-shared/stf011/benjha/rapids_build_0.11/build/ucx/src/uct/ib/mlx5/ib_mlx5.c:340
+ 6 0x000000000003feec uct_ib_mlx5_poll_cq()  /gpfs/alpine/proj-shared/stf011/benjha/rapids_build_0.11/build/ucx/src/uct/ib/mlx5/ib_mlx5.inl:38
+ 7 0x000000000003feec uct_rc_mlx5_iface_poll_tx()  /gpfs/alpine/proj-shared/stf011/benjha/rapids_build_0.11/build/ucx/src/uct/ib/rc/accel/rc_mlx5_iface.c:98
+ 8 0x000000000003feec uct_rc_mlx5_iface_progress()  /gpfs/alpine/proj-shared/stf011/benjha/rapids_build_0.11/build/ucx/src/uct/ib/rc/accel/rc_mlx5_iface.c:133
+ 9 0x000000000002cd04 ucs_callbackq_dispatch()  /gpfs/alpine/proj-shared/stf011/benjha/rapids_build_0.11/build/ucx/src/ucs/datastruct/callbackq.h:211
+10 0x000000000002cd04 uct_worker_progress()  /gpfs/alpine/proj-shared/stf011/benjha/rapids_build_0.11/build/ucx/src/uct/api/uct.h:2203
+11 0x000000000002cd04 ucp_worker_progress()  /gpfs/alpine/proj-shared/stf011/benjha/rapids_build_0.11/build/ucx/src/ucp/core/ucp_worker.c:1897
+12 0x0000000000016a48 __pyx_pf_3ucp_5_libs_4core_18ApplicationContext_9progress()  /gpfs/alpine/proj-shared/stf011/benjha/rapids_build_0.11/build/ucx-py/ucp/_libs/core.c:10566
+13 0x0000000000016a48 __pyx_pw_3ucp_5_libs_4core_18ApplicationContext_10progress()  /gpfs/alpine/proj-shared/stf011/benjha/rapids_build_0.11/build/ucx-py/ucp/_libs/core.c:10545
+14 0x0000000000035988 __Pyx_PyObject_CallMethO()  /gpfs/alpine/proj-shared/stf011/benjha/rapids_build_0.11/build/ucx-py/ucp/_libs/core.c:33762
+15 0x0000000000035988 __Pyx_PyObject_CallNoArg()  /gpfs/alpine/proj-shared/stf011/benjha/rapids_build_0.11/build/ucx-py/ucp/_libs/core.c:34107
+16 0x000000000007006c __pyx_pf_3ucp_5_libs_4core_18ApplicationContext_23_blocking_progress_mode__fd_reader_callback()  /gpfs/alpine/proj-shared/stf011/benjha/rapids_build_0.11/build/ucx-py/ucp/_libs/core.c:10663
+17 0x000000000007006c __pyx_pw_3ucp_5_libs_4core_18ApplicationContext_23_blocking_progress_mode_1_fd_reader_callback()  /gpfs/alpine/proj-shared/stf011/benjha/rapids_build_0.11/build/ucx-py/ucp/_libs/core.c:10622
+18 0x00000000000237ac __Pyx_CyFunction_CallMethod()  itertoolz.c:0
+19 0x0000000000082338 _PyObject_FastCallKeywords()  ???:0
+20 0x000000000019024c context_run()  context.c:0
+21 0x0000000000082af4 _PyMethodDef_RawFastCallDict()  ???:0
+22 0x0000000000082d04 _PyCFunction_FastCallDict()  ???:0
+23 0x00000000000843ec PyCFunction_Call()  ???:0
+24 0x000000000006a3b0 _PyEval_EvalFrameDefault()  ???:0
+25 0x00000000001565b4 PyEval_EvalFrameEx()  ???:0
+26 0x000000000005f1c4 function_code_fastcall()  call.c:0
+27 0x00000000000694d0 _PyEval_EvalFrameDefault()  ???:0
+28 0x00000000001565b4 PyEval_EvalFrameEx()  ???:0
+29 0x000000000005f1c4 function_code_fastcall()  call.c:0
+30 0x00000000000694d0 _PyEval_EvalFrameDefault()  ???:0
+31 0x00000000001565b4 PyEval_EvalFrameEx()  ???:0
+32 0x000000000005f1c4 function_code_fastcall()  call.c:0
+33 0x00000000000694d0 _PyEval_EvalFrameDefault()  ???:0
+34 0x00000000001565b4 PyEval_EvalFrameEx()  ???:0
+35 0x000000000005f1c4 function_code_fastcall()  call.c:0
+36 0x00000000000694d0 _PyEval_EvalFrameDefault()  ???:0
+37 0x00000000001565b4 PyEval_EvalFrameEx()  ???:0
+38 0x00000000001573c8 _PyEval_EvalCodeWithName()  ???:0
+39 0x00000000000817fc _PyFunction_FastCallKeywords()  ???:0
+40 0x00000000000694d0 _PyEval_EvalFrameDefault()  ???:0
+41 0x00000000001565b4 PyEval_EvalFrameEx()  ???:0
+42 0x00000000001573c8 _PyEval_EvalCodeWithName()  ???:0
+43 0x00000000000814bc _PyFunction_FastCallDict()  ???:0
+44 0x0000000000082f84 _PyObject_FastCallDict()  ???:0
+45 0x00000000000832e0 _PyObject_Call_Prepend()  ???:0
+46 0x00000000002538a8 method_call()  classobject.c:0
+47 0x0000000000084550 PyObject_Call()  ???:0
+48 0x0000000000067364 _PyEval_EvalFrameDefault()  ???:0
+49 0x00000000001565b4 PyEval_EvalFrameEx()  ???:0
+50 0x000000000005f1c4 function_code_fastcall()  call.c:0
+51 0x0000000000081710 _PyFunction_FastCallDict()  ???:0
+52 0x0000000000082f84 _PyObject_FastCallDict()  ???:0
+53 0x0000000000083240 _PyObject_Call_Prepend()  ???:0
+54 0x00000000002538a8 method_call()  classobject.c:0
+55 0x0000000000084550 PyObject_Call()  ???:0
+56 0x0000000000067364 _PyEval_EvalFrameDefault()  ???:0
+57 0x00000000001565b4 PyEval_EvalFrameEx()  ???:0
+58 0x000000000005f1c4 function_code_fastcall()  call.c:0
+59 0x00000000000694d0 _PyEval_EvalFrameDefault()  ???:0
+60 0x00000000001565b4 PyEval_EvalFrameEx()  ???:0
+=================================
+/gpfs/alpine/world-shared/stf011/nvrapids_0.11_gcc_6.4.0/lib/python3.7/multiprocessing/semaphore_tracker.py:144: UserWarning: semaphore_tracker: There appear to be 1 leaked semaphores to clean up at shutdown
+  len(cache))
+distributed.nanny - INFO - Worker process 1285 was killed by signal 6
+[f07n09:80286:0:80414] ib_mlx5_log.c:139  Transport retry count exceeded on mlx5_1:1/IB (synd 0x15 vend 0x81 hw_synd 0/0)
+[f07n09:80286:0:80414] ib_mlx5_log.c:139  RC QP 0x2bc82 wqe[945]: SEND --e [inl len 18]
+
+/gpfs/alpine/proj-shared/stf011/benjha/rapids_build_0.11/build/ucx/src/ucs/debug/assert.c: [ ucs_fatal_error_message() ]
+      ...
+       30     }
+       31 
+       32     ucs_handle_error(message_buf);
+==>    33     abort();
+       34 }
+       35 
+       36 void ucs_fatal_error_format(const char *file, unsigned line,
+
+==== backtrace (tid:  80414) ====
+ 0 0x0000000000054fe8 ucs_fatal_error_message()  /gpfs/alpine/proj-shared/stf011/benjha/rapids_build_0.11/build/ucx/src/ucs/debug/assert.c:33
+ 1 0x000000000005a93c ucs_log_default_handler()  /gpfs/alpine/proj-shared/stf011/benjha/rapids_build_0.11/build/ucx/src/ucs/debug/log.c:140
+ 2 0x000000000005aab0 ucs_log_dispatch()  /gpfs/alpine/proj-shared/stf011/benjha/rapids_build_0.11/build/ucx/src/ucs/debug/log.c:191
+ 3 0x00000000000204e8 uct_ib_mlx5_completion_with_err()  /gpfs/alpine/proj-shared/stf011/benjha/rapids_build_0.11/build/ucx/src/uct/ib/mlx5/ib_mlx5_log.c:132
+ 4 0x000000000003e618 uct_rc_mlx5_iface_handle_failure()  /gpfs/alpine/proj-shared/stf011/benjha/rapids_build_0.11/build/ucx/src/uct/ib/rc/accel/rc_mlx5_iface.c:216
+ 5 0x0000000000021978 uct_ib_mlx5_check_completion()  /gpfs/alpine/proj-shared/stf011/benjha/rapids_build_0.11/build/ucx/src/uct/ib/mlx5/ib_mlx5.c:340
+ 6 0x000000000003feec uct_ib_mlx5_poll_cq()  /gpfs/alpine/proj-shared/stf011/benjha/rapids_build_0.11/build/ucx/src/uct/ib/mlx5/ib_mlx5.inl:38
+ 7 0x000000000003feec uct_rc_mlx5_iface_poll_tx()  /gpfs/alpine/proj-shared/stf011/benjha/rapids_build_0.11/build/ucx/src/uct/ib/rc/accel/rc_mlx5_iface.c:98
+ 8 0x000000000003feec uct_rc_mlx5_iface_progress()  /gpfs/alpine/proj-shared/stf011/benjha/rapids_build_0.11/build/ucx/src/uct/ib/rc/accel/rc_mlx5_iface.c:133
+ 9 0x000000000002cd04 ucs_callbackq_dispatch()  /gpfs/alpine/proj-shared/stf011/benjha/rapids_build_0.11/build/ucx/src/ucs/datastruct/callbackq.h:211
+10 0x000000000002cd04 uct_worker_progress()  /gpfs/alpine/proj-shared/stf011/benjha/rapids_build_0.11/build/ucx/src/uct/api/uct.h:2203
+11 0x000000000002cd04 ucp_worker_progress()  /gpfs/alpine/proj-shared/stf011/benjha/rapids_build_0.11/build/ucx/src/ucp/core/ucp_worker.c:1897
+12 0x0000000000016a48 __pyx_pf_3ucp_5_libs_4core_18ApplicationContext_9progress()  /gpfs/alpine/proj-shared/stf011/benjha/rapids_build_0.11/build/ucx-py/ucp/_libs/core.c:10566
+13 0x0000000000016a48 __pyx_pw_3ucp_5_libs_4core_18ApplicationContext_10progress()  /gpfs/alpine/proj-shared/stf011/benjha/rapids_build_0.11/build/ucx-py/ucp/_libs/core.c:10545
+14 0x0000000000035988 __Pyx_PyObject_CallMethO()  /gpfs/alpine/proj-shared/stf011/benjha/rapids_build_0.11/build/ucx-py/ucp/_libs/core.c:33762
+15 0x0000000000035988 __Pyx_PyObject_CallNoArg()  /gpfs/alpine/proj-shared/stf011/benjha/rapids_build_0.11/build/ucx-py/ucp/_libs/core.c:34107
+16 0x000000000007006c __pyx_pf_3ucp_5_libs_4core_18ApplicationContext_23_blocking_progress_mode__fd_reader_callback()  /gpfs/alpine/proj-shared/stf011/benjha/rapids_build_0.11/build/ucx-py/ucp/_libs/core.c:10663
+17 0x000000000007006c __pyx_pw_3ucp_5_libs_4core_18ApplicationContext_23_blocking_progress_mode_1_fd_reader_callback()  /gpfs/alpine/proj-shared/stf011/benjha/rapids_build_0.11/build/ucx-py/ucp/_libs/core.c:10622
+18 0x00000000000237ac __Pyx_CyFunction_CallMethod()  itertoolz.c:0
+19 0x0000000000082338 _PyObject_FastCallKeywords()  ???:0
+20 0x000000000019024c context_run()  context.c:0
+21 0x0000000000082af4 _PyMethodDef_RawFastCallDict()  ???:0
+22 0x0000000000082d04 _PyCFunction_FastCallDict()  ???:0
+23 0x00000000000843ec PyCFunction_Call()  ???:0
+24 0x000000000006a3b0 _PyEval_EvalFrameDefault()  ???:0
+25 0x00000000001565b4 PyEval_EvalFrameEx()  ???:0
+26 0x000000000005f1c4 function_code_fastcall()  call.c:0
+27 0x00000000000694d0 _PyEval_EvalFrameDefault()  ???:0
+28 0x00000000001565b4 PyEval_EvalFrameEx()  ???:0
+29 0x000000000005f1c4 function_code_fastcall()  call.c:0
+30 0x00000000000694d0 _PyEval_EvalFrameDefault()  ???:0
+31 0x00000000001565b4 PyEval_EvalFrameEx()  ???:0
+32 0x000000000005f1c4 function_code_fastcall()  call.c:0
+33 0x00000000000694d0 _PyEval_EvalFrameDefault()  ???:0
+34 0x00000000001565b4 PyEval_EvalFrameEx()  ???:0
+35 0x000000000005f1c4 function_code_fastcall()  call.c:0
+36 0x00000000000694d0 _PyEval_EvalFrameDefault()  ???:0
+37 0x00000000001565b4 PyEval_EvalFrameEx()  ???:0
+38 0x00000000001573c8 _PyEval_EvalCodeWithName()  ???:0
+39 0x00000000000817fc _PyFunction_FastCallKeywords()  ???:0
+40 0x00000000000694d0 _PyEval_EvalFrameDefault()  ???:0
+41 0x00000000001565b4 PyEval_EvalFrameEx()  ???:0
+42 0x00000000001573c8 _PyEval_EvalCodeWithName()  ???:0
+43 0x00000000000814bc _PyFunction_FastCallDict()  ???:0
+44 0x0000000000082f84 _PyObject_FastCallDict()  ???:0
+45 0x00000000000832e0 _PyObject_Call_Prepend()  ???:0
+46 0x00000000002538a8 method_call()  classobject.c:0
+47 0x0000000000084550 PyObject_Call()  ???:0
+48 0x0000000000067364 _PyEval_EvalFrameDefault()  ???:0
+49 0x00000000001565b4 PyEval_EvalFrameEx()  ???:0
+50 0x000000000005f1c4 function_code_fastcall()  call.c:0
+51 0x0000000000081710 _PyFunction_FastCallDict()  ???:0
+52 0x0000000000082f84 _PyObject_FastCallDict()  ???:0
+53 0x0000000000083240 _PyObject_Call_Prepend()  ???:0
+54 0x00000000002538a8 method_call()  classobject.c:0
+55 0x0000000000084550 PyObject_Call()  ???:0
+56 0x0000000000067364 _PyEval_EvalFrameDefault()  ???:0
+57 0x00000000001565b4 PyEval_EvalFrameEx()  ???:0
+58 0x000000000005f1c4 function_code_fastcall()  call.c:0
+59 0x00000000000694d0 _PyEval_EvalFrameDefault()  ???:0
+60 0x00000000001565b4 PyEval_EvalFrameEx()  ???:0
+=================================
+/gpfs/alpine/world-shared/stf011/nvrapids_0.11_gcc_6.4.0/lib/python3.7/multiprocessing/semaphore_tracker.py:144: UserWarning: semaphore_tracker: There appear to be 1 leaked semaphores to clean up at shutdown
+  len(cache))
+distributed.nanny - INFO - Worker process 80414 was killed by signal 6
+distributed.nanny - WARNING - Restarting worker
+distributed.nanny - WARNING - Restarting worker
+distributed.diskutils - INFO - Found stale lock file and directory '/gpfs/alpine/scratch/benjha/stf011/worker/worker-_hfgng58', purging
+distributed.worker - INFO -       Start worker at:   ucx://10.41.13.167:36917
+distributed.worker - INFO -          Listening to:   ucx://10.41.13.167:36917
+distributed.worker - INFO -          dashboard at:         10.41.13.167:41465
+distributed.worker - INFO - Waiting to connect to:      ucx://10.41.0.43:8786
+distributed.worker - INFO - -------------------------------------------------
+distributed.worker - INFO -               Threads:                         42
+distributed.worker - INFO -                Memory:                  512.00 GB
+distributed.worker - INFO -       Local Directory: /gpfs/alpine/scratch/benjha/stf011/worker/worker-cj5m0qey
+distributed.worker - INFO - -------------------------------------------------
+distributed.worker - INFO -       Start worker at:   ucx://10.41.13.168:53295
+distributed.worker - INFO -          Listening to:   ucx://10.41.13.168:53295
+distributed.worker - INFO -          dashboard at:         10.41.13.168:45681
+distributed.worker - INFO - Waiting to connect to:      ucx://10.41.0.43:8786
+distributed.worker - INFO - -------------------------------------------------
+distributed.worker - INFO -               Threads:                         42
+distributed.worker - INFO -                Memory:                  512.00 GB
+distributed.worker - INFO -       Local Directory: /gpfs/alpine/scratch/benjha/stf011/worker/worker-3j0hzg6t
+distributed.worker - INFO - -------------------------------------------------
+distributed.worker - INFO - Waiting to connect to:      ucx://10.41.0.43:8786
+distributed.worker - INFO - Waiting to connect to:      ucx://10.41.0.43:8786
+distributed.worker - INFO - Waiting to connect to:      ucx://10.41.0.43:8786
+distributed.worker - INFO - Waiting to connect to:      ucx://10.41.0.43:8786
+distributed.worker - INFO - Waiting to connect to:      ucx://10.41.0.43:8786
+distributed.worker - INFO - Waiting to connect to:      ucx://10.41.0.43:8786
+distributed.worker - INFO - Waiting to connect to:      ucx://10.41.0.43:8786
+distributed.worker - INFO - Waiting to connect to:      ucx://10.41.0.43:8786
+distributed.worker - INFO - Waiting to connect to:      ucx://10.41.0.43:8786
+distributed.worker - INFO - Waiting to connect to:      ucx://10.41.0.43:8786
+distributed.nanny - INFO - Closing Nanny at 'ucx://10.41.13.167:52127'
+distributed.worker - INFO - Stopping worker at ucx://10.41.13.167:36917
+distributed.worker - INFO - Closed worker has not yet started: None
+distributed.diskutils - ERROR - Failed to remove '/gpfs/alpine/scratch/benjha/stf011/worker/worker-cj5m0qey' (failed in <built-in function lstat>): [Errno 2] No such file or directory: '/gpfs/alpine/scratch/benjha/stf011/worker/worker-cj5m0qey'
+distributed.nanny - ERROR - Timed out connecting Nanny '<Nanny: None, threads: 42>' to scheduler 'ucx://10.41.0.43:8786'
+distributed.nanny - ERROR - Failed to restart worker after its process exited
+Traceback (most recent call last):
+  File "/gpfs/alpine/world-shared/stf011/nvrapids_0.11_gcc_6.4.0/lib/python3.7/site-packages/distributed/nanny.py", line 409, in _on_exit
+    await self.instantiate()
+  File "/gpfs/alpine/world-shared/stf011/nvrapids_0.11_gcc_6.4.0/lib/python3.7/site-packages/distributed/nanny.py", line 322, in instantiate
+    timedelta(seconds=self.death_timeout), self.process.start()
+tornado.util.TimeoutError: Timeout
+distributed.dask_worker - INFO - End worker
+distributed.nanny - INFO - Closing Nanny at 'ucx://10.41.13.168:35493'
+distributed.worker - INFO - Stopping worker at ucx://10.41.13.168:53295
+distributed.worker - INFO - Closed worker has not yet started: None
+distributed.nanny - ERROR - Timed out connecting Nanny '<Nanny: None, threads: 42>' to scheduler 'ucx://10.41.0.43:8786'
+distributed.nanny - ERROR - Failed to restart worker after its process exited
+Traceback (most recent call last):
+  File "/gpfs/alpine/world-shared/stf011/nvrapids_0.11_gcc_6.4.0/lib/python3.7/site-packages/distributed/nanny.py", line 409, in _on_exit
+    await self.instantiate()
+  File "/gpfs/alpine/world-shared/stf011/nvrapids_0.11_gcc_6.4.0/lib/python3.7/site-packages/distributed/nanny.py", line 322, in instantiate
+    timedelta(seconds=self.death_timeout), self.process.start()
+tornado.util.TimeoutError: Timeout
+distributed.dask_worker - INFO - End worker

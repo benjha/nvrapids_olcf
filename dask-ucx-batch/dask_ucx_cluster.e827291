@@ -1,0 +1,89 @@
+
+Lmod is automatically replacing "xl/16.1.1-3" with "gcc/6.4.0".
+
+
+Due to MODULEPATH changes, the following have been reloaded:
+  1) spectrum-mpi/10.3.0.1-20190611
+
+distributed.scheduler - INFO - -----------------------------------------------
+distributed.scheduler - INFO - Local Directory: /gpfs/alpine/scratch/benjha/stf011/scheduler
+distributed.scheduler - INFO - -----------------------------------------------
+distributed.scheduler - INFO - Clear task state
+distributed.scheduler - INFO -   Scheduler at:     ucx://10.41.0.43:8786
+distributed.scheduler - INFO -   dashboard at:           10.41.0.43:8787
+distributed.nanny - INFO -         Start Nanny at: 'ucx://10.41.21.217:38627'
+distributed.nanny - INFO -         Start Nanny at: 'ucx://10.41.21.220:41837'
+distributed.nanny - INFO -         Start Nanny at: 'ucx://10.41.21.216:39073'
+distributed.diskutils - INFO - Found stale lock file and directory '/gpfs/alpine/scratch/benjha/stf011/worker/worker-60yhzbdo', purging
+distributed.diskutils - INFO - Found stale lock file and directory '/gpfs/alpine/scratch/benjha/stf011/worker/worker-s0vbla0p', purging
+distributed.nanny - INFO -         Start Nanny at: 'ucx://10.41.21.219:34031'
+distributed.diskutils - INFO - Found stale lock file and directory '/gpfs/alpine/scratch/benjha/stf011/worker/worker-ymgo7lfz', purging
+distributed.worker - INFO -       Start worker at:   ucx://10.41.21.217:33925
+distributed.worker - INFO -          Listening to:   ucx://10.41.21.217:33925
+distributed.worker - INFO -          dashboard at:         10.41.21.217:38357
+distributed.worker - INFO - Waiting to connect to:      ucx://10.41.0.43:8786
+distributed.worker - INFO - -------------------------------------------------
+distributed.worker - INFO -               Threads:                         42
+distributed.worker - INFO -                Memory:                  512.00 GB
+distributed.worker - INFO -       Local Directory: /gpfs/alpine/scratch/benjha/stf011/worker/worker-s0vbla0p
+distributed.worker - INFO - -------------------------------------------------
+distributed.worker - INFO -       Start worker at:   ucx://10.41.21.220:35827
+distributed.worker - INFO -          Listening to:   ucx://10.41.21.220:35827
+distributed.worker - INFO -          dashboard at:         10.41.21.220:35715
+distributed.worker - INFO - Waiting to connect to:      ucx://10.41.0.43:8786
+distributed.worker - INFO - -------------------------------------------------
+distributed.worker - INFO -               Threads:                         42
+distributed.worker - INFO -                Memory:                  512.00 GB
+distributed.worker - INFO -       Local Directory: /gpfs/alpine/scratch/benjha/stf011/worker/worker-60yhzbdo
+distributed.worker - INFO - -------------------------------------------------
+distributed.worker - INFO -       Start worker at:   ucx://10.41.21.216:52125
+distributed.worker - INFO -          Listening to:   ucx://10.41.21.216:52125
+distributed.worker - INFO -          dashboard at:         10.41.21.216:34991
+distributed.worker - INFO - Waiting to connect to:      ucx://10.41.0.43:8786
+distributed.worker - INFO - -------------------------------------------------
+distributed.worker - INFO -               Threads:                         42
+distributed.worker - INFO -                Memory:                  512.00 GB
+distributed.worker - INFO -       Local Directory: /gpfs/alpine/scratch/benjha/stf011/worker/worker-ymgo7lfz
+distributed.worker - INFO - -------------------------------------------------
+distributed.scheduler - INFO - Register worker <Worker 'ucx://10.41.21.217:33925', name: ucx://10.41.21.217:33925, memory: 0, processing: 0>
+distributed.scheduler - INFO - Starting worker compute stream, ucx://10.41.21.217:33925
+distributed.core - INFO - Starting established connection
+distributed.worker - INFO -         Registered to:      ucx://10.41.0.43:8786
+distributed.worker - INFO - -------------------------------------------------
+distributed.core - INFO - Starting established connection
+distributed.scheduler - INFO - Register worker <Worker 'ucx://10.41.21.220:35827', name: ucx://10.41.21.220:35827, memory: 0, processing: 0>
+distributed.scheduler - INFO - Starting worker compute stream, ucx://10.41.21.220:35827
+distributed.core - INFO - Starting established connection
+distributed.worker - INFO -         Registered to:      ucx://10.41.0.43:8786
+distributed.worker - INFO - -------------------------------------------------
+distributed.core - INFO - Starting established connection
+distributed.scheduler - INFO - Register worker <Worker 'ucx://10.41.21.216:52125', name: ucx://10.41.21.216:52125, memory: 0, processing: 0>
+distributed.scheduler - INFO - Starting worker compute stream, ucx://10.41.21.216:52125
+distributed.core - INFO - Starting established connection
+distributed.worker - INFO -         Registered to:      ucx://10.41.0.43:8786
+distributed.worker - INFO - -------------------------------------------------
+distributed.core - INFO - Starting established connection
+distributed.worker - INFO -       Start worker at:   ucx://10.41.21.219:46143
+distributed.worker - INFO -          Listening to:   ucx://10.41.21.219:46143
+distributed.worker - INFO -          dashboard at:         10.41.21.219:39651
+distributed.worker - INFO - Waiting to connect to:      ucx://10.41.0.43:8786
+distributed.worker - INFO - -------------------------------------------------
+distributed.worker - INFO -               Threads:                         42
+distributed.worker - INFO -                Memory:                  512.00 GB
+distributed.worker - INFO -       Local Directory: /gpfs/alpine/scratch/benjha/stf011/worker/worker-rkrahbjw
+distributed.worker - INFO - -------------------------------------------------
+distributed.scheduler - INFO - Register worker <Worker 'ucx://10.41.21.219:46143', name: ucx://10.41.21.219:46143, memory: 0, processing: 0>
+distributed.scheduler - INFO - Starting worker compute stream, ucx://10.41.21.219:46143
+distributed.core - INFO - Starting established connection
+distributed.worker - INFO -         Registered to:      ucx://10.41.0.43:8786
+distributed.worker - INFO - -------------------------------------------------
+distributed.core - INFO - Starting established connection
+distributed.scheduler - INFO - Register worker <Worker 'ucx://10.41.13.168:34531', name: ucx://10.41.13.168:34531, memory: 0, processing: 0>
+distributed.scheduler - INFO - Starting worker compute stream, ucx://10.41.13.168:34531
+distributed.core - INFO - Starting established connection
+distributed.scheduler - INFO - Register worker <Worker 'ucx://10.41.13.167:36169', name: ucx://10.41.13.167:36169, memory: 0, processing: 0>
+distributed.scheduler - INFO - Starting worker compute stream, ucx://10.41.13.167:36169
+distributed.core - INFO - Starting established connection
+User defined signal 2
+Could not read jskill result from pmix server
+Could not read jskill result from pmix server
