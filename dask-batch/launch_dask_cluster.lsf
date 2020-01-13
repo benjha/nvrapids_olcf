@@ -4,9 +4,9 @@
 #BSUB -W 1:00
 #BSUB -alloc_flags "gpumps"
 #BSUB -nnodes 4
-#BSUB -J dask_worker
-#BSUB -o dask_worker.o%J
-#BSUB -e dask_worker.e%J
+#BSUB -J dask_cluster
+#BSUB -o dask_cluster.o%J
+#BSUB -e dask_cluster.e%J
 
 PROJ_ID=stf011
 
