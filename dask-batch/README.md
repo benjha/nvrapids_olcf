@@ -59,7 +59,6 @@ dask-workers in SUMMIT's login nodes.
 #BSUB -o dask_worker.o%J
 #BSUB -e dask_worker.e%J
 
-JOB_ID=${LSB_JOBID%.*}
 PROJ_ID=stf011
 
 module load gcc/6.4.0
@@ -156,7 +155,6 @@ It is possible to grow and shrink Dask clusters based on current use. However, i
 #BSUB -o dask_worker.o%J
 #BSUB -e dask_worker.e%J
 
-JOB_ID=${LSB_JOBID%.*}
 PROJ_ID=stf011
 
 module load gcc/6.4.0

@@ -1,9 +1,7 @@
 #!/bin/bash
 
-
 REPODIR=$(cd $(dirname $0); pwd)
 XGBOOST_BUILD_DIR=${REPODIR}/build
-
 
 # Set defaults for vars that may not have been defined externally
 #  FIXME: if INSTALL_PREFIX is not set, check PREFIX, then check
@@ -18,6 +16,7 @@ cmake -DCMAKE_INSTALL_PREFIX=${INSTALL_PREFIX} \
       -DCMAKE_INSTALL_LIBDIR="lib" \
       -DUSE_CUDA=ON \
       -DUSE_NCCL=ON \
+      -DUSE_CUDF=ON \
       -DNCCL_ROOT=${CONDA_PREFIX} \
       ..
 
