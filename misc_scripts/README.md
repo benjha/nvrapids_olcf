@@ -34,6 +34,8 @@ source deactivate
 
 ### Step 2. Execute ```connect_jupyther_dask.py``` script
 
+Before executing the script, verify the DASK's scheduler JSON filename used in this script corresponds to the same filename you specified when launching the DASK scheduler.
+
 
 Once the Conda environment has been loaded, type the next command:
 
