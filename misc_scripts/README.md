@@ -64,5 +64,5 @@ Instructions:
 ```
 
 
-First, a tunneling connection should be done between your machine a Summit. Then, using the ports given in the instructions, you should open two windows in your web browser using, in this example, ```http://localhost:8888``` to connect to Jupyter Lab and ```http://localhost:8787``` to connect to Dask's dashboard.
+First, a tunneling connection should be done between your machine and Summit. Then, using the ports given in the instructions, you should open two windows in your web browser using, in this example, ```http://localhost:8888``` to connect to Jupyter Lab and ```http://localhost:8787``` to connect to Dask's dashboard.
 
