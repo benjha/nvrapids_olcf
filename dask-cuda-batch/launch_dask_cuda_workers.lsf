@@ -15,4 +15,4 @@ module load cuda/10.1.168
 
 export PATH=$WORLDWORK/stf011/nvrapids_0.11_gcc_6.4.0/bin:$PATH
 
-jsrun -c 12 -g 6 -n 2 -r 1 -a 1 --smpiargs="off" dask-cuda-worker --scheduler-file $MEMBERWORK/$PROJ_ID/my-scheduler-gpu.json  --local-directory $MEMBERWORK/$PROJ_ID  --nthreads 1 --memory-limit 85GB --device-memory-limit 16GB  --death-timeout 60 --interface ib0 --enable-infiniband --enable-nvlink
+jsrun -c 12 -g 6 -n 2 -r 1 -a 1 --smpiargs="off" --bind rs dask-cuda-worker --scheduler-file $MEMBERWORK/$PROJ_ID/my-scheduler-gpu.json  --local-directory $MEMBERWORK/$PROJ_ID  --nthreads 1 --memory-limit 85GB --device-memory-limit 16GB  --death-timeout 60 --interface ib0 --enable-infiniband --enable-nvlink

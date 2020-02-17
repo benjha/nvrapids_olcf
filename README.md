@@ -19,4 +19,6 @@ dask-batch directory includes scripts to execute DASK distributed workloads in b
 
 dask-cuda-batch directory  includes scripts to execute NVIDIA Rapids workloads with dask-cuda in batch mode.
 
+## DISCLAIMER
 
+The documentation and scripts of this repositiory are not suported by OLCF nor NVIDIA.
