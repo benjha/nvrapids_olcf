@@ -1,4 +1,4 @@
 ## README.md
 
-This directory includes benchmarking scripts fro cuML, cuDF, CuPY and cuGraph.
+This directory includes benchmarking scripts for cuML, cuDF, CuPY and cuGraph.
 
