@@ -8,8 +8,10 @@ Add CuPy / DASK scripts here
 - GCC v6.4
 - CUDA v10.1.168
 - NVIDIA Driver v418.67
-- NVIDIA Rapids 0.11
-- CuPy 7.1.1
+- NVIDIA Rapids v0.11
+- CuPy v7.1.1
+- NumPy v1.17.3
+- DASK v2.9.1
 
 ## SVD Single-GPU vs POWER9
 
