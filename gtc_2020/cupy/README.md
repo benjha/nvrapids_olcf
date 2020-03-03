@@ -13,7 +13,7 @@ Add CuPy / DASK scripts here
 - NumPy v1.17.3
 - DASK v2.9.1
 
-## SVD Single-GPU vs POWER9
+## SVD Single-GPU vs POWER9 CPU
 
 Results obtained from ```svd_dask_cupy.py``` and ```svd_dask_numpy.py``` scripts
 
