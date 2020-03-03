@@ -2,6 +2,15 @@
 
 Add CuPy / DASK scripts here
 
+## System configuration
+
+- IBM Power System AC922. 2x POWER9 CPU (84 smt cores each) 512 GB RAM, 6x NVIDIA Volta GPU with 16 GB HBM2
+- GCC v6.4
+- CUDA v10.1.168
+- NVIDIA Driver v418.67
+- NVIDIA Rapids 0.11
+- CuPy 7.1.1
+
 ## SVD Single-GPU vs POWER9
 
 Results obtained from ```svd_dask_cupy.py``` and ```svd_dask_numpy.py``` scripts
