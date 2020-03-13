@@ -7,6 +7,26 @@ until all the workers are spun up for work.
 Mark Coletti
 colettima@ornl.gov
 Oak Ridge National Laboratory
+
+
+usage: wait_for_workers.py [-h] [--target-workers TARGET_WORKERS]
+                           [--pause-time PAUSE_TIME] [--verbose]
+                           scheduler_file
+
+dask utility for blocking until set target of workers is registered
+
+positional arguments:
+  scheduler_file        Scheduler file for the running scheduler
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --target-workers TARGET_WORKERS, -t TARGET_WORKERS
+                        The target total number of workers on which to wait;
+                        if not specified, just dump out the worker count.
+  --pause-time PAUSE_TIME, -p PAUSE_TIME
+                        How long to pause between polling scheduler for number
+                        of workers
+  --verbose, -v         Verbose output
 """
 import argparse
 import time
