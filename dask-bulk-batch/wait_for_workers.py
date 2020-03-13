@@ -1,8 +1,12 @@
 #!/usr/bin/env python3
 """
-This utility will block on the scheduler until a certain number of workers
+This utility will block on the scheduler until a specified number of workers
 have registered.  This is useful for summit batch jobs to block in LSF scripts
 until all the workers are spun up for work.
+
+Mark Coletti
+colettima@ornl.gov
+Oak Ridge National Laboratory
 """
 import argparse
 import time
