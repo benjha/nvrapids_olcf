@@ -1,0 +1,101 @@
+#!/bin/sh
+#
+# Batch submission script for scaling tests for LEAP/dask
+#
+#BSUB -P CSC363
+#BSUB -W 2:00
+#BSUB -nnodes 921
+#BSUB -J 921_node_scaling_test_two_hour
+#BSUB -o out.leap.%J
+#BSUB -e err.leap.%J
+
+export BBPATH=/mnt/bb/$USER/
+export PROJ_DIR=/ccs/proj/csc363/
+export SRC_PATH=${PROJ_DIR}/may/
+export RUN_DIR=/gpfs/alpine/csc363/scratch/mcoletti/921_node_scaling_test
+export SCHEDULER_FILE=${RUN_DIR}/scheduler_file.json
+
+export PYTHONPATH=$SRC_PATH/LEAP/:$PYTHONPATH
+
+export BB_DATA_DIR=/mnt/bb/mcoletti/
+
+
+# Count the unique host names and subract the batch node to get
+# the actual number of nodes allocated to this job.
+let num_nodes=(`cat $LSB_DJOB_HOSTFILE | sort | uniq | wc -l` - 1)
+
+# We want six workers per node
+let num_workers=($num_nodes * 6)
+
+export NUM_WORKERS=$num_workers
+
+export INIT_POP_SIZE=1000
+export MAX_BIRTHS=10000
+export POOL_SIZE=1000
+export BATCH_SIZE=20
+
+export TIME_TO_RUN=2
+
+# To shut up terminal warning
+export LC_ALL=C
+export LANG=C
+
+
+echo "Init pop size $INIT_POP_SIZE"
+echo "Max births: $MAX_BIRTHS"
+echo "Pool size: $POOL_SIZE"
+echo "NUM_WORKERS: $NUM_WORKERS"
+
+# Load up the DELMERA environment with all its dependencies.
+module purge
+#module load python/3.7.0
+module list
+
+# Presumes that "make venv" has already been done in the LEAP top level to 
+# create the python virtual environment.
+source  /ccs/proj/csc363/may/LEAP/venv/bin/activate
+
+# Just a sanity check to ensure we're using the *correct* python
+# assocaited with the DELEMERA environment.
+echo "Using python: " `which python3`
+echo "PYTHONPATH: " $PYTHONPATH
+
+# Just in case I forgot to make the durn thing ahead of time.  :P
+mkdir -p $RUN_DIR
+
+cd $RUN_DIR
+
+# Copy over the hosts allocated for this job so that we can later verify
+# that all the allocated nodes were busy with the correct worker allocation.
+cp $LSB_DJOB_HOSTFILE $LSB_JOBID.hosts
+
+# The scheduler doesn't need GPUs. It just needs one lonely core to run on.
+jsrun --gpu_per_rs 0 --nrs 1 --tasks_per_rs 1 --cpu_per_rs 1 --rs_per_host 1 dask-scheduler --interface ib0 --no-dashboard --no-show --scheduler-file $SCHEDULER_FILE &
+
+# Give the scheduler a chance to spin up.
+sleep 10
+
+echo Starting workers
+
+# Spin up an individual task for each worker. Since dask does not use MPI, specify smpiargs none.
+# for (( i=0; i < $NUM_WORKERS; i++ )); do
+
+jsrun --smpiargs="none" --nrs $NUM_WORKERS -e individual --stdio_stdout ${RUN_DIR}/worker_out.%h.%j.%t.%p --stdio_stderr ${RUN_DIR}/worker_error.%h.%j.%t.%p   --tasks_per_rs 1 --cpu_per_rs 1 --gpu_per_rs 1 --rs_per_host 6 --latency_priority gpu-cpu dask-worker --nthreads 1 --nprocs 1 --interface ib0 --no-dashboard --reconnect --scheduler-file $SCHEDULER_FILE &
+
+# Now block until the desired number of workers is registered with the
+# scheduler.  Yes, we're going to run this on the batch node because
+# we don't want to use compute node resources for this one shot
+# script.
+python3 /ccs/proj/csc363/may/carla_imitation_learning/gremlin/wait_for_workers.py --verbose --target-workers $NUM_WORKERS --pause-time 15 $SCHEDULER_FILE
+
+echo "About to run EA"
+
+# Run the client EA; like the scheduler, this just needs a single core to noodle away on.
+jsrun --smpiargs="none" --nrs 1  --tasks_per_rs 1 --cpu_per_rs 1  --gpu_per_rs 0 --rs_per_host 1 --latency_priority cpu-cpu python3 -u ${SRC_PATH}/LEAP/examples/simple_distributed.py --verbose --length 10 --init-pop-size $INIT_POP_SIZE --max-births $MAX_BIRTHS --bag-size $POOL_SIZE -t ${RUN_DIR}/tracked_evals.csv  --scheduler-file $SCHEDULER_FILE 
+
+echo "Finished the EA"
+
+# We're done so kill the scheduler and worker processes
+jskill all
+
+echo done
