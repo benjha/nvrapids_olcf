@@ -37,8 +37,7 @@ module purge
 # Just a sanity check to ensure we have the correct modules loaded
 module list
 
-# Presumes that "make venv" has already been done in the LEAP top level to
-# create the python virtual environment.
+# Set up for your anaconda/miniconda/venv environment.
 source  /ccs/proj/YOURPROJ/path/to/your/conda/or/venv/activate
 
 # Just a sanity check to ensure we're using the *correct* python environment.
