@@ -8,20 +8,29 @@ from dask.datasets import timeseries
 from dask.utils import format_bytes, format_time
 import dask.dataframe as dd
 import dask.array as da
-from dask.distributed import Client
+from dask.distributed import Client, wait
 # RAPIDS SPECIFIC:
 import cudf
 import dask_cudf
 
 # -------------- DATA GENERATION FUNC --------------------------------
 
-def generate_timeseries(num_ids=1000, freq='1d', seed=1, csv_path=None, **kwargs):
-    coll_names = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
+def generate_timeseries(num_ids=1000, freq='1d', seed=1, csv_path=None, prefixes_left=True, keep_id=True, **kwargs):
+    
+    alphabets = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
+
+    if prefixes_left:
+        prefixes = alphabets[:10]
+    else:
+        prefixes = alphabets[-10:]
+
     coll_dict = dict()
-    for prefix in [''] + coll_names[:9]:
-        for this_name in coll_names:
+    for prefix in prefixes:
+        for this_name in alphabets:
             coll_dict[prefix + this_name] = float
-    coll_dict['id'] = int
+
+    if keep_id:
+        coll_dict['id'] = int
     
     dask_df = timeseries(start='2000', 
                          end='2001', 
@@ -70,6 +79,37 @@ def get_frequency(targ_size):
                '10T': '16ms'}
     
     return size_2_freq[targ_size]
+
+def get_right_freq_from_left(left_size):
+    left_2_right = {'1G': '1630s',
+            '2.5G': '650s',
+            '5G': '330s',
+            '10G': '160s',
+            '25G': '65000ms',
+            '50G': '32600ms',
+            '100G': '16300ms',
+            '250G': '6520ms',
+            '500G': '3260ms',
+            '1T': '1630ms',
+            '2.5T': '650ms',
+            '5T': '330ms',
+            '10T': '160ms'}
+    return left_2_right[left_size]
+
+def generate_right_data(left_size, num_ids=1001):
+    
+    # Pick a size that is 1/10th the size of left
+    # ie - pick 10x the frequency
+    freq = get_right_freq_from_left(left_size)
+        
+    csv_path = get_timeseries_path(freq, num_ids=num_ids)
+
+    if os.path.exists(csv_path):
+        print('Reading existing csv file')
+    else:
+        print('Generating data using dask.dataset.timeseries for frequency: {}. This can take a few minutes'.format(freq))
+        _ = generate_timeseries(num_ids=num_ids, freq=freq, csv_path=csv_path, prefixes_left=False, keep_id=False)
+    return csv_path
 
 def get_timeseries_path(freq, num_ids=1000):
     
@@ -130,7 +170,7 @@ def benchmark_join_indexed(package_name, targ_size):
     
     # --------------- GET RANDOM DATA FILE PATH---------------------
     csv_left = get_timeseries_path(get_frequency(targ_size), num_ids=1000)
-    csv_right = get_timeseries_path(get_frequency(targ_size), num_ids=1001)
+    csv_right = get_timeseries_path(get_right_freq_from_left(targ_size), num_ids=1001)
 
     # ----------------- READ FROM FILE -----------------------------
     t_start = time.time()
@@ -178,8 +218,13 @@ def benchmark_groupby(package_name, targ_size):
     
     dframe = read_csv(csv_path, package_handle, package_name)
 
-    # Repartition to maximize performance
-    #dframe = dframe.repartition(npartitions=dframe.npartitions // 100)
+    if 'dask' in package_name:
+        print('Dataframe has {} partitions'.format(dframe.npartitions))
+        # Repartition to maximize performance
+        num_dask_workers = len(client.scheduler_info()['workers'])
+        num_partitions = num_dask_workers
+        dframe = dframe.repartition(npartitions=num_partitions)
+        print('Setting number of partitions to: {}'.format(dframe.npartitions))
     
     # ----------------- SEE HEAD -----------------------------
 
@@ -229,6 +274,7 @@ def benchmark_groupby(package_name, targ_size):
     
 if __name__ == '__main__':
     if len(sys.argv) != 4:
+        print('script was called as\n\t' + ' '.join(sys.argv))
         print('please run as "python <script_name>.py <task> <package> <size>"\n\t<task> = groupby or join-indexed\n\t<package> = dask, dask-cudf, cudf or pandas\n\t<size> = 1G, 2.5G, 5G, ...25G')
     else:
         if sys.argv[1] not in ['groupby', 'join-indexed']:
