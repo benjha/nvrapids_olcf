@@ -137,17 +137,27 @@ def get_package_scheduler(package_name):
     
     return package_dict[package_name]
 
-def set_up_dask_client(scheduler_json_name):
+def set_up_dask_client(scheduler_json_name, max_wait_secs=120):
     client = None
     if scheduler_json_name is not None:
         scheduler_file = os.getenv('MEMBERWORK') + '/stf011/' + scheduler_json_name 
         client = Client(scheduler_file=scheduler_file)
         print("client information {}".format(client))
+        
+        if len(client.scheduler_info()['workers']) < 1:
+            print('Dask workers have not yet arrived. Waiting for {} sec'.format(max_wait_secs))
+
+        t0 = time.time()
+        while len(client.scheduler_info()['workers']) < 1 and time.time()-t0 < max_wait_secs:
+            time.sleep(15)
+        
+        if len(client.scheduler_info()['workers']) < 1:
+            raise ValueError('Dask workers have not connected with the scheduler')
     return client
         
-def read_csv(csv_path, package_handle, package_name):
+def read_csv(csv_path, package_handle, package_name, **kwargs):
     t0 = time.time()
-    dframe = package_handle.read_csv('file://' + csv_path)
+    dframe = package_handle.read_csv('file://' + csv_path, **kwargs)
     if package_name in ['dask', 'dask-cudf']:
         dframe = dframe.persist()
     print('Time to load a {} file with {}: {}'.format(format_bytes(os.stat(csv_path).st_size), package_name, format_time(time.time() - t0)))
@@ -215,14 +225,21 @@ def benchmark_groupby(package_name, targ_size):
 
     # ----------------- READ FROM FILE -----------------------------
     t_start = time.time()
+
+    kwargs = dict()
+    if package_name == 'dask-cudf':
+        kwargs['chunksize'] = '1024MiB'
+    elif package_name == 'dask':
+        kwargs['blocksize'] = '1024MB'
+    print('read_csv will be given: {}'.format(kwargs))
     
-    dframe = read_csv(csv_path, package_handle, package_name)
+    dframe = read_csv(csv_path, package_handle, package_name, **kwargs)
 
     if 'dask' in package_name:
         print('Dataframe has {} partitions'.format(dframe.npartitions))
         # Repartition to maximize performance
         num_dask_workers = len(client.scheduler_info()['workers'])
-        num_partitions = num_dask_workers
+        num_partitions = num_dask_workers // 4
         dframe = dframe.repartition(npartitions=num_partitions)
         print('Setting number of partitions to: {}'.format(dframe.npartitions))
     
