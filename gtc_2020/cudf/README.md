@@ -39,20 +39,12 @@ Provide inputs as:
 
 ### 1.2. Optimally reading a csv
 
-#### 1.2.1. Dask-cudf
+Both `dask-cudf` and `dask` are capable of reading `.csv` files in blocks or chunks. Using the optimal block or chunk size can substantially change the speed with which large `.csv` files are read into memory. 
 
-![alt text](./Dask-cudf_default_chunk_sizes.png  "cudf baseline")
-**Figure 3**: Default chunk sizes 
+![alt text](./Dask-cudf_chunk_sizes_load_times_3.png  "cudf baseline")
+**Figure 3**: The `chunksize` parameter in `dask-cudf.read_csv()` was varied from `32 MB` to `4 GB`. Note that by default the `read_csv()` function reads with ~ `256 MB` chunk sizes. For obvious reasons, `chunksize`s larger than the size of the data file were not used in experiments. Also, very small chunk sizes relative to the size of the `csv` file were also not used.
 
-![alt text](./Dask-cudf_chunk_sizes_load_times.png "cudf baseline") 
-**Figure 4**: 
-
-![alt text](./Dask-cudf_chunk_sizes_load_times_2.png "cudf baseline")
-**Figure 5**: 
-
-#### 1.2.2. Dask
-
-![alt text](./Dask_default_block_sizes.png  "cudf baseline")
+![alt text](./Dask_block_sizes_load_times_3.png  "cudf baseline")
 **Figure 6**: Default chunk sizes 
 
 ![alt text](./Dask_block_sizes_load_times.png "cudf baseline") 
