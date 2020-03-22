@@ -42,35 +42,19 @@ Provide inputs as:
 Both `dask-cudf` and `dask` are capable of reading `.csv` files in blocks or chunks. Using the optimal block or chunk size can substantially change the speed with which large `.csv` files are read into memory. 
 
 ![alt text](./Dask-cudf_chunk_sizes_load_times_3.png  "cudf baseline")
-**Figure 3**: The `chunksize` parameter in `dask-cudf.read_csv()` was varied from `32 MB` to `4 GB`. Note that by default the `read_csv()` function reads with ~ `256 MB` chunk sizes. For obvious reasons, `chunksize`s larger than the size of the data file were not used in experiments. Also, very small chunk sizes relative to the size of the `csv` file were also not used. Figure 3 shows that the loading time varies inversely with the `chunksize` and directly with the number of effective `partitions`. Here `partitions` are the number of chunks dask chops the `csv` file and can be calculated as the quotient of the file size and the `chunksize`. Thus, it appears that the `chunksize` should be roughly 1/2 to 1/4 the size of the size of the file for the fastest loading time.
+**Figure 3**: The `chunksize` parameter in `dask-cudf.read_csv()` was varied from `32 MB` to `4 GB`. Note that by default the `read_csv()` function reads with ~ `256 MB` chunk sizes. For obvious reasons, `chunksize`s larger than the size of the data file were not used in experiments. Also, very small chunk sizes relative to the size of the `csv` file were also not used. Figure 3 shows that the loading time varies inversely with the `chunksize` and directly with the number of effective `partitions`. Here `partitions` are the number of chunks dask chops the `csv` file and can be calculated as the quotient of the file size and the `chunksize`. Thus, it appears that the `chunksize` should be roughly 1/2 to 1/4 the size of the size of the file for the fastest loading time. Note that by default `dask-cudf` prefers to read ~ `128MB` chunks.
 
 ![alt text](./Dask_block_sizes_load_times_3.png  "cudf baseline")
 **Figure 4**: The `blocksize` parameter in `dask.dataframe.read_csv()` was varied from `32 MB` to `1 GB`. The trends obvserved and the inference gleaned from figure 3 apply to `dask` as well. 
 
 ### 1.3. Partitioning the dataframe to maximize performance
 
-#### 1.3.1. Dask-cudf
+![alt text](./Dask_cudf_partition_size_vs_unique_groupby_time_2.png  "cudf baseline")
+**Figure 5**: By default `dask-cudf` uses partitions that are ~ `128 MB` in size. The dataframe was repartitioned into 3 to 96 partitions to observe the effect of such repartitioning on the time taken to compute the number of unique values in a particular column and performing a few groupby operations. It appears that setting the partition size to the default (~128 MB) appears to result in the best performance regardless of the size of the dataset in question.
 
-![alt text](./Dask_cudf_partiton_sizes.png  "cudf baseline")
-**Figure 9**: Default chunk sizes 
-
-![alt text](./Dask_cudf_partition_size_vs_unique_groupby_time.png "cudf baseline") 
-**Figure 10**: 
-
-![alt text](./Dask_cudf_groupby_timing_vs_partitions.png "cudf baseline")
-**Figure 11**: 
-
-#### 1.3.2. Dask
-
-![alt text](./Dask_partiton_sizes.png  "cudf baseline")
-**Figure 12**: Default chunk sizes 
-
-![alt text](./Dask_partition_size_vs_unique_groupby_time.png "cudf baseline") 
-**Figure 13**: 
-
-![alt text](./Dask_groupby_timing_vs_partitions.png "cudf baseline")
-**Figure 14**: 
+![alt text](./Dask_partition_size_vs_unique_groupby_time_2.png "cudf baseline") 
+**Figure 6**: 
 
 ### 1.4. Comparing all packages
 ![alt text](./groupby_packages_comparison.png "Summary of Groupby")
-**Figure 1**: Summary of durations for (left) loading a csv file, (center) calculate the number of unique values, and (right) groupby on a single column. Results from experiments that use the best ``blocksize``, ``chunksize`` and ``parititons`` parameters are used in the above plots. Overall, the multi-threaded, dask-counterparts of the single-threaded (CPU-only) pandas and (NVIDIA GPU) cudf packages are substantially faster at reading the single csv file. 
+**Figure 7**: Summary of durations for (left) loading a csv file, (center) calculate the number of unique values, and (right) groupby on a single column. Results from experiments that use the best ``blocksize``, ``chunksize`` and ``parititons`` parameters are used in the above plots. Overall, the multi-threaded, dask-counterparts of the single-threaded (CPU-only) pandas and (NVIDIA GPU) cudf packages are substantially faster at reading the single csv file. 
