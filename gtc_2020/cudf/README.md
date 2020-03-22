@@ -42,16 +42,10 @@ Provide inputs as:
 Both `dask-cudf` and `dask` are capable of reading `.csv` files in blocks or chunks. Using the optimal block or chunk size can substantially change the speed with which large `.csv` files are read into memory. 
 
 ![alt text](./Dask-cudf_chunk_sizes_load_times_3.png  "cudf baseline")
-**Figure 3**: The `chunksize` parameter in `dask-cudf.read_csv()` was varied from `32 MB` to `4 GB`. Note that by default the `read_csv()` function reads with ~ `256 MB` chunk sizes. For obvious reasons, `chunksize`s larger than the size of the data file were not used in experiments. Also, very small chunk sizes relative to the size of the `csv` file were also not used.
+**Figure 3**: The `chunksize` parameter in `dask-cudf.read_csv()` was varied from `32 MB` to `4 GB`. Note that by default the `read_csv()` function reads with ~ `256 MB` chunk sizes. For obvious reasons, `chunksize`s larger than the size of the data file were not used in experiments. Also, very small chunk sizes relative to the size of the `csv` file were also not used. Figure 3 shows that the loading time varies inversely with the `chunksize` and directly with the number of effective `partitions`. Here `partitions` are the number of chunks dask chops the `csv` file and can be calculated as the quotient of the file size and the `chunksize`. Thus, it appears that the `chunksize` should be roughly 1/2 to 1/4 the size of the size of the file for the fastest loading time.
 
 ![alt text](./Dask_block_sizes_load_times_3.png  "cudf baseline")
-**Figure 6**: Default chunk sizes 
-
-![alt text](./Dask_block_sizes_load_times.png "cudf baseline") 
-**Figure 7**: 
-
-![alt text](./Dask_block_sizes_load_times_2.png "cudf baseline")
-**Figure 8**: 
+**Figure 4**: The `blocksize` parameter in `dask.dataframe.read_csv()` was varied from `32 MB` to `1 GB`. The trends obvserved and the inference gleaned from figure 3 apply to `dask` as well. 
 
 ### 1.3. Partitioning the dataframe to maximize performance
 
