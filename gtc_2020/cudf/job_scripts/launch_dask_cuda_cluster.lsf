@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+#BSUB -P STF011
+#BSUB -W 0:30
+#BSUB -alloc_flags "gpumps"
+#BSUB -nnodes 2
+#BSUB -J dask_cluster
+#BSUB -o dask_cluster.o%J
+#BSUB -e dask_cluster.e%J
+
+PROJ_ID=stf011
+
+module load gcc/6.4.0
+module load cuda/10.1.168
+
+export PATH=$WORLDWORK/stf011/nvrapids_0.11_gcc_6.4.0/bin:$PATH
+
+dask-scheduler --interface ib0 --scheduler-file $MEMBERWORK/$PROJ_ID/my-scheduler.json --local-directory $MEMBERWORK/$PROJ_ID/scheduler &
+
+jsrun -n 84 -c 1 -a 1 -r 42 --bind rs dask-worker --scheduler-file $MEMBERWORK/$PROJ_ID/my-scheduler.json --nthreads 1  --memory-limit 12GB  --nanny --death-timeout 60 --interface ib0 --local-directory $MEMBERWORK/$PROJ_ID/worker
