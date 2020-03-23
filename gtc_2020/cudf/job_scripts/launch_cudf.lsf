@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+#BSUB -P STF011
+#BSUB -W 0:30
+#BSUB -alloc_flags "gpumps smt4"
+#BSUB -nnodes 1
+#BSUB -J cudf_benchmarking
+#BSUB -o cudf_benchmarking.o%J
+#BSUB -e cudf_benchmarking.e%J
+
+
+PROJ_ID=stf011
+
+module load gcc/6.4.0
+module load cuda/10.1.168
+
+#export OMP_PROC_BIND=FALSE
+export PATH=$WORLDWORK/stf011/nvrapids_0.11_gcc_6.4.0/bin:$PATH
+
+cd /gpfs/alpine/world-shared/stf011/somnaths/rapids/nvrapids_olcf/dask-cuda-batch
+
+jsrun -n 1 -r 1 -a 1 -c 42 -g 6 --smpiargs="off" python rapids_bench_v0.py groupby cudf all
