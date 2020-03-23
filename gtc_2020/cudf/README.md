@@ -2,7 +2,11 @@
 
 ## Running the benchmark
 
-First, run the job script that provisions the dask scheduler and dask-cuda workers shown [elsewhere](https://github.com/benjha/nvrapids_olcf/blob/branch-0.11/dask-cuda-batch/launch_dask_cuda_cluster.lsf) in this repository.
+First, run the appropriate job script that provisions the compute allocation and a dask cluster:
+* `dask-cudf`: [dask cuda scheduler + dask cuda workers](./job_scripts/launch_dask_cuda_cluster.lsf) 
+* `dask`: [dask scheduler + dask workers](./job_scripts/launch_dask_cuda_cluster.lsf)
+* `cudf`: [job script that also runs a benchmark](./job_scripts/launch_cudf.lsf)
+* `pandas`: [job script that also runs a benchmark](./job_scripts/launch_pandas.lsf)
 
 Next, run benchmarking script as: 
 
