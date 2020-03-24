@@ -10,8 +10,11 @@ import dask.dataframe as dd
 import dask.array as da
 from dask.distributed import Client, wait
 # RAPIDS SPECIFIC:
+import rmm
 import cudf
 import dask_cudf
+
+ben_data_path = '/gpfs/alpine/proj-shared/stf011/benjha/datasets/dataset.csv'
 
 # -------------- DATA GENERATION FUNC --------------------------------
 
@@ -119,7 +122,7 @@ def validate_inputs(package_name, targ_size):
 
     if not isinstance(targ_size, str):
         raise TypeError('targ_size should be of type str. Provided object ({}) of type ({})'.format(targ_size, type(targ_size)))
-    if targ_size not in ['1G', '2.5G', '5G' , '10G', '25G', 'all']: 
+    if targ_size not in ['ben', '1G', '2.5G', '5G' , '10G', '25G', 'all']: 
         raise ValueError('Requested data size: "' +  targ_size + '" is not valid')
         
     if not isinstance(package_name, str):
@@ -137,33 +140,74 @@ def get_package_scheduler(package_name):
     
     return package_dict[package_name]
 
-def set_up_dask_client(scheduler_json_name, max_wait_secs=120):
+def set_up_dask_client(scheduler_json_name, num_exp_workers=None, max_wait_secs=120):
     client = None
     if scheduler_json_name is not None:
         scheduler_file = os.getenv('MEMBERWORK') + '/stf011/' + scheduler_json_name 
         client = Client(scheduler_file=scheduler_file)
-        print("client information {}".format(client))
         
-        if len(client.scheduler_info()['workers']) < 1:
-            print('Dask workers have not yet arrived. Waiting for {} sec'.format(max_wait_secs))
+        if num_exp_workers is None:
+            num_exp_workers = 1
+ 
+        if len(client.scheduler_info()['workers']) < num_exp_workers:
+            print('Dask workers have not yet arrived. Waiting for at most {} sec'.format(max_wait_secs))
 
         t0 = time.time()
-        while len(client.scheduler_info()['workers']) < 1 and time.time()-t0 < max_wait_secs:
-            time.sleep(15)
+        while len(client.scheduler_info()['workers']) < num_exp_workers and time.time()-t0 < max_wait_secs:
+            time.sleep(10)
         
-        if len(client.scheduler_info()['workers']) < 1:
+        if len(client.scheduler_info()['workers']) < num_exp_workers:
             raise ValueError('Dask workers have not connected with the scheduler')
+
+        print("client information {}".format(client))
+        """    
+        client.run(
+                   rmm.reinitialize,
+                   pool_allocator=True,
+                   managed_memory=False,
+                   initial_pool_size=2**31,
+                   )"""
     return client
         
-def read_csv(csv_path, package_handle, package_name, **kwargs):
+def read_csv(csv_path, package_handle, package_name, chunksize_mb=1024, **kwargs):
+    #kwargs = dict()
+    if isinstance(chunksize_mb, int) and chunksize_mb > 32:
+        if package_name == 'dask-cudf':
+            kwargs['chunksize'] = str(chunksize_mb) + 'MiB'
+        elif package_name == 'dask':
+            kwargs['blocksize'] = str(chunksize_mb) + 'MB'
+    print('read_csv will be given: {}'.format(kwargs))
+
     t0 = time.time()
     dframe = package_handle.read_csv('file://' + csv_path, **kwargs)
+    persist = kwargs.pop('persist', True)
     if package_name in ['dask', 'dask-cudf']:
-        dframe = dframe.persist()
+        if persist:
+            dframe = dframe.persist()
+        else:
+            print('Dataframe requested to not persist in memory')
     print('Time to load a {} file with {}: {}'.format(format_bytes(os.stat(csv_path).st_size), package_name, format_time(time.time() - t0)))
 
     print('Dataframe object of type: {}'.format(type(dframe)))
     
+    return dframe
+
+
+def repartition_dframe(package_name, dframe, client, scale_by_workers=None, new_partitions=None):
+    if 'dask' not in package_name:
+        return dframe
+
+    print('Dataframe has {} partitions'.format(dframe.npartitions))
+    # Repartition to maximize performance
+    num_partitions = dframe.npartitions
+    if scale_by_workers is not None:
+        num_dask_workers = len(client.scheduler_info()['workers'])
+        num_partitions = int(num_dask_workers * scale_by_workers)
+    elif isinstance(new_partitions, int):
+        num_partitions = new_partitions
+
+    dframe = dframe.repartition(npartitions=num_partitions)
+    print('Setting number of partitions to: {}'.format(dframe.npartitions))
     return dframe
 
 # -------------- JOIN INDEXED --------------------------------
@@ -185,8 +229,12 @@ def benchmark_join_indexed(package_name, targ_size):
     # ----------------- READ FROM FILE -----------------------------
     t_start = time.time()
     
-    dframe_left = read_csv(csv_left, package_handle, package_name)
-    dframe_right = read_csv(csv_right, package_handle, package_name)
+    dframe_left = read_csv(csv_left, package_handle, package_name, chunksize_mb=1024)
+    if 'dask' in package_name:
+        print('Dataframe has {} partitions'.format(dframe_left.npartitions))
+    dframe_right = read_csv(csv_right, package_handle, package_name, chunksize_mb=None)
+    if 'dask' in package_name:
+        print('Dataframe has {} partitions'.format(dframe_right.npartitions))
     
     # cudf doesn't handle datetime indexes well yet, so we convert to integer dtype
     dframe_left.index = dframe_left.index.astype(int)
@@ -204,7 +252,53 @@ def benchmark_join_indexed(package_name, targ_size):
     if scheduler_json_name is not None:
         _ = client.profile(start=t_start, filename=package_name + '-join-indexed-profile_'+ targ_size + '.html')
     
-    print('\n'*2 + '~'*10 + ' RAPIDS BENCHMARKING - JOIN INDEXED END ' + '~'*10)
+    print('~'*10 + ' RAPIDS BENCHMARKING - JOIN INDEXED END ' + '~'*10 + '\n'*2 )
+
+
+
+
+
+# -------------- LOADING FROM FILE --------------------------
+
+def benchmark_read_csv(package_name, targ_size):
+    """
+    single GPU benchmarked up to 1E+8 rows but unknown number of columns
+    """
+    package_handle, scheduler_json_name = get_package_scheduler(package_name)
+
+    print('\n'*2 + '~'*10 + ' RAPIDS BENCHMARKING - READ_CSV START ' + '~'*10)
+    print('Target dataframe size: {}. package_name: {}\n'.format(targ_size, package_name))
+
+    # -------------- SET UP CLUSTER --------------------------------
+    client = set_up_dask_client(scheduler_json_name)
+
+    # --------------- GET RANDOM DATA FILE PATH---------------------
+    kwargs = dict()
+    if targ_size == 'ben':
+        csv_path = ben_data_path
+        kwargs.update({'delimiter': ' ', 'persist': False})
+    else:
+        csv_path = get_timeseries_path(get_frequency(targ_size), num_ids=1000)
+
+    # ----------------- READ FROM FILE -----------------------------
+    t_start = time.time()
+
+    dframe = read_csv(csv_path, package_handle, package_name, chunksize_mb=1024, **kwargs)
+
+    if 'dask' in package_name:
+        print('Dataframe has {} partitions'.format(dframe.npartitions))
+        
+    # -------------- QUERY SIZE OF DATAFRAME ------------------------
+
+    t0 = time.time()
+    print('Dataframe has {} rows and {} columns'.format(len(dframe), len(dframe.columns)))
+    print('Time to calculate number of rows using {}: {}'.format(package_name, format_time(time.time() - t0)))
+
+    print('~'*10 + ' RAPIDS BENCHMARKING - READ_CSV END ' + '~'*10 + '\n'*2)
+
+
+
+
     
 # -------------- GROUPBY --------------------------------
 
@@ -221,28 +315,21 @@ def benchmark_groupby(package_name, targ_size):
     client = set_up_dask_client(scheduler_json_name)
     
     # --------------- GET RANDOM DATA FILE PATH---------------------
-    csv_path = get_timeseries_path(get_frequency(targ_size), num_ids=1000)
+    kwargs = dict()
+    if targ_size == 'ben':
+        col_name = 'x'
+        csv_path = ben_data_path
+        kwargs.update({'delimiter': ' ', 'persist': True})
+    else:
+        col_name = 'id'
+        csv_path = get_timeseries_path(get_frequency(targ_size), num_ids=1000)
 
     # ----------------- READ FROM FILE -----------------------------
     t_start = time.time()
 
-    kwargs = dict()
-    if package_name == 'dask-cudf':
-        kwargs['chunksize'] = '1024MiB'
-    elif package_name == 'dask':
-        kwargs['blocksize'] = '1024MB'
-    print('read_csv will be given: {}'.format(kwargs))
-    
-    dframe = read_csv(csv_path, package_handle, package_name, **kwargs)
+    dframe = read_csv(csv_path, package_handle, package_name, chunksize_mb=1024, **kwargs)
 
-    if 'dask' in package_name:
-        print('Dataframe has {} partitions'.format(dframe.npartitions))
-        # Repartition to maximize performance
-        num_dask_workers = len(client.scheduler_info()['workers'])
-        num_partitions = num_dask_workers // 4
-        dframe = dframe.repartition(npartitions=num_partitions)
-        print('Setting number of partitions to: {}'.format(dframe.npartitions))
-    
+    drame = repartition_dframe(package_name, dframe, client, scale_by_workers=None, new_partitions=None)
     # ----------------- SEE HEAD -----------------------------
 
     # print(dframe.head().to_pandas())
@@ -256,7 +343,7 @@ def benchmark_groupby(package_name, targ_size):
     # -------------- COMPUTE UNIQUE IDs ------------------------
 
     t0 = time.time()
-    uniq_ids = dframe.id.nunique()
+    uniq_ids = dframe[col_name].nunique()
     if scheduler_json_name is not None:
         uniq_ids = uniq_ids.compute()
     print('Time to compute unique values: {} using {}: {}'.format(uniq_ids, package_name, format_time(time.time() - t0)))
@@ -266,17 +353,17 @@ def benchmark_groupby(package_name, targ_size):
     t0 = time.time()
     if scheduler_json_name is not None:
         vals = dask.compute(
-            dframe.groupby('id').min(),
-            dframe.groupby('id').max(),
-            dframe.groupby('id').mean(),
-            dframe.groupby('id').count(),
+            dframe.groupby(col_name).min(),
+            dframe.groupby(col_name).max(),
+            dframe.groupby(col_name).mean(),
+            dframe.groupby(col_name).count(),
         )
     else:
         vals = (
-            dframe.groupby('id').min(),
-            dframe.groupby('id').max(),
-            dframe.groupby('id').mean(),
-            dframe.groupby('id').count(),
+            dframe.groupby(col_name).min(),
+            dframe.groupby(col_name).max(),
+            dframe.groupby(col_name).mean(),
+            dframe.groupby(col_name).count(),
         )
 
     print('Time to compute Groupby using {}: {}'.format(package_name, format_time(time.time() - t0)))
@@ -292,17 +379,22 @@ def benchmark_groupby(package_name, targ_size):
 if __name__ == '__main__':
     if len(sys.argv) != 4:
         print('script was called as\n\t' + ' '.join(sys.argv))
-        print('please run as "python <script_name>.py <task> <package> <size>"\n\t<task> = groupby or join-indexed\n\t<package> = dask, dask-cudf, cudf or pandas\n\t<size> = 1G, 2.5G, 5G, ...25G')
+        print('please run as "python <script_name>.py <task> <package> <size>"\n\t<task> = read_csv, groupby or join-indexed\n\t<package> = dask, dask-cudf, cudf or pandas\n\t<size> = 1G, 2.5G, 5G, ...25G')
     else:
-        if sys.argv[1] not in ['groupby', 'join-indexed']:
+        if sys.argv[1] not in ['read_csv', 'groupby', 'join-indexed']:
             raise ValueError('First argument should either be "groupby" or "join-indexed"')
         if sys.argv[1] == 'groupby':
             benchmark_func = benchmark_groupby
         elif sys.argv[1] == 'join-indexed':
             benchmark_func = benchmark_join_indexed
+        elif sys.argv[1] == 'read_csv':
+            benchmark_func = benchmark_read_csv
         
         validate_inputs(sys.argv[2], sys.argv[3])
-        
+
+        # package_handle, scheduler_json_name = get_package_scheduler(sys.argv[2])        
+        # client = set_up_dask_client(scheduler_json_name)
+
         if sys.argv[3] == 'all':
             for dsize in ['1G', '2.5G', '5G' , '10G', '25G']:
                 benchmark_func(sys.argv[2], dsize)
