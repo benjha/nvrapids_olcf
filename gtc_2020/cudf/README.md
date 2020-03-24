@@ -77,5 +77,5 @@ Both `dask-cudf` and `dask` are capable of reading `.csv` files in blocks or chu
 **Figure 10**: 
 
 ## 2. Indexed-Join:
-![alt text](./figures/dask_read_groupby_scaling.png "indexed join scaling") 
+![alt text](./figures/dask_cudf_indexed_join_scaling.png "indexed join scaling") 
 **Figure 8**: 
