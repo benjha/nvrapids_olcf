@@ -1,5 +1,17 @@
 # Benchmarking cudf on Summit
 
+## System configuration
+
+* IBM Power System AC922. 2x POWER9 CPU (84 smt cores each) 512 GB RAM, 6x NVIDIA Volta GPU with 16 GB HBM2
+* GCC v6.4
+* CUDA v10.1.168
+* NVIDIA Driver v418.67
+* NVIDIA Rapids v0.11
+* cudf v0.11.0b0+7.g3498c7e.dirty
+* dask-cudf v0.11.0b0+7.g3498c7e.dirty
+* dask v2.9.1
+* pandas v0.25.3
+
 ## Running the benchmark
 
 First, run the appropriate job script that provisions the compute allocation and a dask cluster:
