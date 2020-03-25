@@ -73,7 +73,7 @@ Both `dask-cudf` and `dask` are capable of reading `.csv` files in blocks or chu
 
 ### 1.5 Scaling
 ![alt text](./figures/dask_cudf_read_groupby_scaling.png "Groupby scaling")
-**Figure 10**: 
+**Figure 10**: These plots show the time required to (left) load a `.csv` spreadsheet, (center) perform a `unique()` operation on the loaded dataframe, and (right) perform a set of `groupby()` operations on the dataframe as a function of both the size of the dataset and the number of NVIDIA Volta V100 GPUs (from `1` to `100`) using the `dask-cudf` package. The plot on the left shows that reading time does not vary significantly with the number of GPUs. In this case the `chunksize` was set to `1 GB` following findings reported above. This may explain the comparable read times for datasets that vary by little over 1 magnitude in size. The plot in the center shows a decrease in the time required to perform the `unique()` operation as more GPUs become available regardless of dataset size. However, for all dataframe sizes, a sudden jump in computational time is observed followed by plateuing of the compute time. This point of jump may be related to a drop in the number of partitions per GPU or data size per GPU below a threshold. The plot on the right shows exponentially decreasing time to perform a set of `groupby()` operations as the number of GPUs are increased. Eventually, the compute time reaches an asymptote for all dataset sizes.  
 
 ## 2. Indexed-Join:
 ![alt text](./figures/dask_cudf_indexed_join_scaling.png "indexed join scaling") 
