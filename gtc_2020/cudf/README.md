@@ -77,4 +77,4 @@ Both `dask-cudf` and `dask` are capable of reading `.csv` files in blocks or chu
 
 ## 2. Indexed-Join:
 ![alt text](./figures/dask_cudf_indexed_join_scaling.png "indexed join scaling") 
-**Figure 8**: 
+**Figure 11**: This plot shows the time required to perform an indexed-join or a `merge()` operation on dataframes as a function of both the size of the dataset and the number of NVIDIA Volta V100 GPUs (from `1` to `100`) using the `dask-cudf` package. Interestingly, the plot shows that the compute time remains constant regardless of the number of GPUs available for computation. Furthermore, there is a marked jump in the compute time when the size of the dataframe was increased from `2.5 GB` to `5 GB`.
