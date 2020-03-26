@@ -19,7 +19,7 @@ Results obtained from ```svd_dask_cupy.py``` and ```svd_dask_numpy.py``` scripts
 
 cupy/fig
 
-![SVD_Dask-NumPy](https://github.com/benjha/nvrapids_olcf/blob/branch-0.11/gtc_2020/cupy/fig/SVD_Dask-NumPy.png)
-![SVD_Dask-NumPy_42T](https://github.com/benjha/nvrapids_olcf/blob/branch-0.11/gtc_2020/cupy/fig/SVD_Dask-NumPy_42T.png)
-![SVD_Dask-CuPy](https://github.com/benjha/nvrapids_olcf/blob/branch-0.11/gtc_2020/cupy/fig/SVD_CuPy_Dask-CuPy.png)
-![SVD_Dask-CuPy_SpeedUp](https://github.com/benjha/nvrapids_olcf/blob/branch-0.11/gtc_2020/cupy/fig/SVD_Dask-CuPy_SpeedUp.png)
+![SVD_Dask-NumPy](https://github.com/benjha/nvrapids_olcf/blob/branch-0.11/gtc_2020/cupy/fig/SVD_DASK-NumPy.png)
+![SVD_Dask-NumPy_42T](https://github.com/benjha/nvrapids_olcf/blob/branch-0.11/gtc_2020/cupy/fig/SVD_DASK-NumPy_42T.png)
+![SVD_Dask-CuPy](https://github.com/benjha/nvrapids_olcf/blob/branch-0.11/gtc_2020/cupy/fig/SVD_CuPy_DASK-CuPy.png)
+![SVD_Dask-CuPy_SpeedUp](https://github.com/benjha/nvrapids_olcf/blob/branch-0.11/gtc_2020/cupy/fig/SVD_DASK-CuPy_SpeedUp.png)
