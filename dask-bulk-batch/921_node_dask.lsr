@@ -68,7 +68,20 @@ jsrun --smpiargs="none" --nrs $NUM_WORKERS -e individual --stdio_stdout ${RUN_DI
 # Now block until the desired number of workers is registered with the
 # scheduler.  Yes, we're going to run this on the batch node because
 # we don't want to use compute node resources for this one shot tiny script.
-python3 /ccs/proj/YOURPROJ/path/to/wait_for_workers.py --verbose --target-workers $NUM_WORKERS --pause-time 15 $SCHEDULER_FILE
+# Now block until the desired number of workers is registered with the
+# scheduler.
+echo Waiting for workers
+
+jsrun  --smpiargs="off"  --nrs 1  --cpu_per_rs 1  --gpu_per_rs 0 --rs_per_host 1 --latency_priority cpu-cpu python3 -u /ccs/proj/YOURPROJ/path/to/wait_for_workers.py --verbose --target-workers $target_num_workers --pause-time 5 --maximum-wait-time 5 --scheduler-timeout 60 $SCHEDULER_FILE
+
+if [ $? -eq 0 ]
+then
+  echo Wait for workers ran OK.
+else
+  echo Wait for workers failed.  Aborting.
+  jskill all
+  exit 1
+fi
 
 echo "About to run dask client"
 
