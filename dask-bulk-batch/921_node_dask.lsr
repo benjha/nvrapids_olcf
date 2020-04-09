@@ -32,8 +32,6 @@ export NUM_WORKERS=$num_workers
 export LC_ALL=C
 export LANG=C
 
-module purge
-
 # Just a sanity check to ensure we have the correct modules loaded
 module list
 
@@ -51,7 +49,7 @@ cd $RUN_DIR
 
 # Copy over the hosts allocated for this job so that we can later verify
 # that all the allocated nodes were busy with the correct worker allocation.
-cp $LSB_DJOB_HOSTFILE $LSB_JOBID.hosts
+cat $LSB_DJOB_HOSTFILE | sort | uniq > $LSB_JOBID.hosts
 
 # The scheduler doesn't need GPUs. It just needs one lonely core to run on.
 jsrun --gpu_per_rs 0 --nrs 1 --tasks_per_rs 1 --cpu_per_rs 1 --rs_per_host 1 dask-scheduler --interface ib0 --no-dashboard --no-show --scheduler-file $SCHEDULER_FILE &
