@@ -1,0 +1,67 @@
+#!/usr/bin/env bash
+
+#BSUB -P STF011
+#BSUB -W 0:10
+#BSUB -alloc_flags "gpumps smt4"
+#BSUB -nnodes 1
+#BSUB -J dask_cuda_cluster
+#BSUB -o dask_cuda_cluster.o%J
+#BSUB -e dask_cuda_cluster.e%J
+
+PROJ_ID=stf011
+
+module load gcc/6.4.0
+module load cuda/10.1.168
+
+export PATH=$WORLDWORK/stf011/nvrapids_0.11_gcc_6.4.0/bin:$PATH
+
+DASK_DIR=$MEMBERWORK/$PROJ_ID/dask
+
+if [ ! -d "$DASK_DIR" ] 
+then
+    mkdir $DASK_DIR
+fi
+
+# clean previous contents
+rm -fr $DASK_DIR/*
+
+export SCHEDULER_FILE=$DASK_DIR/my-scheduler-gpu.json
+
+# Several dask schedulers could run in the same batch node by different users,
+# create a random port to reduce port collisions
+PORT_SCHED=$(shuf -i 4000-6000 -n 1)
+PORT_DASH=$(shuf -i 7000-8999 -n 1)
+
+# saving ports to use them if  launching jupyter lab
+echo $PORT_SCHED >> $DASK_DIR/port_sched
+echo $PORT_DASH  >> $DASK_DIR/port_dash
+
+# $HOSTNAME=hostname
+echo "Hostname:" $HOSTNAME
+echo "Scheduler port:" $PORT_SCHED
+echo "Dashboard port:" $PORT_DASH
+echo "Scheduler JSON Path:" $SCHEDULER_FILE
+echo "Dask dir:" $DASK_DIR
+
+dask-scheduler --port $PORT_SCHED --dashboard-address $HOSTNAME:$PORT_DASH --interface ib0 --scheduler-file $SCHEDULER_FILE &
+
+# Give the scheduler a chance to spin up.
+sleep 10
+
+echo Starting workers
+
+# Count the unique host names and subtract the batch node to get
+# the actual number of nodes allocated to this job.
+let num_nodes=(`cat $LSB_DJOB_HOSTFILE | sort | uniq | wc -l` - 1)
+
+# We want six workers per node
+let num_workers=($num_nodes * 6)
+
+export NUM_WORKERS=$num_workers
+
+echo "Num workers: " $NUM_WORKERS
+
+NRS=$( (( $NUM_WORKERS <= 6 )) && echo "$NUM_WORKERS" || echo "6" )
+
+# -n $(( 6*NODES )) -c 1 -g 1 -r 6 -a 1
+jsrun -n $NUM_WORKERS -c 1 -g 1 -r $NRS -a 1 --smpiargs='off' dask-cuda-worker --scheduler-file $SCHEDULER_FILE  --nthreads 1 --memory-limit 85GB --device-memory-limit 16GB  --death-timeout 60 --interface ib0  --enable-infiniband --enable-nvlink
