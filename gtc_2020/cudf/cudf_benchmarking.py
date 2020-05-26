@@ -24,12 +24,12 @@ dask_dir = os.path.join(os.path.join(os.getenv('MEMBERWORK'),
                                      'stf011'), 
                         'dask')
 
-sched_json_for_pack = {'dask-cudf': os.path.join(dask_dir, 'my-scheduler-gpu.json'),
+sched_json_for_pack = {'dask_cudf': os.path.join(dask_dir, 'my-scheduler-gpu.json'),
                        'dask': os.path.join(dask_dir, 'my-scheduler.json'),
                        'cudf': None,
                        'pandas': None}
 
-package_name_to_handle = {'dask-cudf': dask_cudf,
+package_name_to_handle = {'dask_cudf': dask_cudf,
                           'dask': dd,
                           'cudf': cudf,
                           'pandas': pd}
@@ -173,11 +173,13 @@ def set_chunksize(read_chunk_mb, file_size_mb):
     
 def read_csv(csv_path, package_handle, package_name, chunksize_mb=1024, **kwargs):
     #kwargs = dict()
-    if isinstance(chunksize_mb, int) and chunksize_mb > 32:
+    if isinstance(chunksize_mb, int) and chunksize_mb >= 32:
         if package_name == 'dask-cudf':
             kwargs['chunksize'] = str(chunksize_mb) + 'MiB'
         elif package_name == 'dask':
             kwargs['blocksize'] = str(chunksize_mb) + 'MB'
+    # else:
+        # print('Will ignore chunksize_mb = {} of type: {}'.format(chunksize_mb, type(chunksize_mb)))
     print('read_csv will be given: {}'.format(kwargs))
 
     t0 = time.time()
@@ -204,9 +206,9 @@ def single_benchmark(package_name, targ_size, client,
     single GPU benchmarked up to 1E+8 rows but unknown number of columns
     """   
     print('\n'*2 + '~'*10 + ' BENCHMARKING START ' + '~'*10)
-    print('Target dataframe size: {}. package_name: {}\n'.format(targ_size, package_name))
+    print('Target dataframe size: {}. package_name: {}'.format(targ_size, package_name))
     print('Optional arguments: stop_at_read={}, read_chunk_mb={}, scale_partitions_by_workers={}, num_partitions={}, '
-          'default_partitions={}, client={}'
+          'default_partitions={}, client={}\n'
           ''.format(stop_at_read, read_chunk_mb, scale_partitions_by_workers, num_partitions, default_partitions, client))
     
     package_handle = package_name_to_handle[package_name]
@@ -228,7 +230,8 @@ def single_benchmark(package_name, targ_size, client,
     
     chunksize_mb = None
     if 'dask' in package_name:
-        chunksize = set_chunksize(read_chunk_mb, file_size_mb)
+        chunksize_mb = set_chunksize(read_chunk_mb, file_size_mb)
+        # print('Interpreted requested chunksize of {} as {} MB'.format(read_chunk_mb, chunksize_mb))
             
     dframe = read_csv(csv_path, package_handle, package_name, chunksize_mb=chunksize_mb, **kwargs)
     
@@ -398,7 +401,7 @@ def manually_add_workers_bsub(client, num_workers, cuda=True, scheduler_file_pat
 
     os.system(jsrun_cmd)  
     
-# ----------------------------- SCALING FUNCTION -----------------------------------------
+# ----------------------------- PARAMETER SWEEP FUNCTION -----------------------------------------
 
 def main(package_name, file_sizes, scheduler_file_path, worker_sizes, **kwargs):
     
@@ -416,9 +419,14 @@ def main(package_name, file_sizes, scheduler_file_path, worker_sizes, **kwargs):
         print('Calling Client setup with: scheduler json: {}, expected workers: {}'.format(scheduler_file_path, worker_sizes[0]))
         client = set_up_dask_client(scheduler_file_path, num_exp_workers=worker_sizes[0])
         
+        if package_name == 'dask_cudf':
+            # https://github.com/rapidsai/cudf/issues/2288
+            client.run(cudf.set_allocator, "managed")  # Uses managed memory instead of "default"
+        
     print('Will benchmark package: {} on file sizes: {} over dask workers: {}'.format(package_name, file_sizes, worker_sizes))
         
     for num_workers in worker_sizes:
+        """
         if 'dask' in package_name:
             # Not sure how well this function will work
             #client.cluster.scale(num_workers)
@@ -428,9 +436,26 @@ def main(package_name, file_sizes, scheduler_file_path, worker_sizes, **kwargs):
             
             #client.wait_for_workers(n_workers=num_workers)
             wait_for_workers(client, num_exp_workers, max_wait_secs=120, wait_secs=10)
+        """
+        num_partitions = kwargs.pop('num_partitions', [None])
+        if not isinstance(num_partitions, list):
+            num_partitions = [num_partitions]
+        if any([x is not None for x in num_partitions]):
+            kwargs.update({'default_partitions': False})
+            
+        for this_parts in num_partitions:
         
-        for dsize in file_sizes:
-            single_benchmark(package_name, dsize, client, **kwargs)
+            chunk_sizes = kwargs.pop('read_chunk_mb', [None])
+            if not isinstance(chunk_sizes, list):
+                chunk_sizes = [chunk_sizes]
+
+            for this_chunksize in chunk_sizes:
+
+                for dsize in file_sizes:
+                    
+                    new_kwargs = kwargs.copy()
+                    new_kwargs.update({'num_partitions': this_parts, 'read_chunk_mb': this_chunksize})
+                    single_benchmark(package_name, dsize, client, **new_kwargs)
 
             
 # ----------------------------------- GENERAL HELPER FUNCTIONS -----------------------------------------
@@ -448,8 +473,10 @@ def validate_package_name(package_name):
     
     if not isinstance(package_name, str):
         raise TypeError('package_name should be of type str. Provided object ({}) of type ({})'.format(package_name, type(package_name)))
-    if package_name not in ['dask-cudf', 'dask', 'cudf', 'pandas']:
-        raise ValueError('Requested package: "' +  package_name + '" is not valid')    
+    package_name = package_name.replace('-', '_')
+    if package_name not in ['dask_cudf', 'dask', 'cudf', 'pandas']:
+        raise ValueError('Requested package: "' +  package_name + '" is not valid')
+    return package_name
     
 if __name__ == '__main__':    
     args = argparse.ArgumentParser()
@@ -459,14 +486,15 @@ if __name__ == '__main__':
                       help='Primary file size in GB. Use one (or list) of 1G, 2.5G, 5G, 10G, or 25G or leave unspecified to loop over all sizes')
     args.add_argument('--stop_at_read', default=False, type=bool,
                       help='Whether to stop benchmark after reading the primary CSV file. Use for testing I/O only')
-    args.add_argument('--read_chunk_mb', default=None, type=int,
-                      help='chunksize or blocksize in MB to be passed onto read_csv(). Set to < 0 for best block size. Note - this directly affects number of partitions. Applies to dask and dask-cudf only.')
+    args.add_argument('--read_chunk_mb', default=None, type=int, nargs='+',
+                      help='chunksize(s) or blocksize(s) in MB to be passed onto read_csv(). Set to < 0 for best block size. Note - this directly affects number of partitions. Applies to dask and dask-cudf only.')
+    
     args.add_argument('--scale_partitions_by_workers', default=None, type=int,
                       help='Partitions the dataframe into scale_partitions_by_workers * number of dask workers. Applies to dask and dask-cudf only.')
     args.add_argument('--default_partitions', default=True, type=bool,
                       help='Sets number of partitions to default values according to package. Applies to dask and dask-cudf only.')
-    args.add_argument('--num_partitions', default=None, type=int,
-                      help='Partitions the dataframe into the specified number of partitions. Applies to dask and dask-cudf only.')
+    args.add_argument('--num_partitions', default=None, type=int, nargs='+', 
+                      help='Partitions the dataframe into the specified number of partitions. Can be specified as a list of integers. Applies to dask and dask-cudf only.')
     
     args.add_argument('--num_dask_workers', default=None, type=int, nargs='+', 
                       help='Number of expected dask workers linked with the scheduler. Specify a list of (increasing) integers to instruct how the workers need to be varied. Example: "--num_dask_workers 4" will only use 4; "--num_dask_workers 1 2 4" scales over 1, 2, and 4. Applies to dask and dask-cudf only.')
@@ -475,16 +503,16 @@ if __name__ == '__main__':
 
     args = args.parse_args()
     
-    validate_package_name(args.package)
+    args.package = validate_package_name(args.package)
     
-    file_sizes = validate_file_sizes(args.file_size)
+    args.file_size = validate_file_sizes(args.file_size)
     
     if args.scheduler_json_path is None:
-        scheduler_json_path = sched_json_for_pack[args.package]
+        args.scheduler_json_path = sched_json_for_pack[args.package]
     else:
-        scheduler_json_path = args.scheduler_json_path
-    if not os.path.exists(scheduler_json_path):
-        raise FileNotFoundError('Dask scheduler JSON file does not exist: {}'.format(scheduler_file_path))
+        args.scheduler_json_path = args.scheduler_json_path
+    if args.scheduler_json_path is not None and not os.path.exists(args.scheduler_json_path):
+        raise FileNotFoundError('Dask scheduler JSON file does not exist: {}'.format(args.scheduler_json_path))
         
     if args.num_dask_workers is not None:
         if isinstance(args.num_dask_workers, int):
@@ -499,6 +527,7 @@ if __name__ == '__main__':
               'num_partitions': args.num_partitions, 
               'default_partitions': args.default_partitions}
     
-    print('Validated all inputs. Calling main with: package_name: {}, file_sizes: {}, scheduler: {}, dask_workers: {}, kwargs: {}'.format(args.package, file_sizes, scheduler_json_path, args.num_dask_workers, kwargs))
+    print('Validated all inputs. Calling main with: package_name: {}, file_sizes: {}, scheduler: {}, dask_workers: {}, kwargs: {}'.format(args.package, args.file_size, args.scheduler_json_path, args.num_dask_workers, kwargs))
     
-    main(args.package, file_sizes, scheduler_json_path, args.num_dask_workers, **kwargs)
+    main(args.package, args.file_size, args.scheduler_json_path, args.num_dask_workers, **kwargs)
+ 
