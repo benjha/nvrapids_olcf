@@ -3,6 +3,7 @@ import sys
 import os
 import argparse
 import time
+import socket
 from warnings import filterwarnings
 # Suppress the annoying future warnings
 filterwarnings("ignore")
@@ -20,9 +21,13 @@ import cudf
 import dask_cudf
 
 ben_data_path = '/gpfs/alpine/proj-shared/stf011/benjha/datasets/dataset.csv'
-dask_dir = os.path.join(os.path.join(os.getenv('MEMBERWORK'), 
-                                     'stf011'), 
-                        'dask')
+
+if socket.getfqdn() == 'deep.ornl.gov':
+    dask_dir = '/raid/syz/rapids/dask'
+else:
+    dask_dir = os.path.join(os.path.join(os.getenv('MEMBERWORK'), 
+                                         'stf011'), 
+                            'dask')
 
 sched_json_for_pack = {'dask_cudf': os.path.join(dask_dir, 'my-scheduler-gpu.json'),
                        'dask': os.path.join(dask_dir, 'my-scheduler.json'),
@@ -133,8 +138,12 @@ def generate_right_data(left_size, num_ids=1001):
     return csv_path
 
 def get_timeseries_path(freq, num_ids=1000):
+    if socket.getfqdn() == 'deep.ornl.gov':
+        data_dir = '/raid/syz/rapids/data'
+    else:
+        data_dir = '/gpfs/alpine/world-shared/stf011/somnaths/rapids/data'
     
-    return '/gpfs/alpine/world-shared/stf011/somnaths/rapids/data/timeseries_{}_ids_{}_freq.csv'.format(num_ids, freq)
+    return os.path.join(data_dir, 'timeseries_{}_ids_{}_freq.csv'.format(num_ids, freq))
 
 # ----------------------------------- PARTITIONING FUNCTIONS -----------------------------------------
     
@@ -201,15 +210,16 @@ def read_csv(csv_path, package_handle, package_name, chunksize_mb=1024, **kwargs
 def single_benchmark(package_name, targ_size, client,
                      stop_at_read=False,
                      read_chunk_mb=None, 
-                     scale_partitions_by_workers=None, num_partitions=None, default_partitions=True):
+                     scale_partitions_by_workers=None, num_partitions=None, default_partitions=True,
+                     persist_instead_of_compute=True):
     """
     single GPU benchmarked up to 1E+8 rows but unknown number of columns
     """   
     print('\n'*2 + '~'*10 + ' BENCHMARKING START ' + '~'*10)
     print('Target dataframe size: {}. package_name: {}'.format(targ_size, package_name))
     print('Optional arguments: stop_at_read={}, read_chunk_mb={}, scale_partitions_by_workers={}, num_partitions={}, '
-          'default_partitions={}, client={}\n'
-          ''.format(stop_at_read, read_chunk_mb, scale_partitions_by_workers, num_partitions, default_partitions, client))
+          'default_partitions={}, persist_instead_of_compute={}, client={}\n'
+          ''.format(stop_at_read, read_chunk_mb, scale_partitions_by_workers, num_partitions, default_partitions, persist_instead_of_compute, client))
     
     package_handle = package_name_to_handle[package_name]
             
@@ -270,27 +280,30 @@ def single_benchmark(package_name, targ_size, client,
 
     t0 = time.time()
     uniq_ids = dframe[col_name].nunique()
+    
     if 'dask' in package_name:
-        uniq_ids = uniq_ids.compute()
+        if persist_instead_of_compute:
+            uniq_ids.persist()
+        else:
+            uniq_ids = uniq_ids.compute()
     print('Time to compute unique values: {} using {}: {}'.format(uniq_ids, package_name, format_time(time.time() - t0)))
-
+    
     # -------------- COMPUTE GROUPBY ------------------------
 
     t0 = time.time()
+    
+    vals = (
+            dframe.groupby(col_name).min(),
+            dframe.groupby(col_name).max(),
+            dframe.groupby(col_name).mean(),
+            dframe.groupby(col_name).count(),
+        )
     if 'dask' in package_name:
-        vals = dask.compute(
-            dframe.groupby(col_name).min(),
-            dframe.groupby(col_name).max(),
-            dframe.groupby(col_name).mean(),
-            dframe.groupby(col_name).count(),
-        )
-    else:
-        vals = (
-            dframe.groupby(col_name).min(),
-            dframe.groupby(col_name).max(),
-            dframe.groupby(col_name).mean(),
-            dframe.groupby(col_name).count(),
-        )
+        if persist_instead_of_compute:
+            dask.persist(vals)
+        else:
+            vals = dask.compute(vals)
+        
 
     print('Time to compute Groupby using {}: {}'.format(package_name, format_time(time.time() - t0)))
     
@@ -348,7 +361,7 @@ def set_up_dask_client(scheduler_json_path, num_exp_workers=None, max_wait_secs=
     """    
     client.run(
                rmm.reinitialize,
-               pool_allocator=True,
+               pool_allocator='pool',
                managed_memory=False,
                initial_pool_size=2**31,
                )"""
@@ -401,6 +414,35 @@ def manually_add_workers_bsub(client, num_workers, cuda=True, scheduler_file_pat
 
     os.system(jsrun_cmd)  
     
+# ----------------------------- DGX1-SPECIFIC FUNCTIONS -----------------------------------------   
+    
+def launch_dask_scheduler(scheduler_json_path, interface='enp1s0f0'):
+    sched_cmd = 'dask-scheduler --interface {} --scheduler-file {} &'.format(interface, scheduler_json_path)
+    print('Starting scheduler. Will wait for 10 seconds to spin up')
+    os.system(sched_cmd)
+    time.sleep(10)
+    print('Started scheduler')
+
+def launch_cuda_worker(scheduler_json_path, interface='enp1s0f0', which_gpu=0):
+    work_cmd = 'CUDA_VISIBLE_DEVICES={} dask-cuda-worker --interface {} --scheduler-file {} --nthreads 1 --memory-limit 40GB --device-memory-limit 16GB --death-timeout 180 --enable-nvlink &'.format(which_gpu, interface, scheduler_json_path)
+    print('Starting worker. Will wait for 10 seconds to spin up')
+    os.system(work_cmd)
+    time.sleep(10)
+    print('Started GPU worker(s)')
+    
+def launch_cpu_worker(scheduler_json_path, interface='enp1s0f0'):
+    raise NotImplementedError('Copy over from ')
+
+def start_scheduler_and_worker(scheduler_json_path, interface='enp1s0f0', cuda=True, **kwargs):
+    if os.path.exists(scheduler_json_path):
+        os.remove(scheduler_json_path)
+    launch_dask_scheduler(scheduler_json_path, interface=interface)
+    if cuda:
+        which_gpu = kwargs.pop('which_gpu', 0)
+        launch_cuda_worker(scheduler_json_path, interface=interface, which_gpu=which_gpu)
+    else:
+        launch_cpu_worker(scheduler_json_path, interface=interface)
+    
 # ----------------------------- PARAMETER SWEEP FUNCTION -----------------------------------------
 
 def main(package_name, file_sizes, scheduler_file_path, worker_sizes, **kwargs):
@@ -415,6 +457,9 @@ def main(package_name, file_sizes, scheduler_file_path, worker_sizes, **kwargs):
         worker_sizes = list(set(worker_sizes))
         # sort ascending
         worker_sizes.sort()
+        
+        if socket.getfqdn() == 'deep.ornl.gov' and False:
+            start_scheduler_and_worker(scheduler_file_path, cuda=package_name=='dask_cudf')
         
         print('Calling Client setup with: scheduler json: {}, expected workers: {}'.format(scheduler_file_path, worker_sizes[0]))
         client = set_up_dask_client(scheduler_file_path, num_exp_workers=worker_sizes[0])
@@ -500,9 +545,16 @@ if __name__ == '__main__':
                       help='Number of expected dask workers linked with the scheduler. Specify a list of (increasing) integers to instruct how the workers need to be varied. Example: "--num_dask_workers 4" will only use 4; "--num_dask_workers 1 2 4" scales over 1, 2, and 4. Applies to dask and dask-cudf only.')
     args.add_argument('--scheduler_json_path', default=None, type=str,
                       help='Absolute path to Dask scheduler JSON file. Applies to dask and dask-cudf only.')
+    args.add_argument('--persist_instead_of_compute', default=False, type=bool,
+                      help='Set to True to use persist(). set to False to use compute(). Applies only to dask and dask-cudf')
 
     args = args.parse_args()
-    
+
+
+
+    print('persist or compute: {}'.format(args.persist_instead_of_compute))
+
+
     args.package = validate_package_name(args.package)
     
     args.file_size = validate_file_sizes(args.file_size)
@@ -525,9 +577,9 @@ if __name__ == '__main__':
               'read_chunk_mb': args.read_chunk_mb, 
               'scale_partitions_by_workers': args.scale_partitions_by_workers, 
               'num_partitions': args.num_partitions, 
-              'default_partitions': args.default_partitions}
+              'default_partitions': args.default_partitions, 
+              'persist_instead_of_compute': args.persist_instead_of_compute,}
     
     print('Validated all inputs. Calling main with: package_name: {}, file_sizes: {}, scheduler: {}, dask_workers: {}, kwargs: {}'.format(args.package, args.file_size, args.scheduler_json_path, args.num_dask_workers, kwargs))
     
     main(args.package, args.file_size, args.scheduler_json_path, args.num_dask_workers, **kwargs)
- 
