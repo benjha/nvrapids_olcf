@@ -1,4 +1,3 @@
-# Groupby Aggregations with Dask and cuDF
 import sys
 import os
 import argparse
@@ -222,7 +221,8 @@ def single_benchmark(package_name, targ_size, client,
           ''.format(stop_at_read, read_chunk_mb, scale_partitions_by_workers, num_partitions, default_partitions, persist_instead_of_compute, client))
     
     package_handle = package_name_to_handle[package_name]
-            
+    print('Using package: {}. Version: {}'.format(package_handle, package_handle.__version__))
+
     # --------------- GET RANDOM DATA FILE PATH---------------------
     kwargs = dict()
     if targ_size == 'ben':
@@ -550,11 +550,6 @@ if __name__ == '__main__':
 
     args = args.parse_args()
 
-
-
-    print('persist or compute: {}'.format(args.persist_instead_of_compute))
-
-
     args.package = validate_package_name(args.package)
     
     args.file_size = validate_file_sizes(args.file_size)
@@ -563,6 +558,7 @@ if __name__ == '__main__':
         args.scheduler_json_path = sched_json_for_pack[args.package]
     else:
         args.scheduler_json_path = args.scheduler_json_path
+    
     if args.scheduler_json_path is not None and not os.path.exists(args.scheduler_json_path):
         raise FileNotFoundError('Dask scheduler JSON file does not exist: {}'.format(args.scheduler_json_path))
         
