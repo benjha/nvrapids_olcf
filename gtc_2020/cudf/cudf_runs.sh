@@ -16,6 +16,10 @@ python $SCRIPT --package $PACKAGE --num_dask_workers $NUM_WORKERS --scheduler_js
 
 # Partitioning
 
-python $SCRIPT --package $PACKAGE --num_dask_workers $NUM_WORKERS --scheduler_json_path $SCHEDULER_JSON --file_size 1G 2.5G 5G 10G 25G
+python $SCRIPT --package $PACKAGE --num_dask_workers $NUM_WORKERS --scheduler_json_path $SCHEDULER_JSON --file_size 1G 2.5G 5G 10G
 
-python $SCRIPT --package $PACKAGE --num_dask_workers $NUM_WORKERS --scheduler_json_path $SCHEDULER_JSON --file_size 1G 2.5G 5G 10G 25G --num_partitions 3 6 12 24 48 96
+python $SCRIPT --package $PACKAGE --num_dask_workers $NUM_WORKERS --scheduler_json_path $SCHEDULER_JSON --file_size 1G 2.5G 5G 10G --num_partitions 3 6 12 24 48 96
+
+python $SCRIPT --package $PACKAGE --num_dask_workers $NUM_WORKERS --scheduler_json_path $SCHEDULER_JSON --file_size 25G
+
+python $SCRIPT --package $PACKAGE --num_dask_workers $NUM_WORKERS --scheduler_json_path $SCHEDULER_JSON --file_size 25G --num_partitions 3 6 12 24 48 96
