@@ -20,29 +20,11 @@ First, run the appropriate job script that provisions the compute allocation and
 * `cudf`: [job script that also runs a benchmark](./job_scripts/launch_cudf.lsf)
 * `pandas`: [job script that also runs a benchmark](./job_scripts/launch_pandas.lsf)
 
-Next, run benchmarking script as: 
+Next, run benchmarking script by following the help: 
 
 ```bash
-python cudf_benchmarking.py <task> <package> <size>
+python cudf_benchmarking.py --help
 ```
-
-Provide inputs as:
-* `task`: 
-  * `groupby` based on [this](https://github.com/mrocklin/dask-gpu-benchmarks/blob/master/groupby-aggregations.ipynb) notebook
-  * `join-indexed` based on [this](https://github.com/mrocklin/dask-gpu-benchmarks/blob/master/join-indexed.ipynb) notebook
-* `package`:
-  * `dask`
-  * `dask-cudf`
-  * `cudf`
-  * `pandas`
-* `size`:
-  * `all`
-  * `1G`
-  * `2.5G`
-  * `5G`
-  * `10G`
-  * `25G`
-  * more to come ...
 
 ## 1. Groupby Results
 
