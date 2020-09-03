@@ -1,4 +1,3 @@
-
 import os
 import sys
 import time
@@ -29,7 +28,7 @@ if __name__ == '__main__':
     print ('Matrix Size\t\tMB\t\tTime(s)\n')
 
     j = 1
-    for i in range (12):
+    for i in range (5):
         x = genMatrix (j,1)
         mb = x.nbytes/(1024*1024)
         dt=SVD(x)

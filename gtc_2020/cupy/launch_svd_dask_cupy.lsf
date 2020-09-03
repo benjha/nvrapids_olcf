@@ -1,0 +1,109 @@
+#!/usr/bin/env bash
+
+#BSUB -P STF011
+#BSUB -W 0:30
+#BSUB -alloc_flags "gpumps smt4"
+#BSUB -nnodes 2
+#BSUB -J svd_dask_cupy_cluster_2GPU_8000
+#BSUB -o svd_dask_cupy_cluster_2GPU_8000.o%J
+#BSUB -e svd_dask_cupy_cluster_2GPU_8000.e%J
+#BSUB -q batch-hm
+
+WORKERS=12
+chunk=8000
+echo 'chunk: ' 
+echo $chunk
+
+module load gcc/7.4.0
+module load python/3.7.0-anaconda3-5.3.0
+module load cuda/10.1.243
+
+export PATH=/gpfs/alpine/world-shared/stf011/nvrapids_0.14_gcc_7.4.0/bin:$PATH
+
+PROJ_ID=stf011
+dask_dir=$MEMBERWORK/$PROJ_ID/dask
+
+if [ ! -d "$dask_dir" ]
+then
+    mkdir $dask_dir
+fi
+
+export CUPY_CACHE_DIR=$dask_dir
+export OMP_PROC_BIND=FALSE
+export PYTHONUNBUFFERED=TRUE
+
+# clean previous contents
+rm -fr ${dask_dir}/*
+
+# Several dask schedulers could run in the same batch node by different users,
+# create a random port to reduce port collisions
+PORT_SCHED=$(shuf -i 4000-6000 -n 1)
+PORT_DASH=$(shuf -i 7000-8999 -n 1)
+
+# saving ports to use them if  launching jupyter lab
+echo $PORT_SCHED >> ${dask_dir}/port_sched
+echo $PORT_DASH  >> ${dask_dir}/port_dash
+
+
+HOSTNAME=$(hostname)
+echo 'Running scheduler in'
+echo $HOSTNAME:$PORT_SCHED
+echo
+echo 'Running dashboard in'
+echo $HOSTNAME:$PORT_DASH
+
+dask-scheduler --port ${PORT_SCHED}  --dashboard-address ${PORT_DASH} --interface ib0  --scheduler-file ${dask_dir}/my-scheduler.json &
+
+sleep 5
+
+echo
+echo 'Running worker(s) in: '
+jsrun -n 1 -c 1 hostname 
+
+
+jsrun -c 1 -g 1 -n ${WORKERS} -r 6 -a 1 --bind rs --smpiargs="off" dask-cuda-worker --scheduler-file ${dask_dir}/my-scheduler.json --local-directory ${dask_dir} --nthreads 1 --memory-limit 85GB --device-memory-limit 16GB  --death-timeout 180 --interface ib0 --enable-nvlink & 
+
+sleep 10
+
+cd /gpfs/alpine/world-shared/stf011/benjha/gtc_2020/dask_cupy/svd_perf_eval/rapids_0.14
+python -u svd_dask_cupy.py $chunk compute >> svd_${chunk}_${WORKERS}_GPU.log
+
+echo '---'
+sleep 20
+python -u svd_dask_cupy.py $chunk compute >> svd_${chunk}_${WORKERS}_GPU.log
+
+echo '---'
+sleep 20
+python -u svd_dask_cupy.py $chunk compute >> svd_${chunk}_${WORKERS}_GPU.log
+
+echo '---'
+sleep 20
+python -u svd_dask_cupy.py $chunk compute >> svd_${chunk}_${WORKERS}_GPU.log
+
+echo '---'
+sleep 20
+python -u svd_dask_cupy.py $chunk compute >> svd_${chunk}_${WORKERS}_GPU.log
+
+echo '---'
+sleep 20
+python -u svd_dask_cupy.py $chunk compute >> svd_${chunk}_${WORKERS}_GPU.log
+
+echo '---'
+sleep 20
+python -u svd_dask_cupy.py $chunk compute >> svd_${chunk}_${WORKERS}_GPU.log
+
+echo '---'
+sleep 20
+python -u svd_dask_cupy.py $chunk compute >> svd_${chunk}_${WORKERS}_GPU.log
+
+echo '---'
+sleep 20
+python -u svd_dask_cupy.py $chunk compute >> svd_${chunk}_${WORKERS}_GPU.log
+
+echo '---'
+sleep 20
+python -u svd_dask_cupy.py $chunk compute >> svd_${chunk}_${WORKERS}_GPU.log
+
+sleep 10
+python -u shutdown_cluster.py
+
