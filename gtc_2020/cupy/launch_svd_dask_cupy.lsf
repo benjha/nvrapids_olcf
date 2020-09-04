@@ -3,13 +3,15 @@
 #BSUB -P STF011
 #BSUB -W 0:30
 #BSUB -alloc_flags "gpumps smt4"
-#BSUB -nnodes 2
+#BSUB -nnodes 1
 #BSUB -J svd_dask_cupy_cluster_2GPU_8000
 #BSUB -o svd_dask_cupy_cluster_2GPU_8000.o%J
 #BSUB -e svd_dask_cupy_cluster_2GPU_8000.e%J
 #BSUB -q batch-hm
 
-WORKERS=12
+#set the number of GPUs to use
+WORKERS=2
+#set the chunk size to use
 chunk=8000
 echo 'chunk: ' 
 echo $chunk
