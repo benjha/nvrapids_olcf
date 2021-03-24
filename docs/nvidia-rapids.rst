@@ -7,7 +7,7 @@ Overview
 
 `RAPIDS <https://rapids.ai/>`_ is a suite of libraries to execute end-to-end data science and analytics pipelines on GPUs. RAPIDS utilizes NVIDIA CUDA primitives for low-level compute optimization through user-friendly Python interfaces.
 
-A general overview of the RAPIDS libraries available at OLCF is given next. A more detailed explanation of each library, capabilities and APIs is available in the `official RAPIDS documentation <https://docs.rapids.ai/api>`_.
+An overview of the RAPIDS libraries available at OLCF is given next. A more detailed explanation of each library, capabilities and APIs is available in the `official RAPIDS documentation <https://docs.rapids.ai/api>`_.
 
 cuDF
 ----
@@ -31,6 +31,17 @@ dask-cuda extends Dask where necessary to scale up and scale out RAPIDS workflow
 
 Getting Started
 ===============
+
+RAPIDS is available at OLCF via `Jupyter <https://docs.olcf.ornl.gov/services_and_applications/jupyter/overview.html#example-creating-a-conda-environment-for-rapids>`_ and via ``module load`` command in Summit. 
+
+
+
+We recommend to prepare your python scripts with RAPIDS in your  
+
+
+
+There are two options 
+
 
 
 RAPIDS is provided on Summit through the ``module load`` command:
