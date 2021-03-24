@@ -86,6 +86,6 @@ As an example, the following LSF script will run a single-gpu RAPIDS script in o
     module load ums-gen119
     module load nvidia-rapids/0.18
 
-    jsrun --nrs 1 --tasks_per_rs 1 --cpu_per_rs 1 --gpu_per_rs 1 --smpiargs="off" python $CONDA_PREFIX/examples/cudf/cudf_test.py
+    
 
 From the code
