@@ -66,4 +66,12 @@ RAPIDS is provided on Summit through the ``module load`` command:
 
 The RAPIDS module loads ``gcc/7.4.0``, ``cuda/10.1.243`` and ``python/3.7.0-anaconda3-5.3.0`` modules. This module includes cuDF, a pandas-like dataframe manipulation library; cuML, a collection of machine learning libraries that will provide GPU versions of algorithms available in scikit-learn; cuGraph, a NetworkX-like accelerated graph analytics library; and dask-cuda, for RAPIDS multi-gpu and multi-node GPU workloads. For a complete list of available packages, use ``conda list`` command after loading the RAPIDS module.
 
+Basic RAPIDS LSF Script
+^^^^^^^^^^^^^^^^^^^^^^^
+
+The following LSF script will run a distributed Tensorflow resnet50 training job across 2 nodes.
+
+
+
+
 
