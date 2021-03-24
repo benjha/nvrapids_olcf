@@ -8,7 +8,7 @@ This repository includes the next directories:
 
 - docs
 
-[`docs`] provides documentation for the OLCF's user community to execute NVIDIA RAPIDS in Summit.
+[`docs`](https://github.com/benjha/nvrapids_olcf/tree/branch-0.18/docs/nvidia-rapids.rst) provides documentation for the OLCF's user community to execute NVIDIA RAPIDS in Summit.
 
 - examples
 
