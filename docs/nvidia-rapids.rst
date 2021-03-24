@@ -40,11 +40,17 @@ We recommend to use Jupyter in the next situations:
 - Workload fits comfortably on a single GPU.
 - Interactive capabilities are needed. 
 
-whereas Summit is recommended in the next situtations:
+whereas Summit is recommended in the next situtations (but not limited to):
 
+- Script is single gpu but requires `concurrent job steps <https://docs.olcf.ornl.gov/systems/summit_user_guide.html?highlight=jsrun%20steps#concurrent-job-steps>`_.
 - Script has support for multi-gpu/multi-node execution via dask-cuda.
-- Large workloads.  
+- Large workloads.
 
+
+Note that Python scripts prepared on Jupyter can be  deployed on Summit if they use the same RAPIDS
+
+RAPIDS on Summit
+----------------
 
 RAPIDS is provided on Summit through the ``module load`` command:
 
