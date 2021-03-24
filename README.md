@@ -1,7 +1,5 @@
 # NVIDIA RAPIDS at OLCF
 
-This repository is meant to share recipes to build, install, maintain and execute NVIDIA RAPIDS in OLCF's SUMMIT supercomputer.
-
 ## Repository Organization
 
 This repository includes the next directories:
