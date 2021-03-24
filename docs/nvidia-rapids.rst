@@ -5,9 +5,7 @@ NVIDIA RAPIDS
 Overview
 ========
 
-`RAPIDS <https://rapids.ai/>`_ is a suite of libraries to execute end-to-end data science and analytics pipelines on GPUs. RAPIDS utilizes NVIDIA CUDA primitives for low-level compute optimization through user-friendly Python interfaces.
-
-An overview of the RAPIDS libraries available at OLCF is given next. A more detailed explanation of each library, capabilities and APIs is available in the `official RAPIDS documentation <https://docs.rapids.ai/api>`_.
+`RAPIDS <https://rapids.ai/>`_ is a suite of libraries to execute end-to-end data science and analytics pipelines on GPUs. RAPIDS utilizes NVIDIA CUDA primitives for low-level compute optimization through user-friendly Python interfaces. An overview of the RAPIDS libraries available at OLCF is given next.
 
 cuDF
 ----
@@ -24,13 +22,17 @@ cuGraph
 
 cuGraph is a GPU accelerated graph analytics library, with functionality like NetworkX, which is seamlessly integrated into the RAPIDS data science platform.
 
-CuPy
------
-
 dask-cuda
 ---------
 
 dask-cuda extends Dask where necessary to scale up and scale out RAPIDS workflows.
+
+CuPy
+----
+
+Chainer's CuPy is a NumPy-compatible, open source mathematical library. While CuPy is not a library under the RAPIDS framework, it is compatible with RAPIDS and dask-cuda for memory management and multi-GPU, multi-node workload distribution.
+
+A more detailed explanation of each library, capabilities and APIs is available in the `official RAPIDS documentation <https://docs.rapids.ai/api>`_ and `CuPy's documentation <https://docs.cupy.dev/en/stable/tutorial/basic.html>`
 
 Getting Started
 ===============
@@ -54,7 +56,7 @@ RAPIDS on OLCF's Jupyter
 
 RAPIDS is provided in Jupyter following then next `instructions <https://docs.olcf.ornl.gov/services_and_applications/jupyter/overview.html#example-creating-a-conda-environment-for-rapids>`_.
 
-Note that Python scripts prepared on Jupyter can be  deployed on Summit if they use the same RAPIDS version.
+Note that Python scripts prepared on Jupyter can be  deployed on Summit if they use the same RAPIDS version. Use ``!jupyter nbconvert --to script my_notebook.ipynb`` to convert notebook files to a Python scripts.
 
 RAPIDS on Summit
 ================
@@ -96,9 +98,9 @@ From the ``jsrun`` options, note the ``--smpiargs="off"`` flag is being used. Di
 Concurrent job steps LSF Script
 -------------------------------
 
-In cases (e.g. extract statistics) where the RAPIDS libraries are used to post-process datasets and each of the datasets' partition or time steps fits comfortably in GPU memory. It is possible to execute concurrently a single-GPU RAPIDS script that operates on each partition or time step via `concurrent job steps <https://docs.olcf.ornl.gov/systems/summit_user_guide.html?highlight=jsrun%20steps#concurrent-job-steps>`_.
+In cases (e.g. extract statistics) where the RAPIDS libraries are used to post-process datasets and each of the datasets' partition or time step fits comfortably in GPU memory. It is recommended to execute `concurrent job steps <https://docs.olcf.ornl.gov/systems/summit_user_guide.html?highlight=jsrun%20steps#concurrent-job-steps>`_ on each partition or time step.
 
-The following scripts provides a general pattern to run job steps concurrently with RAPIDS:
+The following script provides a general pattern to run job steps concurrently with RAPIDS:
 
 .. code-block:: bash
 
@@ -115,12 +117,15 @@ The following scripts provides a general pattern to run job steps concurrently w
     module load nvidia-rapids/0.18
 
     jsrun --nrs 1 --tasks_per_rs 1 --cpu_per_rs 1 --gpu_per_rs 1 --smpiargs="off" \ 
-          python <my_path>/<my_rapids_script.py> <dataset_part01> &
+          python /my_path/my_rapids_script.py dataset_part01 &
     jsrun --nrs 1 --tasks_per_rs 1 --cpu_per_rs 1 --gpu_per_rs 1 --smpiargs="off" \ 
-          python <my_path>/<my_rapids_script.py> <dataset_part02> &
+          python /my_path/my_rapids_script.py dataset_part02 &
     jsrun --nrs 1 --tasks_per_rs 1 --cpu_per_rs 1 --gpu_per_rs 1 --smpiargs="off" \ 
-          python <my_path>/<my_rapids_script.py> <dataset_part03> &
+          python /my_path/my_rapids_script.py dataset_part03 &
     ...
     wait
+
+Distributed RAPIDS LSF Script
+-----------------------------
 
 
