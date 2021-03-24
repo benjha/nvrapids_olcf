@@ -7,7 +7,7 @@ NVIDIA RAPIDS
 Getting Started
 ===============
 
-RAPIDS is provided on Summit through the `module load` command:
+RAPIDS is provided on Summit through the ``module load`` command:
 
 .. code-block:: bash
 
@@ -15,5 +15,6 @@ RAPIDS is provided on Summit through the `module load` command:
     module load ums-gen119
     module load nvidia-rapids/0.18
 
-The RAPIDS module includes cuDF, a pandas-like dataframe manipulation library; cuML, a collection of machine learning libraries that will provide GPU versions of algorithms available in scikit-learn; cuGraph, a NetworkX-like accelerated graph analytics library. 
+
+The RAPIDS module includes cuDF, a pandas-like dataframe manipulation library; cuML, a collection of machine learning libraries that will provide GPU versions of algorithms available in scikit-learn; cuGraph, a NetworkX-like accelerated graph analytics library. This module was created from ``gcc/7.4.0``, ``cuda/10.1.243`` and ``python/3.7.0-anaconda3-5.3.0`` modules.
 
