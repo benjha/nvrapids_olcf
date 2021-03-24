@@ -2,10 +2,12 @@
 NVIDIA RAPIDS
 *************************************************************************************
 
+`RAPIDS <https://rapids.ai/>` is a suite of libraries to execute end-to-end data science and analytics pipelines on GPUs. RAPIDS utilizes NVIDIA CUDA primitives for low-level compute optimization through user-friendly Python interfaces.
+
 Getting Started
 ===============
 
-NVIDIA RAPIDS is provided on Summit through the `module load` command:
+RAPIDS is provided on Summit through the `module load` command:
 
 .. code-block:: bash
 
@@ -13,6 +15,5 @@ NVIDIA RAPIDS is provided on Summit through the `module load` command:
     module load ums-gen119
     module load nvidia-rapids/0.18
 
+The RAPIDS module includes cuDF, a pandas-like dataframe manipulation library; cuML, a collection of machine learning libraries that will provide GPU versions of algorithms available in scikit-learn; cuGraph, a NetworkX-like accelerated graph analytics library. 
 
-This repository is meant to share recipes to build, install, maintain and execute NVIDIA Rapids Framework in OLCF's SUMMIT
-supercomputer.
