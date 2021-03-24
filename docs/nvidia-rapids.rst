@@ -69,9 +69,23 @@ The RAPIDS module loads ``gcc/7.4.0``, ``cuda/10.1.243`` and ``python/3.7.0-anac
 Basic RAPIDS LSF Script
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-The following LSF script will run a distributed Tensorflow resnet50 training job across 2 nodes.
+As an example, the following LSF script will run a single-gpu RAPIDS script in one Summit node:
 
+.. code-block:: bash
+    :caption: single_gpu.lsf
 
+    #BSUB -P <PROJECT>
+    #BSUB -W 0:05
+    #BSUB -nnodes 1
+    #BSUB -q batch
+    #BSUB -J rapids_test
+    #BSUB -o rapids_test_%J.out
+    #BSUB -e rapids_test_%J.out
 
+    module load ums
+    module load ums-gen119
+    module load nvidia-rapids/0.18
 
+    jsrun --nrs 1 --tasks_per_rs 1 --cpu_per_rs 1 --gpu_per_rs 1 --smpiargs="off" python $CONDA_PREFIX/examples/cudf/cudf_test.py
 
+From the code 
