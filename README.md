@@ -4,20 +4,19 @@ This repository is meant to share recipes to build, install, maintain and execut
 
 ## Repository Organization
 
-This repository has the next directories:
+This repository includes the next directories:
+
+- docs
+
+[`docs`] provides documentation for the OLCF's user community to execute NVIDIA RAPIDS in Summit.
+
+- examples
+
+[`examples`] provides the LSF scripts and python examples discussed in the documentation.
 
 - build-scripts
 
-[`build-scripts`](https://github.com/benjha/nvrapids_olcf/tree/branch-0.11/build_scripts) directory includes scripts to build from source NVIDIA Rapids in SUMMIT.
-
-- dask-batch
-
-dask-batch directory includes scripts to execute DASK distributed workloads in batch mode.
-
-- dask-cuda-batch
-
-dask-cuda-batch directory  includes scripts to execute NVIDIA Rapids workloads with dask-cuda in batch mode.
-
+[`build-scripts`](https://github.com/benjha/nvrapids_olcf/tree/branch-0.18/build_scripts) directory includes scripts to build from source NVIDIA RAPIDS in Summit. This directory is meant to be used by mantainers.
 
 
 
