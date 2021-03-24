@@ -34,14 +34,16 @@ Getting Started
 
 RAPIDS is available at OLCF via `Jupyter <https://docs.olcf.ornl.gov/services_and_applications/jupyter/overview.html#example-creating-a-conda-environment-for-rapids>`_ and via ``module load`` command in Summit. 
 
+We recommend to use Jupyter in the next situations:
 
+- Script preparation.
+- Workload fits comfortably on a single GPU.
+- Interactive capabilities are needed. 
 
-We recommend to prepare your python scripts with RAPIDS in your  
+whereas Summit is recommended in the next situtations:
 
-
-
-There are two options 
-
+- Script has support for multi-gpu/multi-node execution via dask-cuda.
+- Large workloads.  
 
 
 RAPIDS is provided on Summit through the ``module load`` command:
