@@ -34,20 +34,24 @@ Getting Started
 
 RAPIDS is available at OLCF via `Jupyter <https://docs.olcf.ornl.gov/services_and_applications/jupyter/overview.html#example-creating-a-conda-environment-for-rapids>`_ and via ``module load`` command in Summit. 
 
-We recommend to use Jupyter in the next situations:
+We recommend to use Jupyter in the next situations (but not limited to):
 
-- Script preparation.
-- Workload fits comfortably on a single GPU.
+- Python script preparation.
+- Your workload fits comfortably on a single GPU.
 - Interactive capabilities are needed. 
 
 whereas Summit is recommended in the next situtations (but not limited to):
 
-- Script is single gpu but requires `concurrent job steps <https://docs.olcf.ornl.gov/systems/summit_user_guide.html?highlight=jsrun%20steps#concurrent-job-steps>`_.
-- Script has support for multi-gpu/multi-node execution via dask-cuda.
+- Your Python script is single gpu but requires `concurrent job steps <https://docs.olcf.ornl.gov/systems/summit_user_guide.html?highlight=jsrun%20steps#concurrent-job-steps>`_.
+- Your Python script has support for multi-gpu/multi-node execution via dask-cuda.
 - Large workloads.
 
+RAPIDS on OLCF's Jupyter
+------------------------
 
-Note that Python scripts prepared on Jupyter can be  deployed on Summit if they use the same RAPIDS
+RAPIDS is provided in Jupyter following then next `instructions <https://docs.olcf.ornl.gov/services_and_applications/jupyter/overview.html#example-creating-a-conda-environment-for-rapids>`_.
+
+Note that Python scripts prepared on Jupyter can be  deployed on Summit if they use the same RAPIDS version.
 
 RAPIDS on Summit
 ----------------
