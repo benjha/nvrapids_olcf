@@ -2,9 +2,12 @@
 NVIDIA RAPIDS
 *************************************************************************************
 
+Overview
+========
+
 `RAPIDS <https://rapids.ai/>`_ is a suite of libraries to execute end-to-end data science and analytics pipelines on GPUs. RAPIDS utilizes NVIDIA CUDA primitives for low-level compute optimization through user-friendly Python interfaces.
 
-A general overview of the RAPIDS libraries available at OLCF is given next. A more detailed explanation of each library, capabilities and API documentation is available in the `official RAPIDS documentation <https://docs.rapids.ai/api>`_.
+A general overview of the RAPIDS libraries available at OLCF is given next. A more detailed explanation of each library, capabilities and APIs is available in the `official RAPIDS documentation <https://docs.rapids.ai/api>`_.
 
 cuDF
 ----
