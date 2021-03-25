@@ -142,8 +142,8 @@ Once the dask-cluster is running, the RAPIDS script should `connect to <https://
 Reference of multi-gpu/multi-node operation with cuDF, cuML, cuGraph is available in the next links:
 
 - `10 Minutes to cuDF and Dask-cuDF <https://docs.rapids.ai/api/cudf/stable/10min.html#>`_.
-- `cuML Multi-Node, Multi-GPU Algorithms <https://docs.rapids.ai/api/cuml/stable/api.html#multi-node-multi-gpu-algorithms>`_.
-- `Multi-GPU with cuGraph <https://docs.rapids.ai/api/cuml/stable/api.html#multi-node-multi-gpu-algorithms>`_.
-https://docs.rapids.ai/api/cugraph/stable/dask-cugraph.html
+- `cuML's Multi-Node, Multi-GPU Algorithms <https://docs.rapids.ai/api/cuml/stable/api.html#multi-node-multi-gpu-algorithms>`_.
+- `Multi-GPU with cuGraph <https://docs.rapids.ai/api/cugraph/stable/dask-cugraph.html>`_.
+
 
 
