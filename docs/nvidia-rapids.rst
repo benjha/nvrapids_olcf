@@ -56,7 +56,7 @@ RAPIDS on OLCF's Jupyter
 
 RAPIDS is provided in Jupyter following then next `instructions <https://docs.olcf.ornl.gov/services_and_applications/jupyter/overview.html#example-creating-a-conda-environment-for-rapids>`_.
 
-Note that Python scripts prepared on Jupyter can be  deployed on Summit if they use the same RAPIDS version. Use ``!jupyter nbconvert --to script my_notebook.ipynb`` to convert notebook files to a Python scripts.
+Note this option is for illustrative purposes and not recommended to run RAPIDS on Summit since it underutilizes resources. If your RAPIDS code is single GPU, consider  `Jupyter <https://docs.olcf.ornl.gov/services_and_applications/jupyter/overview.html#example-creating-a-conda-environment-for-rapids>`_. or the concurrent job steps option.
 
 RAPIDS on Summit
 ================
@@ -73,7 +73,7 @@ The RAPIDS module loads ``gcc/7.4.0``, ``cuda/10.1.243`` and ``python/3.7.0-anac
 
 The RAPIDS module also defines a set of environment variables to take advantage of `UCX <https://dask-cuda.readthedocs.io/en/latest/ucx.html>`_, an optimized communication framework for high-performance networking including Summit's NVLink and Infiniband communication interfaces.
 
-Basic LSF Script
+RAPIDS basic execution
 ----------------
 
 As an example, the following LSF script will run a single-GPU RAPIDS script in one Summit node:
@@ -97,8 +97,10 @@ As an example, the following LSF script will run a single-GPU RAPIDS script in o
 
 From the ``jsrun`` options, note the ``--smpiargs="off"`` flag is being used. Disabling smpiargs allows non Spectrum MPI codes run with CUDA.
 
-Concurrent job steps LSF Script
--------------------------------
+Note this option is for illustrative purposes and is not recommended to run RAPIDS since it underutilizes Summit's resources. If your RAPIDS code is single GPU, consider the concurrent job steps option.
+
+Concurrent job steps with RAPIDS
+--------------------------------
 
 In cases (e.g. extract statistics) where the RAPIDS libraries are used to post-process datasets and each of the datasets' partition or time step fits comfortably in GPU memory. It is recommended to execute `concurrent job steps <https://docs.olcf.ornl.gov/systems/summit_user_guide.html?highlight=jsrun%20steps#concurrent-job-steps>`_ on each partition or time step.
 
