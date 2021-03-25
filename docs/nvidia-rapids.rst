@@ -129,7 +129,12 @@ The following script provides a general pattern to run job steps concurrently wi
     ...
     wait
 
-Distributed RAPIDS LSF Script
------------------------------
+Distributed RAPIDS execution
+----------------------------
 
+Running RAPIDS distributed workloads requires a dask-cuda cluster. Setting up a dask-cuda cluster in Summit requires three components:
+
+- `dask-scheduler <https://docs.dask.org/en/latest/setup/cli.html#dask-scheduler>`_.
+- `dask-cuda-workers <https://dask-cuda.readthedocs.io/en/latest/worker.html#worker>`_.
+- Python `function calls <https://docs.dask.org/en/latest/setup/single-distributed.html?highlight=Client#client>`_ in the RAPIDS script to connect to the dask-cuda cluster.
 
