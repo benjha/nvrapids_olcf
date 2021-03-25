@@ -132,9 +132,18 @@ The following script provides a general pattern to run job steps concurrently wi
 Distributed RAPIDS execution
 ----------------------------
 
-Running RAPIDS distributed workloads requires a dask-cuda cluster. Setting up a dask-cuda cluster in Summit requires three components:
+Running RAPIDS distributed workloads (multi-gpu/multi-node) requires a dask-cuda cluster. Setting up a dask-cuda cluster on Summit requires two components:
 
 - `dask-scheduler <https://docs.dask.org/en/latest/setup/cli.html#dask-scheduler>`_.
 - `dask-cuda-workers <https://dask-cuda.readthedocs.io/en/latest/worker.html#worker>`_.
-- Python `function calls <https://docs.dask.org/en/latest/setup/single-distributed.html?highlight=Client#client>`_ in the RAPIDS script to connect to the dask-cuda cluster.
+
+Once the dask-cluster is running, the RAPIDS script should `connect to <https://docs.dask.org/en/latest/setup/single-distributed.html?highlight=Client#client>`_  to the dask-cuda cluster. 
+
+Reference of multi-gpu/multi-node operation with cuDF, cuML, cuGraph is available in the next links:
+
+- `10 Minutes to cuDF and Dask-cuDF <https://docs.rapids.ai/api/cudf/stable/10min.html#>`_.
+- `cuML Multi-Node, Multi-GPU Algorithms <https://docs.rapids.ai/api/cuml/stable/api.html#multi-node-multi-gpu-algorithms>`_.
+- `Multi-GPU with cuGraph <https://docs.rapids.ai/api/cuml/stable/api.html#multi-node-multi-gpu-algorithms>`_.
+https://docs.rapids.ai/api/cugraph/stable/dask-cugraph.html
+
 
