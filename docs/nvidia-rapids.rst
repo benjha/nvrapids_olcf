@@ -32,7 +32,7 @@ CuPy
 
 Chainer's CuPy is a NumPy-compatible, open source mathematical library. While CuPy is not a library under the RAPIDS framework, it is compatible with RAPIDS and dask-cuda for memory management and multi-GPU, multi-node workload distribution.
 
-Additional information is available at the `official RAPIDS documentation <https://docs.rapids.ai/api>`_ and `CuPy's documentation <https://docs.cupy.dev/en/stable/overview.html>`_.
+Complete documentation is available at the `official RAPIDS documentation <https://docs.rapids.ai/api>`_ and `CuPy's documentation <https://docs.cupy.dev/en/stable/overview.html>`_ websites.
 
 Getting Started
 ===============
@@ -135,12 +135,12 @@ Distributed RAPIDS execution
 Preliminaries
 ^^^^^^^^^^^^^
 
-Running RAPIDS distributed workloads (multi-gpu/multi-node) requires a dask-cuda cluster. Setting up a dask-cuda cluster on Summit requires two components:
+Running RAPIDS multi-gpu/multi-node workloads requires a dask-cuda cluster. Setting up a dask-cuda cluster on Summit requires two components:
 
 - `dask-scheduler <https://docs.dask.org/en/latest/setup/cli.html#dask-scheduler>`_.
 - `dask-cuda-workers <https://dask-cuda.readthedocs.io/en/latest/worker.html#worker>`_.
 
-Once the dask-cluster is running, the RAPIDS script should `connect to <https://docs.dask.org/en/latest/setup/single-distributed.html?highlight=Client#client>`_  to the dask-cuda cluster. 
+Once the dask-cluster is running, the RAPIDS script should `connect to <https://dask-cuda.readthedocs.io/en/latest/ucx.html#client>`_  to the dask-cuda cluster. 
 
 Reference of multi-gpu/multi-node operation with cuDF, cuML, cuGraph is available in the next links:
 
@@ -148,5 +148,46 @@ Reference of multi-gpu/multi-node operation with cuDF, cuML, cuGraph is availabl
 - `cuML's Multi-Node, Multi-GPU Algorithms <https://docs.rapids.ai/api/cuml/stable/api.html#multi-node-multi-gpu-algorithms>`_.
 - `Multi-GPU with cuGraph <https://docs.rapids.ai/api/cugraph/stable/dask-cugraph.html>`_.
 
+Launching the dask-scheduler and dask-cuda-workers
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The following script will run a dask-cuda cluster accross two compute nodes. The script launches the dask-scheduler in a batch node and twelve dask-cuda-workers in the compute nodes.
+
+.. code-block:: bash
+
+    #BSUB -P <PROJECT>
+    #BSUB -W 0:05
+    #BSUB -alloc_flags "gpumps"
+    #BSUB -nnodes 2
+    #BSUB -J rapids_dask_test
+    #BSUB -o rapids_dask_test_%J.out
+    #BSUB -e rapids_dask_test_%J.out
+
+    PROJ_ID=<project>
+
+    module load ums
+    module load ums-gen119
+    module load nvidia-rapids/0.18
+
+    dask_dir=$MEMBERWORK/$PROJ_ID/dask
+    if [ ! -d "$dask_dir" ]
+    then
+        mkdir $dask_dir
+    fi
+    # clean previous contents
+    rm -fr $dask_dir/*
+
+    echo 'Running scheduler'
+    jsrun --nrs 1 --tasks_per_rs 1 --cpu_per_rs 1 \
+          dask-scheduler --interface ib0 --protocol ucx  --scheduler-file $dask_dir/my-scheduler.json &
+    #Wait for the dask-scheduler to run
+    sleep 5
+
+    echo 'Running workers'
+    jsrun --nrs 12 --rs_per_host 6 --tasks_per_rs 1 --cpu_per_rs 1 --gpu_per_rs 1 --smpiargs='off' \
+          dask-cuda-worker --nthreads 1 --memory-limit 85GB --device-memory-limit 16GB --rmm-pool-size 15GB \
+                           --enable-nvlink --enable-infiniband --enable-rdmacm --net-devices="auto"\
+                           --death-timeout 60  --interface ib0 --scheduler-file $dask_dir/my-scheduler.json --local-directory $dask_dir &
 
 
+Note a dask-cuda-worker is executed per each GPU available.
