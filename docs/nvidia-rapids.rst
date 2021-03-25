@@ -132,6 +132,9 @@ The following script provides a general pattern to run job steps concurrently wi
 Distributed RAPIDS execution
 ----------------------------
 
+Preliminaries
+^^^^^^^^^^^^^
+
 Running RAPIDS distributed workloads (multi-gpu/multi-node) requires a dask-cuda cluster. Setting up a dask-cuda cluster on Summit requires two components:
 
 - `dask-scheduler <https://docs.dask.org/en/latest/setup/cli.html#dask-scheduler>`_.
