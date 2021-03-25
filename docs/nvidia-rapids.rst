@@ -25,38 +25,38 @@ cuGraph is a GPU accelerated graph analytics library, with functionality like Ne
 dask-cuda
 ---------
 
-dask-cuda extends Dask where necessary to scale up and scale out RAPIDS workflows.
+dask-cuda extends Dask where it is necessary to scale up and scale out RAPIDS workflows.
 
 CuPy
 ----
 
 Chainer's CuPy is a NumPy-compatible, open source mathematical library. While CuPy is not a library under the RAPIDS framework, it is compatible with RAPIDS and dask-cuda for memory management and multi-GPU, multi-node workload distribution.
 
-A more detailed explanation of each library, capabilities and APIs is available in the `official RAPIDS documentation <https://docs.rapids.ai/api>`_ and `CuPy's documentation <https://docs.cupy.dev/en/stable/overview.html>`_.
+Additional information is available at the `official RAPIDS documentation <https://docs.rapids.ai/api>`_ and `CuPy's documentation <https://docs.cupy.dev/en/stable/overview.html>`_.
 
 Getting Started
 ===============
 
 RAPIDS is available at OLCF via `Jupyter <https://docs.olcf.ornl.gov/services_and_applications/jupyter/overview.html#example-creating-a-conda-environment-for-rapids>`_ and via ``module load`` command in Summit. 
 
-We recommend to use Jupyter in the next situations (but not limited to):
+We recommend the use of Jupyter in example situations like:
 
 - Python script preparation.
 - Your workload fits comfortably on a single GPU.
 - Interactive capabilities are needed. 
 
-whereas Summit is recommended in the next situtations (but not limited to):
+whereas Summit is recommended in example situations like:
 
-- Your Python script is single gpu but requires `concurrent job steps <https://docs.olcf.ornl.gov/systems/summit_user_guide.html?highlight=jsrun%20steps#concurrent-job-steps>`_.
 - Your Python script has support for multi-gpu/multi-node execution via dask-cuda.
 - Large workloads.
+- Your Python script is single GPU but requires `concurrent job steps <https://docs.olcf.ornl.gov/systems/summit_user_guide.html?highlight=jsrun%20steps#concurrent-job-steps>`_.
 
-RAPIDS on OLCF's Jupyter
-========================
+RAPIDS on `Jupyter <https://docs.olcf.ornl.gov/services_and_applications/jupyter/overview.html>`_
+==================
 
-RAPIDS is provided in Jupyter following then next `instructions <https://docs.olcf.ornl.gov/services_and_applications/jupyter/overview.html#example-creating-a-conda-environment-for-rapids>`_.
+RAPIDS is provided in Jupyter following the next `instructions <https://docs.olcf.ornl.gov/services_and_applications/jupyter/overview.html#example-creating-a-conda-environment-for-rapids>`_.
 
-Note this option is for illustrative purposes and not recommended to run RAPIDS on Summit since it underutilizes resources. If your RAPIDS code is single GPU, consider `Jupyter <https://docs.olcf.ornl.gov/services_and_applications/jupyter/overview.html#example-creating-a-conda-environment-for-rapids>`_ or the concurrent job steps option.
+Note that Python scripts prepared on Jupyter can be deployed on Summit if they use the same RAPIDS version. Use ``!jupyter nbconvert --to script my_notebook.ipynb`` to convert notebook files to Python scripts.
 
 RAPIDS on Summit
 ================
@@ -71,10 +71,10 @@ RAPIDS is provided on Summit through the ``module load`` command:
 
 The RAPIDS module loads ``gcc/7.4.0``, ``cuda/10.1.243`` and ``python/3.7.0-anaconda3-5.3.0`` modules. For a complete list of available packages, use ``conda list`` command after loading this module. 
 
-The RAPIDS module also defines a set of environment variables to take advantage of `UCX <https://dask-cuda.readthedocs.io/en/latest/ucx.html>`_, an optimized communication framework for high-performance networking including Summit's NVLink and Infiniband communication interfaces.
+The RAPIDS module also defines a set of environment variables to take advantage of `UCX <https://dask-cuda.readthedocs.io/en/latest/ucx.html>`_, an optimized communication framework for high-performance networking using Summit's NVLink and Infiniband communication interfaces.
 
 RAPIDS basic execution
-----------------
+----------------------
 
 As an example, the following LSF script will run a single-GPU RAPIDS script in one Summit node:
 
@@ -97,12 +97,12 @@ As an example, the following LSF script will run a single-GPU RAPIDS script in o
 
 From the ``jsrun`` options, note the ``--smpiargs="off"`` flag is being used. Disabling smpiargs allows non Spectrum MPI codes run with CUDA.
 
-Note this option is for illustrative purposes and is not recommended to run RAPIDS since it underutilizes Summit's resources. If your RAPIDS code is single GPU, consider the concurrent job steps option.
+Note this option is for illustrative purposes and not recommended to run RAPIDS on Summit since it underutilizes resources. If your RAPIDS code is single GPU, consider `Jupyter <https://docs.olcf.ornl.gov/services_and_applications/jupyter/overview.html#example-creating-a-conda-environment-for-rapids>`_ or the concurrent job steps option.
 
 Concurrent job steps with RAPIDS
 --------------------------------
 
-In cases (e.g. extract statistics) where the RAPIDS libraries are used to post-process datasets and each of the datasets' partition or time step fits comfortably in GPU memory. It is recommended to execute `concurrent job steps <https://docs.olcf.ornl.gov/systems/summit_user_guide.html?highlight=jsrun%20steps#concurrent-job-steps>`_ on each partition or time step.
+In cases when a set of time steps need to be processed by single-GPU RAPIDS codes and each time step fits comfortably in GPU memory, it is recommended to execute `concurrent job steps <https://docs.olcf.ornl.gov/systems/summit_user_guide.html?highlight=jsrun%20steps#concurrent-job-steps>`_.
 
 The following script provides a general pattern to run job steps concurrently with RAPIDS:
 
