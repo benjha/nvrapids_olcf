@@ -174,20 +174,19 @@ The following script will run a dask-cuda cluster accross two compute nodes. The
     then
         mkdir $dask_dir
     fi
-    # clean previous contents
-    rm -fr $dask_dir/*
 
     echo 'Running scheduler'
     jsrun --nrs 1 --tasks_per_rs 1 --cpu_per_rs 1 \
-          dask-scheduler --interface ib0 --protocol ucx  --scheduler-file $dask_dir/my-scheduler.json &
+          dask-scheduler --interface ib0 --scheduler-file $DASK_DIR/my-scheduler.json \
+                         --no-dashboard --no-show &
+
     #Wait for the dask-scheduler to run
-    sleep 5
+    sleep 15
 
     echo 'Running workers'
     jsrun --nrs 12 --rs_per_host 6 --tasks_per_rs 1 --cpu_per_rs 1 --gpu_per_rs 1 --smpiargs='off' \
           dask-cuda-worker --nthreads 1 --memory-limit 85GB --device-memory-limit 16GB --rmm-pool-size 15GB \
-                           --enable-nvlink --enable-infiniband --enable-rdmacm --net-devices="auto"\
-                           --death-timeout 60  --interface ib0 --scheduler-file $dask_dir/my-scheduler.json --local-directory $dask_dir &
+                           --death-timeout 60  --interface ib0 --scheduler-file $DASK_DIR/my-scheduler.json --local-directory $DASK_DIR \
+                           --no-dashboard &
 
-
-Note a dask-cuda-worker is executed per each GPU available.
+Note a dask-cuda-worker is executed per each available GPU.
