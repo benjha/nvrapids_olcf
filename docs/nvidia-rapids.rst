@@ -157,7 +157,7 @@ The following script will run a dask-cuda cluster accross two compute nodes. The
 
     #BSUB -P <PROJECT>
     #BSUB -W 0:05
-    #BSUB -alloc_flags "gpumps"
+    #BSUB -alloc_flags "gpumps smt4"
     #BSUB -nnodes 2
     #BSUB -J rapids_dask_test
     #BSUB -o rapids_dask_test_%J.out
@@ -176,17 +176,27 @@ The following script will run a dask-cuda cluster accross two compute nodes. The
     fi
 
     echo 'Running scheduler'
-    jsrun --nrs 1 --tasks_per_rs 1 --cpu_per_rs 1 \
+    jsrun --rs_per_host 1 --tasks_per_rs 1 --cpu_per_rs 1 \
           dask-scheduler --interface ib0 --scheduler-file $DASK_DIR/my-scheduler.json \
                          --no-dashboard --no-show &
 
-    #Wait for the dask-scheduler to run
-    sleep 15
+    #Wait for the dask-scheduler to start
+    sleep 10
 
     echo 'Running workers'
-    jsrun --nrs 12 --rs_per_host 6 --tasks_per_rs 1 --cpu_per_rs 1 --gpu_per_rs 1 --smpiargs='off' \
-          dask-cuda-worker --nthreads 1 --memory-limit 85GB --device-memory-limit 16GB --rmm-pool-size 15GB \
+    jsrun --rs_per_host 6 --tasks_per_rs 1 --cpu_per_rs 2 --gpu_per_rs 1 --smpiargs='off' \
+          dask-cuda-worker --nthreads 1 --memory-limit 82GB --device-memory-limit 16GB --rmm-pool-size 15GB \
                            --death-timeout 60  --interface ib0 --scheduler-file $DASK_DIR/my-scheduler.json --local-directory $DASK_DIR \
                            --no-dashboard &
 
+    #Wait for some workers to start
+    sleep 5
+
+    #verify_dask_cuda_cluster.py wait for WORKERS
+    WORKERS=3    
+    python $CONDA_PREFIX/examples/dask-cuda/verify_dask_cuda_cluster.py $DASK_DIR/my-scheduler.json $WORKERS
+   
 Note a dask-cuda-worker is executed per each available GPU.
+
+.. code-block:: bash
+
