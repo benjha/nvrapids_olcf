@@ -210,7 +210,7 @@ The following script will run a dask-cuda cluster on two compute nodes, then it 
 
     echo "Done!"
    
-Note twelve dask-cuda-workers are executed, one per each available GPU, ``--memory-limit`` is set to 82GB and  ``--device-memory-limit`` is set to 16GB. If using Summit's high-memory nodes ``--memory-limit`` can be increased and setting ``--device-memory-limit`` to 32 GB  and ``--rmm-pool-size`` to 30GB or so is recommended. Also note it is recommeded to wait some seconds for the dask-scheduler and dask-cuda-workers to start.
+Note twelve dask-cuda-workers are executed, one per each available GPU, ``--memory-limit`` is set to 82 GB and  ``--device-memory-limit`` is set to 16 GB. If using Summit's high-memory nodes ``--memory-limit`` can be increased and setting ``--device-memory-limit`` to 32 GB  and ``--rmm-pool-size`` to 30 GB or so is recommended. Also note it is recommeded to wait some seconds for the dask-scheduler and dask-cuda-workers to start.
 
 As mentioned earlier, the RAPIDS code should perform four main tasks as shown in the following script. First, connect to the dask-scheduler; second, wait for all workers to start; third, do some computation, and fourth, shutdown the dask-cuda-cluster.
 
