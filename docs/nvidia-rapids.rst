@@ -42,13 +42,14 @@ RAPIDS is available at OLCF via `Jupyter <https://docs.olcf.ornl.gov/services_an
 We recommend the use of Jupyter in example situations like:
 
 - Python script preparation.
-- Your workload fits comfortably on a single GPU.
-- Interactive capabilities are needed. 
+- Workload fits comfortably on a single GPU (NVIDIA V100 16GB).
+- Interactive capabilities needed. 
 
 whereas Summit is recommended in example situations like:
 
-- Your Python script has support for multi-gpu/multi-node execution via dask-cuda.
 - Large workloads.
+- Long runtimes on Summit's high memory nodes.
+- Your Python script has support for multi-gpu/multi-node execution via dask-cuda.
 - Your Python script is single GPU but requires `concurrent job steps <https://docs.olcf.ornl.gov/systems/summit_user_guide.html?highlight=jsrun%20steps#concurrent-job-steps>`_.
 
 RAPIDS on `Jupyter <https://docs.olcf.ornl.gov/services_and_applications/jupyter/overview.html>`_
@@ -120,11 +121,11 @@ The following script provides a general pattern to run job steps concurrently wi
     module load ums-gen119
     module load nvidia-rapids/0.18
 
-    jsrun --nrs 1 --tasks_per_rs 1 --cpu_per_rs 1 --gpu_per_rs 1 --smpiargs="off" \ 
+    jsrun --nrs 1 --tasks_per_rs 1 --cpu_per_rs 1 --gpu_per_rs 1 --smpiargs="-disable_gpu_hooks" \ 
           python /my_path/my_rapids_script.py dataset_part01 &
-    jsrun --nrs 1 --tasks_per_rs 1 --cpu_per_rs 1 --gpu_per_rs 1 --smpiargs="off" \ 
+    jsrun --nrs 1 --tasks_per_rs 1 --cpu_per_rs 1 --gpu_per_rs 1 --smpiargs="-disable_gpu_hooks" \ 
           python /my_path/my_rapids_script.py dataset_part02 &
-    jsrun --nrs 1 --tasks_per_rs 1 --cpu_per_rs 1 --gpu_per_rs 1 --smpiargs="off" \ 
+    jsrun --nrs 1 --tasks_per_rs 1 --cpu_per_rs 1 --gpu_per_rs 1 --smpiargs="-disable_gpu_hooks" \ 
           python /my_path/my_rapids_script.py dataset_part03 &
     ...
     wait
@@ -209,9 +210,7 @@ The following script will run a dask-cuda cluster across two compute nodes, then
 
     echo "Done!"
    
-Note twelve dask-cuda-workers are executed, one per each available GPU, ``--memory-limit`` is set to 82GB and  ``--device-memory-limit`` is set to 16GB. If using Summit's high-memory nodes ``--memory-limit`` can be increased and setting ``--device-memory-limit`` to 32 GB  and ``--rmm-pool-size`` to 30GB or so is recommended.
-
-. Also note the LSF script waits after the dask-scheduler and dask-cuda-workers calls.
+Note twelve dask-cuda-workers are executed, one per each available GPU, ``--memory-limit`` is set to 82GB and  ``--device-memory-limit`` is set to 16GB. If using Summit's high-memory nodes ``--memory-limit`` can be increased and setting ``--device-memory-limit`` to 32 GB  and ``--rmm-pool-size`` to 30GB or so is recommended. Also note it is recommeded to wait some seconds for the dask-scheduler and dask-cuda-workers to start.
 
 A distributed RAPIDS python script should perform four main tasks as shown in the following script. First, connecting to the dask-scheduler; second, wait for all workers to start; third, do some computation, and fourth, shutdown the dask-cuda-cluster.
 
@@ -258,18 +257,15 @@ The RAPIDS module was build with `UCX <https://dask-cuda.readthedocs.io/en/lates
 
 Using UCX requires the use of the ``--protocol ucx`` option in the dask-scheduler call and, ``--enable-nvlink`` and ``--enable-infiniband`` options in the dask-cuda-worker call as show next:
 
-
-minor changes in the dask-scheduler and dask-cuda-worker calls as shown next:
-
 .. code-block:: bash
 
     #BSUB -P <PROJECT>
     #BSUB -W 0:05
     #BSUB -alloc_flags "gpumps smt4 NVME"
     #BSUB -nnodes 2
-    #BSUB -J rapids_dask_test_tcp
-    #BSUB -o rapids_dask_test_tcp_%J.out
-    #BSUB -e rapids_dask_test_tcp_%J.out
+    #BSUB -J rapids_dask_test_ucx
+    #BSUB -o rapids_dask_test_ucx_%J.out
+    #BSUB -e rapids_dask_test_ucx_%J.out
 
     PROJ_ID=<project>
 
