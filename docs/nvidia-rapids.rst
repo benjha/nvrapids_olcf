@@ -241,3 +241,8 @@ A distributed RAPIDS python script should perform four main tasks as shown in th
         print("Shutting down the cluster")
         workers_list = list(workers_info)
         disconnect (client, workers_list)
+
+Launching the dask-scheduler and dask-cuda-workers using UCX (work in progress on ppc64le architecture)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
