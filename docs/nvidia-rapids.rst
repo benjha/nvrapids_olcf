@@ -55,7 +55,7 @@ whereas Summit is recommended in example situations like:
 RAPIDS on `Jupyter <https://docs.olcf.ornl.gov/services_and_applications/jupyter/overview.html>`_
 ==================
 
-RAPIDS is provided in Jupyter following the next `instructions <https://docs.olcf.ornl.gov/services_and_applications/jupyter/overview.html#example-creating-a-conda-environment-for-rapids>`_.
+RAPIDS is provided in Jupyter following  `these instructions <https://docs.olcf.ornl.gov/services_and_applications/jupyter/overview.html#example-creating-a-conda-environment-for-rapids>`_.
 
 Note that Python scripts prepared on Jupyter can be deployed on Summit if they use the same RAPIDS version. Use ``!jupyter nbconvert --to script my_notebook.ipynb`` to convert notebook files to Python scripts.
 
@@ -70,7 +70,7 @@ RAPIDS is provided on Summit through the ``module load`` command:
     module load ums-gen119
     module load nvidia-rapids/0.18
 
-The RAPIDS module loads ``gcc/7.4.0``, ``cuda/10.1.243`` and ``python/3.7.0-anaconda3-5.3.0`` modules. For a complete list of available packages, use ``conda list`` command after loading this module. 
+The RAPIDS module loads ``gcc/7.4.0``, ``cuda/10.1.243`` and ``python/3.7.0-anaconda3-5.3.0`` modules. For a complete list of available packages, use ``conda list`` command after loading these modules. 
 
 The RAPIDS module also defines a set of environment variables to take advantage of `UCX <https://dask-cuda.readthedocs.io/en/latest/ucx.html>`_, an optimized communication framework for high-performance networking using Summit's NVLink and Infiniband communication interfaces.
 
@@ -96,9 +96,9 @@ As an example, the following LSF script will run a single-GPU RAPIDS script in o
     jsrun --nrs 1 --tasks_per_rs 1 --cpu_per_rs 1 --gpu_per_rs 1 --smpiargs="-disable_gpu_hooks" \ 
           python $CONDA_PREFIX/examples/cudf/cudf_test.py
 
-From the ``jsrun`` options, note the ``--smpiargs="off"`` flag is being used. Disabling smpiargs allows non Spectrum MPI codes run with CUDA.
+From the ``jsrun`` options, note the ``--smpiargs="-disable_gpu_hooks"`` flag is being used. Disabling gpu hooks allows non Spectrum MPI codes run with CUDA.
 
-Note this option is for illustrative purposes and not recommended to run RAPIDS on Summit since it underutilizes resources. If your RAPIDS code is single GPU, consider `Jupyter <https://docs.olcf.ornl.gov/services_and_applications/jupyter/overview.html#example-creating-a-conda-environment-for-rapids>`_ or the concurrent job steps option.
+Note the "RAPIDS basic execution" option is for illustrative purposes and not recommended to run RAPIDS on Summit since it underutilizes resources. If your RAPIDS code is single GPU, consider `Jupyter <https://docs.olcf.ornl.gov/services_and_applications/jupyter/overview.html#example-creating-a-conda-environment-for-rapids>`_ or the concurrent job steps option.
 
 Concurrent job steps with RAPIDS
 --------------------------------
@@ -143,7 +143,7 @@ Running RAPIDS multi-gpu/multi-node workloads requires a dask-cuda cluster. Sett
 - `dask-scheduler <https://docs.dask.org/en/latest/setup/cli.html#dask-scheduler>`_.
 - `dask-cuda-workers <https://dask-cuda.readthedocs.io/en/latest/worker.html#worker>`_.
 
-Once the dask-cluster is running, the RAPIDS script should `connect to <https://dask-cuda.readthedocs.io/en/latest/ucx.html#client>`_  to the dask-cuda cluster. 
+Once the dask-cluster is running, the RAPIDS script should perform four main tasks. First, connect to the dask-scheduler; second, wait for all workers to start; third, do some computation, and fourth, shutdown the dask-cuda-cluster.
 
 Reference of multi-gpu/multi-node operation with cuDF, cuML, cuGraph is available in the next links:
 
@@ -154,7 +154,7 @@ Reference of multi-gpu/multi-node operation with cuDF, cuML, cuGraph is availabl
 Launching the dask-scheduler and dask-cuda-workers
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The following script will run a dask-cuda cluster across two compute nodes, then it executes a python script.
+The following script will run a dask-cuda cluster on two compute nodes, then it executes a Python script.
 
 .. code-block:: bash
 
@@ -212,7 +212,7 @@ The following script will run a dask-cuda cluster across two compute nodes, then
    
 Note twelve dask-cuda-workers are executed, one per each available GPU, ``--memory-limit`` is set to 82GB and  ``--device-memory-limit`` is set to 16GB. If using Summit's high-memory nodes ``--memory-limit`` can be increased and setting ``--device-memory-limit`` to 32 GB  and ``--rmm-pool-size`` to 30GB or so is recommended. Also note it is recommeded to wait some seconds for the dask-scheduler and dask-cuda-workers to start.
 
-A distributed RAPIDS python script should perform four main tasks as shown in the following script. First, connecting to the dask-scheduler; second, wait for all workers to start; third, do some computation, and fourth, shutdown the dask-cuda-cluster.
+As mentioned earlier, the RAPIDS code should perform four main tasks as shown in the following script. First, connect to the dask-scheduler; second, wait for all workers to start; third, do some computation, and fourth, shutdown the dask-cuda-cluster.
 
 .. code-block:: bash
     
