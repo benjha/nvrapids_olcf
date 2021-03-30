@@ -93,7 +93,7 @@ As an example, the following LSF script will run a single-GPU RAPIDS script in o
     module load ums-gen119
     module load nvidia-rapids/0.18
 
-    jsrun --nrs 1 --tasks_per_rs 1 --cpu_per_rs 1 --gpu_per_rs 1 --smpiargs="off" \ 
+    jsrun --nrs 1 --tasks_per_rs 1 --cpu_per_rs 1 --gpu_per_rs 1 --smpiargs="-disable_gpu_hooks" \ 
           python $CONDA_PREFIX/examples/cudf/cudf_test.py
 
 From the ``jsrun`` options, note the ``--smpiargs="off"`` flag is being used. Disabling smpiargs allows non Spectrum MPI codes run with CUDA.
@@ -130,7 +130,7 @@ The following script provides a general pattern to run job steps concurrently wi
     ...
     wait
 
-Be aware of different OLCF's queues and scheduling policies to make best use of `regular <https://docs.olcf.ornl.gov/systems/summit_user_guide.html#job-priority-by-processor-count>`_ and `large-memory <https://docs.olcf.ornl.gov/systems/summit_user_guide.html#batch-hm-queue-policy>`_ Summit nodes.
+Be aware of different OLCF's queues and scheduling policies to make best use of `regular <https://docs.olcf.ornl.gov/systems/summit_user_guide.html#job-priority-by-processor-count>`_ and `high memory <https://docs.olcf.ornl.gov/systems/summit_user_guide.html#batch-hm-queue-policy>`_ Summit nodes.
 
 Distributed RAPIDS execution
 ----------------------------
