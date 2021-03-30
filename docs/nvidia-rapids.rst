@@ -129,7 +129,7 @@ The following script provides a general pattern to run job steps concurrently wi
     ...
     wait
 
-Be aware of different OLCF's queues and scheduling policies to make best use of `regular <https://docs.olcf.ornl.gov/systems/summit_user_guide.html#batch-queue-policy>`_ and `large-memory <https://docs.olcf.ornl.gov/systems/summit_user_guide.html#batch-hm-queue-policy>`_ Summit nodes.
+Be aware of different OLCF's queues and scheduling policies to make best use of `regular <https://docs.olcf.ornl.gov/systems/summit_user_guide.html#job-priority-by-processor-count>`_ and `large-memory <https://docs.olcf.ornl.gov/systems/summit_user_guide.html#batch-hm-queue-policy>`_ Summit nodes.
 
 Distributed RAPIDS execution
 ----------------------------
