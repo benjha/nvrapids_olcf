@@ -153,7 +153,7 @@ Reference of multi-gpu/multi-node operation with cuDF, cuML, cuGraph is availabl
 Launching the dask-scheduler and dask-cuda-workers
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The following script will run a dask-cuda cluster accross two compute nodes, then it execute a python script that connects to the dask-cuda cluster.
+The following script will run a dask-cuda cluster across two compute nodes, then it executes a python script.
 
 .. code-block:: bash
 
@@ -202,7 +202,46 @@ The following script will run a dask-cuda cluster accross two compute nodes, the
 
     echo "Done!"
    
-Note a dask-cuda-worker is executed per each available GPU.
+Note twelve dask-cuda-workers are executed, one per each available GPU. Also note the LSF script waits after the dask-scheduler and dask-cuda-workers calls, however it is recommended to 
+use the `wait_for_workers <https://docs.dask.org/en/latest/futures.html?highlight=wait_for_workers#distributed.Client.wait_for_workers>`_.
+
+
+explicitly wait for all the dask-cuda-workers in the python script as shown in the next script:
+
+that connects to the dask-scheduler, wait for the dask-cuda-workers to start and then it shutdowns the dask-cuda cluster.
 
 .. code-block:: bash
+    
+    import sys
+    from dask.distributed import Client
 
+    def disconnect(client, workers_list):
+        client.retire_workers(workers_list, close_workers=True)
+        client.shutdown()
+
+    if __name__ == '__main__':
+
+        sched_file = str(sys.argv[1]) #scheduler file
+        num_workers = int(sys.argv[2]) # number of workers to wait for
+
+        # Connects to the dask-cuda-cluster
+        client = Client(scheduler_file=sched_file)
+        print("client information ",client)
+        
+        # Blocks until num_workers are ready
+        print("Waiting for " + str(num_workers) + " workers...")
+        client.wait_for_workers(n_workers=num_workers)
+
+        
+        workers_info=client.scheduler_info()['workers']
+        connected_workers = len(workers_info)
+        print(str(connected_workers) + " workers connected")
+
+        # Do computation
+        # ...
+        # ...
+
+        #Next lines will shutdown the DASK Cluster and eventually the LSF jobs
+        print("Shutting down the cluster")
+        workers_list = list(workers_info)
+        disconnect (client, workers_list)
