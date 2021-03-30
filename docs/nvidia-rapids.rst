@@ -203,7 +203,7 @@ The following script will run a dask-cuda cluster across two compute nodes, then
     echo "Done!"
    
 Note twelve dask-cuda-workers are executed, one per each available GPU. Also note the LSF script waits after the dask-scheduler and dask-cuda-workers calls, however it is recommended to 
-use the [`wait_for_workers <https://docs.dask.org/en/latest/futures.html?highlight=wait_for_workers#distributed.Client.wait_for_workers>``_]
+use the ``wait_for_workers <https://docs.dask.org/en/latest/futures.html?highlight=wait_for_workers#distributed.Client.wait_for_workers>``_
 
 
 explicitly wait for all the dask-cuda-workers in the python script as shown in the next script:
