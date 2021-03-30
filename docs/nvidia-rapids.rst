@@ -220,11 +220,11 @@ A distributed RAPIDS python script should perform four main tasks as shown in th
         sched_file = str(sys.argv[1]) #scheduler file
         num_workers = int(sys.argv[2]) # number of workers to wait for
 
-        # Connects to the dask-cuda-cluster
+        # 1. Connects to the dask-cuda-cluster
         client = Client(scheduler_file=sched_file)
         print("client information ",client)
         
-        # Blocks until num_workers are ready
+        # 2. Blocks until num_workers are ready
         print("Waiting for " + str(num_workers) + " workers...")
         client.wait_for_workers(n_workers=num_workers)
 
@@ -233,11 +233,11 @@ A distributed RAPIDS python script should perform four main tasks as shown in th
         connected_workers = len(workers_info)
         print(str(connected_workers) + " workers connected")
 
-        # Do computation
+        # 3. Do computation
         # ...
         # ...
 
-        #Next lines will shutdown the DASK Cluster and eventually the LSF jobs
+        # 4. Shutting down the dask-cuda-cluster
         print("Shutting down the cluster")
         workers_list = list(workers_info)
         disconnect (client, workers_list)
