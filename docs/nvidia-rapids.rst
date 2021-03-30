@@ -129,6 +129,8 @@ The following script provides a general pattern to run job steps concurrently wi
     ...
     wait
 
+Be aware of different OLCF's queues and scheduling policies to make best use of `regular <https://docs.olcf.ornl.gov/systems/summit_user_guide.html#batch-queue-policy>`_ and `large-memory <https://docs.olcf.ornl.gov/systems/summit_user_guide.html#batch-hm-queue-policy>`_ Summit nodes.
+
 Distributed RAPIDS execution
 ----------------------------
 
@@ -151,7 +153,7 @@ Reference of multi-gpu/multi-node operation with cuDF, cuML, cuGraph is availabl
 Launching the dask-scheduler and dask-cuda-workers
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The following script will run a dask-cuda cluster accross two compute nodes. The script launches the dask-scheduler in a batch node and twelve dask-cuda-workers in the compute nodes.
+The following script will run a dask-cuda cluster accross two compute nodes, then it execute a python script that connects to the dask-cuda cluster.
 
 .. code-block:: bash
 
