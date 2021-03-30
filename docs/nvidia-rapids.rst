@@ -190,7 +190,14 @@ The following script will run a dask-cuda cluster across two compute nodes, then
     #Wait for the dask-scheduler to start
     sleep 10
 
-    #Wait for WORKERS 
+    jsrun --rs_per_host 6 --tasks_per_rs 1 --cpu_per_rs 2 --gpu_per_rs 1 --smpiargs="-disable_gpu_hooks" \
+          dask-cuda-worker --nthreads 1 --memory-limit 82GB --device-memory-limit 16GB --rmm-pool-size=15GB \
+                           --death-timeout 60  --interface ib0 --scheduler-file $SCHEDULER_FILE --local-directory $WORKER_DIR \
+                           --no-dashboard &
+
+    #Wait for WORKERS
+    sleep 10 
+
     WORKERS=12
 
     python -u $CONDA_PREFIX/examples/dask-cuda/verify_dask_cuda_cluster.py $SCHEDULER_FILE $WORKERS
@@ -245,6 +252,66 @@ A distributed RAPIDS python script should perform four main tasks as shown in th
 Launching the dask-scheduler and dask-cuda-workers using UCX (work in progress on ppc64le architecture)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The RAPIDS module was build with `UCX <https://dask-cuda.readthedocs.io/en/latest/ucx.html>`_  an optimized communication framework for high-performance networking, to support Summit's NVLink and Infiniband communication interfaces. 
+The RAPIDS module was build with `UCX <https://dask-cuda.readthedocs.io/en/latest/ucx.html>`_, an optimized communication framework for high-performance networking, to support Summit's NVLink and Infiniband communication interfaces. 
+
+Using UCX requires the use of the ``--protocol ucx`` option in the dask-scheduler call and, ``--enable-nvlink`` and ``--enable-infiniband`` options in the dask-cuda-worker call as show next:
+
+
+minor changes in the dask-scheduler and dask-cuda-worker calls as shown next:
+
+.. code-block:: bash
+
+    #BSUB -P <PROJECT>
+    #BSUB -W 0:05
+    #BSUB -alloc_flags "gpumps smt4 NVME"
+    #BSUB -nnodes 2
+    #BSUB -J rapids_dask_test_tcp
+    #BSUB -o rapids_dask_test_tcp_%J.out
+    #BSUB -e rapids_dask_test_tcp_%J.out
+
+    PROJ_ID=<project>
+
+    module load ums
+    module load ums-gen119
+    module load nvidia-rapids/0.18
+
+    SCHEDULER_DIR=$MEMBERWORK/$PROJ_ID/dask
+    WORKER_DIR=/mnt/bb/$USER
+
+    if [ ! -d "$SCHEDULER_DIR" ]
+    then
+        mkdir $SCHEDULER_DIR
+    fi
+
+    SCHEDULER_FILE=$SCHEDULER_DIR/my-scheduler.json
+
+    echo 'Running scheduler'
+    jsrun --nrs 1 --tasks_per_rs 1 --cpu_per_rs 1 --smpiargs="-disable_gpu_hooks" \
+          dask-scheduler --interface ib0 --protocol ucx \
+                         --scheduler-file $SCHEDULER_FILE \
+                         --no-dashboard --no-show &
+
+    #Wait for the dask-scheduler to start
+    sleep 10
+
+    jsrun --rs_per_host 6 --tasks_per_rs 1 --cpu_per_rs 2 --gpu_per_rs 1 --smpiargs="-disable_gpu_hooks" \
+          dask-cuda-worker --nthreads 1 --memory-limit 82GB --device-memory-limit 16GB --rmm-pool-size=15GB \
+                           --enable-nvlink --enable-infiniband \
+                           --death-timeout 60  --interface ib0 --scheduler-file $SCHEDULER_FILE --local-directory $WORKER_DIR \
+                           --no-dashboard &
+
+    #Wait for WORKERS
+    sleep 10 
+
+    WORKERS=12
+
+    python -u $CONDA_PREFIX/examples/dask-cuda/verify_dask_cuda_cluster.py $SCHEDULER_FILE $WORKERS
+
+    wait
+
+    #clean DASK files
+    rm -fr $SCHEDULER_DIR
+
+    echo "Done!"
 
 
