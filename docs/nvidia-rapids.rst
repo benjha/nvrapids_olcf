@@ -157,11 +157,11 @@ The following script will run a dask-cuda cluster accross two compute nodes. The
 
     #BSUB -P <PROJECT>
     #BSUB -W 0:05
-    #BSUB -alloc_flags "gpumps smt4"
+    #BSUB -alloc_flags "gpumps smt4 NVME"
     #BSUB -nnodes 2
-    #BSUB -J rapids_dask_test
-    #BSUB -o rapids_dask_test_%J.out
-    #BSUB -e rapids_dask_test_%J.out
+    #BSUB -J rapids_dask_test_tcp
+    #BSUB -o rapids_dask_test_tcp_%J.out
+    #BSUB -e rapids_dask_test_tcp_%J.out
 
     PROJ_ID=<project>
 
@@ -169,32 +169,36 @@ The following script will run a dask-cuda cluster accross two compute nodes. The
     module load ums-gen119
     module load nvidia-rapids/0.18
 
-    dask_dir=$MEMBERWORK/$PROJ_ID/dask
-    if [ ! -d "$dask_dir" ]
+    SCHEDULER_DIR=$MEMBERWORK/$PROJ_ID/dask
+    WORKER_DIR=/mnt/bb/$USER
+
+    if [ ! -d "$SCHEDULER_DIR" ]
     then
-        mkdir $dask_dir
+        mkdir $SCHEDULER_DIR
     fi
 
+    SCHEDULER_FILE=$SCHEDULER_DIR/my-scheduler.json
+
     echo 'Running scheduler'
-    jsrun --rs_per_host 1 --tasks_per_rs 1 --cpu_per_rs 1 \
-          dask-scheduler --interface ib0 --scheduler-file $DASK_DIR/my-scheduler.json \
+    jsrun --nrs 1 --tasks_per_rs 1 --cpu_per_rs 1 --smpiargs="-disable_gpu_hooks" \
+          dask-scheduler --interface ib0 \
+                         --scheduler-file $SCHEDULER_FILE \
                          --no-dashboard --no-show &
 
     #Wait for the dask-scheduler to start
     sleep 10
 
-    echo 'Running workers'
-    jsrun --rs_per_host 6 --tasks_per_rs 1 --cpu_per_rs 2 --gpu_per_rs 1 --smpiargs='off' \
-          dask-cuda-worker --nthreads 1 --memory-limit 82GB --device-memory-limit 16GB --rmm-pool-size 15GB \
-                           --death-timeout 60  --interface ib0 --scheduler-file $DASK_DIR/my-scheduler.json --local-directory $DASK_DIR \
-                           --no-dashboard &
+    #Wait for WORKERS 
+    WORKERS=12
 
-    #Wait for some workers to start
-    sleep 5
+    python -u $CONDA_PREFIX/examples/dask-cuda/verify_dask_cuda_cluster.py $SCHEDULER_FILE $WORKERS
 
-    #verify_dask_cuda_cluster.py wait for WORKERS
-    WORKERS=3    
-    python $CONDA_PREFIX/examples/dask-cuda/verify_dask_cuda_cluster.py $DASK_DIR/my-scheduler.json $WORKERS
+    wait
+
+    #clean DASK files
+    rm -fr $SCHEDULER_DIR
+
+    echo "Done!"
    
 Note a dask-cuda-worker is executed per each available GPU.
 
