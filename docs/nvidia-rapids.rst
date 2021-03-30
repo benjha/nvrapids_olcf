@@ -209,7 +209,9 @@ The following script will run a dask-cuda cluster across two compute nodes, then
 
     echo "Done!"
    
-Note twelve dask-cuda-workers are executed, one per each available GPU and ``--device-memory-limit`` is set to 16GB. If using Summit's high-memory nodes setting  ``--device-memory-limit`` to 32 GB is recommended. Also note the LSF script waits after the dask-scheduler and dask-cuda-workers calls.
+Note twelve dask-cuda-workers are executed, one per each available GPU, ``--memory-limit`` is set to 82GB and  ``--device-memory-limit`` is set to 16GB. If using Summit's high-memory nodes ``--memory-limit`` can be increased and setting ``--device-memory-limit`` to 32 GB  and ``--rmm-pool-size`` to 30GB or so is recommended.
+
+. Also note the LSF script waits after the dask-scheduler and dask-cuda-workers calls.
 
 A distributed RAPIDS python script should perform four main tasks as shown in the following script. First, connecting to the dask-scheduler; second, wait for all workers to start; third, do some computation, and fourth, shutdown the dask-cuda-cluster.
 
