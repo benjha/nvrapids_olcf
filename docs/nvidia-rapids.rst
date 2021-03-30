@@ -245,4 +245,6 @@ A distributed RAPIDS python script should perform four main tasks as shown in th
 Launching the dask-scheduler and dask-cuda-workers using UCX (work in progress on ppc64le architecture)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+The RAPIDS module was build with `UCX <https://dask-cuda.readthedocs.io/en/latest/ucx.html>`_  an optimized communication framework for high-performance networking, to support Summit's NVLink and Infiniband communication interfaces. 
+
 
