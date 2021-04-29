@@ -1,0 +1,30 @@
+#!/bin/bash
+
+module load gcc/9.3.0
+module load cmake/3.18.2
+module load python/3.7.0-anaconda3-5.3.0
+module load cuda/11.0.3
+module load netlib-lapack/3.8.0
+
+export LD_LIBRARY_PATH=$CONDA_PREFIX/lib:$LD_LIBRARY_PATH
+export CUDA_TOOLKIT_LIB_PATH=$CUDA_TOOLKIT_ROOT_DIR/lib64
+export CLANG_TOOLS_PATH=$CONDA_PREFIX/bin
+export CUDA_HOME=$CUDA_DIR
+export LDFLAGS="-L$CUDA_DIR/lib64":"-L$CONDA_PREFIX/lib"
+export CC=$(which gcc)
+export CXX=$(which g++)
+export PARALLEL_LEVEL=4
+
+export UMS_DIR=/sw/summit/ums/gen119
+export ENV_DIR=$UMS_DIR/nvrapids_0.19_gcc_9.3.0
+
+export PATH=$UMS_DIR/ibm-java-ppc64le-110/jdk-11.0.10+9/bin:$PATH
+export PATH=$CONDA_PREFIX/apache-maven-3.6.3/bin:$PATH
+
+export JAVA_HOME=$UMS_DIR/ibm-java-ppc64le-110/jdk-11.0.10+9/lib/j9vm/libjvm.so
+
+export LAPACK=$OLCF_NETLIB_LAPACK_ROOT/lib64/liblapack.so
+export BLAS=$OLCF_NETLIB_LAPACK_ROOT/lib64/libcblas.so
+
+source activate $ENV_DIR
+

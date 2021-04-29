@@ -1,0 +1,98 @@
+name: rapids_0.19_gcc_9.3.0
+channels:
+  - conda-forge
+dependencies:
+    - black=19.10
+    - boost
+    - boost-cpp=1.74.0
+    - brotli
+    - bz2file
+
+    - cachetools
+    - cppzmq=4.7.1
+    - cysignals
+    - cython>=0.29,<0.30
+
+    - dask=2021.4.0
+    - dask-ml
+    - dask_labextension
+    - distributed>=2.22.0,<=2021.4.0
+    - dlpack=0.3
+    - double-conversion
+    - doxygen=1.8.20
+
+    - fastavro=0.23.5
+    - fastrlock
+    - flake8=3.8.3
+    - flatbuffers=1.10.0
+    - fsspec=0.7.4
+
+    - gflags
+    - gmock
+    - gtest
+
+    - hypothesis
+
+    - ipython
+    - isort=5.0.7
+
+    - joblib
+    - jpype1=1.0.2
+    - jupyter-server-proxy
+    - jupyterlab
+    - jupyterlab-nvdashboard
+
+    - libhwloc
+    - libutf8proc
+
+    - mimesis 
+    - mypy=0.782
+
+    - ncurses
+    - netifaces=0.10.9
+    - networkx>=2.5.1
+    - nodejs
+    - notebook
+    - numba=0.52.0
+    - numpy=1.19.5
+    - numpydoc
+    - nvtx>=0.2.1
+
+    - orc=1.6.4
+
+    - packaging
+    - pandas=1.1.5
+    - pre_commit
+    - protobuf=3.13.0
+    - pyhive=0.6.2 
+    - pynvml
+    - python=3.7
+    - pytest-timeout
+    - pytest=5.4.3
+    - pytest-benchmark
+    - pytest-xdist
+    - python-louvain
+    
+    - rapidjson=1.1.0
+    - recommonmark
+    
+    - scikit-learn=0.23.1
+    - scipy=1.5.1
+    - snappy
+    - sphinx-copybutton
+    - sphinx-markdown-tables
+    - sphinx_rtd_theme
+    - spdlog=1.7.0
+    - statsmodels
+    - streamz
+    
+    - thrift-cpp=0.13.0
+    - treelite=1.1.0
+    - typing_extensions
+    
+    - umap-learn=0.5.1
+    
+    - zeromq=4.3.3
+    - zlib
+    - zstd
+
