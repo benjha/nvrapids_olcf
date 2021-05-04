@@ -153,4 +153,6 @@ This is a requirement for RAPIDS.
 ```
 ./blazingsql.sh v0.19.0
 ```
+### Automatic deployment
 
+TODO: define env. variables to control component's  versions and pack all this in one script
