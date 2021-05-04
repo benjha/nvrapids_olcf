@@ -46,7 +46,74 @@ Most of these dependencies are configured to be installed in `CONDA_PREFIX` dire
 
 #### Install LLVM and clang 8.0.1
 
+This is a requirement for RAPIDS.
+
 ```
 ./clang_8.0.1.sh
 ```
 
+#### Build/Install NCCL
+
+This is a requirement for CuPy and RAPIDS.
+
+```
+./nccl.sh v2.9.6-1
+```
+
+#### Install cuTENSOR (requires nvidia developer account)
+
+cuTENSOR 1.2.0 can't be distributable by third-parties thus you need to download it from developer.nvidia.com. This is a requirement for CuPy.
+
+```
+./cutensor.sh
+```
+
+#### Build/Install CuPy 
+
+This is a requirement for RAPIDS.
+
+```
+./cupy.sh v8.6.0
+```
+
+#### Build/Install UCX
+
+This is a requirement for RAPIDS and Blazing SQL.
+
+```
+./ucx.sh v1.8.1
+```
+
+#### Install JAVA SDK 11
+
+This is a requirement for BlazingSQL.
+
+```
+./java-jdk.sh
+```
+
+#### Install apache-maven-3.6.3
+
+This is a requirement for BlazingSQL.
+
+```
+./maven.sh
+```
+
+#### Build/Install LIBcypher-parser v0.6.2
+
+This is a requirement for RAPIDS.
+
+```
+./libcypher-parser.sh
+```
+
+#### Build/Install FAISS
+
+This is a requirement for RAPIDS.
+
+```
+./faiss.sh v1.7.0
+```
+
+### Build and Install RAPIDS
