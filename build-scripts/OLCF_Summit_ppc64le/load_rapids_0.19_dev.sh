@@ -19,9 +19,9 @@ export UMS_DIR=/sw/summit/ums/gen119
 export ENV_DIR=$UMS_DIR/nvrapids_0.19_gcc_9.3.0
 
 export PATH=$UMS_DIR/ibm-java-ppc64le-110/jdk-11.0.10+9/bin:$PATH
-export PATH=$CONDA_PREFIX/apache-maven-3.6.3/bin:$PATH
+export PATH=$ENV_DIR/apache-maven-3.6.3/bin:$PATH
 
-export JAVA_HOME=$UMS_DIR/ibm-java-ppc64le-110/jdk-11.0.10+9/lib/j9vm/libjvm.so
+export JAVA_HOME=$UMS_DIR/ibm-java-ppc64le-110/jdk-11.0.10+9
 
 export LAPACK=$OLCF_NETLIB_LAPACK_ROOT/lib64/liblapack.so
 export BLAS=$OLCF_NETLIB_LAPACK_ROOT/lib64/libcblas.so
