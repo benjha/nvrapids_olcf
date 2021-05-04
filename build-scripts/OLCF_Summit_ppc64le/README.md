@@ -30,3 +30,9 @@ source load_rapids_0.19_dev.sh
 ```
 
 In addition to load the required modules and environment variables to build from source, `load_rapids_0.19_dev.sh` also activates the RAPIDS environment that previously was created in `ENV_DIR`.
+
+### Building and/or installing RAPIDS dependencies
+
+Once the RAPIDS environment and the building environment is enabled, the next steps consist in building and/or installing RAPIDS dependencies that are not available in the conda-forge channel or require specific configurations from Summit.
+
+#### Install LLVM and clang 8.0.1
