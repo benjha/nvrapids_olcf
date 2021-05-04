@@ -116,4 +116,41 @@ This is a requirement for RAPIDS.
 ./faiss.sh v1.7.0
 ```
 
-### Build and Install RAPIDS
+### Build and Install RAPIDS and BlazingSQL
+
+#### Build/Install RMM
+
+```
+./rmm.sh v0.19.0
+```
+
+#### Build/Install cudf
+
+```
+./cudf.sh v0.19.0
+```
+
+#### Build/Install cuML
+
+```
+./cuml.sh v0.19.0
+```
+
+#### Build/Install cuGraph
+
+```
+./cugraph.sh v0.19.0
+```
+
+#### Build/Install dask-cuda
+
+```
+./dask-cuda.sh v0.19.0
+```
+
+#### Build/Install BlazingSQL
+
+```
+./blazingsql.sh v0.19.0
+```
+

@@ -11,6 +11,5 @@ else
    git checkout $1
    export LAPACK=$OLCF_NETLIB_LAPACK_ROOT/lib64/liblapack.so
    export BLAS=$OLCF_NETLIB_LAPACK_ROOT/lib64/libcblas.so
-   #export PARALLEL_LEVEL=1
-   ./build.sh libcugraph cugraph  -n 
+   ./build.sh libcugraph cugraph
 fi

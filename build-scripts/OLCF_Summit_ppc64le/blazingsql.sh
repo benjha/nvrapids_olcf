@@ -15,7 +15,5 @@ else
    export GPU_ARCHS="70"
    export CMAKE_CUDA_ARCHITECTURES="70"
    
-   #export CPPFLAGS="-I$CONDA_PREFIX/include/libcudf/libcudacxx"
-   #export PARALLEL_LEVEL=1
    ./build.sh -t disable-aws-s3 disable-google-gs disable-mysql disable-sqlite disable-postgresql
 fi
