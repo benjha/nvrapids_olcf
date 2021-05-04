@@ -6,7 +6,14 @@ RAPIDS deployment involves three steps:
 - Build from source and/or install RAPIDS dependencies that are not available in the conda-forge channel. Build from source and/or install RAPIDS dependencies that require optimizations.
 - Build from source and install CuPy, RAPIDS and BlazingSQL.
 
-## Manual deployment
+## Supervised deployment
+
+Clone this repository in a temporal directory an go to `OLCF_Summit_ppc64le` directory.
+
+```
+git clone https://github.com/benjha/nvrapids_olcf.git tmp
+cd tmp/build-scripts/OLCF_Summit_ppc64le
+```
 
 ### Setting-up RAPIDS environment
 
@@ -35,4 +42,11 @@ In addition to load the required modules and environment variables to build from
 
 Once the RAPIDS environment and the building environment is enabled, the next steps consist in building and/or installing RAPIDS dependencies that are not available in the conda-forge channel or require specific configurations from Summit.
 
+Most of these dependencies are configured to be installed in `CONDA_PREFIX` directory.
+
 #### Install LLVM and clang 8.0.1
+
+```
+./clang_8.0.1.sh
+```
+
