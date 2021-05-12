@@ -5,9 +5,8 @@
 This repository includes the next directories:
 
 - docs Provides documentation for the OLCF's user community to use:
-  - [`NVIDIA RAPIDS`](https://github.com/benjha/nvrapids_olcf/tree/branch-0.18/docs/nvidia-rapids.rst)
-  - DASK
-  - BlazingSQL
+  - [`NVIDIA RAPIDS`](https://github.com/benjha/nvrapids_olcf/tree/branch-0.19/docs/nvidia-rapids.rst)
+  - [`BlazingSQL`](https://github.com/benjha/nvrapids_olcf/tree/branch-0.19/docs/blazingsql.rst)
 
 - examples
 
