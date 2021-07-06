@@ -116,6 +116,14 @@ This is a requirement for RAPIDS.
 ./faiss.sh v1.7.0
 ```
 
+#### Build/Install Arrow
+
+This is a requirement for RAPIDS.
+
+```
+./arrow.sh apache-arrow-1.0.1
+```
+
 ### Build and Install RAPIDS and BlazingSQL
 
 #### Build/Install RMM
