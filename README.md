@@ -1,4 +1,4 @@
-# Data Analytics Software Stack at OLCF
+# GPU accelerated Data Analytics Software Stack at OLCF
 
 ## Repository Organization
 
