@@ -8,11 +8,15 @@ RAPIDS deployment involves three steps:
 
 ### Automatic deployment
 
-`super_script.sh` packs all the scripts necessary to build from source and deploy RMM, cuDF, cuML, cuGRAPH, BLAZING SQL and CuPy. 
+`super_script.sh` packs all the scripts necessary to build from source and deploy RMM, cuDF, cuML, cuGRAPH, BLAZING SQL and CuPy. To start the installation process use the next command:
 
-The scripts are getting some generalization to support deployments on `ppc64le`, `armv8` and `x86_64` architectures. Currently, this script has been tested on OLCF's Summit supercomputer which is a ppc64le machine. 
+```
+./super_script.sh
+```
 
 For your own deployments, you'll need to modify the environment variables defined at the beginning of this script. Hopefully all the directory paths are solved correctly and the build will succeed, otherwise feel free to add your own modifications that fits your system. Our intention is only to support clusters at the DOE's Leadership Computing Facilities.
+
+The scripts are getting some generalization to support deployments on `ppc64le`, `armv8` and `x86_64` architectures. Currently, this script has been tested on OLCF's Summit supercomputer which is a ppc64le machine. 
 
 To learn more about how this scipt works check the "Supervised deployment" section.
 
