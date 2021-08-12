@@ -1,7 +1,9 @@
-name: rapids_0.19_gcc_9.3.0
+name: nvrapids_21.08_gcc_9.3.0
 channels:
   - conda-forge
 dependencies:
+    - abseil-cpp
+
     - black=19.10
     - boost
     - boost-cpp=1.74.0
@@ -9,17 +11,22 @@ dependencies:
     - bz2file
 
     - cachetools
+    - cffi>=1.10.0
+    - clang=11.0.0
+    - clang-tools=11.0.0
+    - click
+    - cmake_setuptools>=0.1.3
     - cppzmq=4.7.1
     - cysignals
     - cython>=0.29,<0.30
 
-    - dask=2021.4.0
+    - dask>=2021.6.0
     - dask-ml
     - dask_labextension
-    - distributed>=2.22.0,<=2021.4.0
-    - dlpack=0.3
+    - distributed>=2021.6.0
+    - dlpack>=0.5,<0.6.0a0
     - double-conversion
-    - doxygen=1.8.20
+    - doxygen>=1.8.20
 
     - fastavro=0.23.5
     - fastrlock
@@ -32,41 +39,54 @@ dependencies:
     - gtest
 
     - hypothesis
+    - hdbscan
 
     - ipython
-    - isort=5.0.7
+    - isort=5.6.4
 
+    - jbig
     - joblib
+    - jpeg
     - jpype1=1.0.2
     - jupyter-server-proxy
     - jupyterlab
     - jupyterlab-nvdashboard
 
+    - lapack
     - libhwloc
     - libutf8proc
+    - libwebp-base
+    - libxcb
 
     - mimesis 
     - mypy=0.782
+    - mamba
 
     - ncurses
     - netifaces=0.10.9
     - networkx>=2.5.1
+    - nltk
     - nodejs
-    - notebook
-    - numba=0.52.0
+    - notebook>=0.5.0
+    - numba>=0.53.1
     - numpy=1.19.5
     - numpydoc
     - nvtx>=0.2.1
 
+    - openslide
+    - openblas
     - orc=1.6.4
+    - openjdk=11.0.9.1
 
     - packaging
-    - pandas=1.1.5
+    - pandas>=1.0,<1.3.0dev0
+    - pip
     - pre_commit
     - protobuf=3.13.0
     - pyhive=0.6.2 
     - pynvml
     - python=3.7
+    - pytest-cov
     - pytest-timeout
     - pytest=5.4.3
     - pytest-benchmark
@@ -74,25 +94,32 @@ dependencies:
     - python-louvain
     
     - rapidjson=1.1.0
+    - re2
     - recommonmark
     
-    - scikit-learn=0.23.1
+    - scikit-image=0.18.1
+    - scikit-learn>=0.23.1
     - scipy=1.5.1
+    - seaborn
     - snappy
     - sphinx-copybutton
     - sphinx-markdown-tables
     - sphinx_rtd_theme
-    - spdlog=1.7.0
+    - spdlog>=1.8.5,<1.9
     - statsmodels
     - streamz
     
     - thrift-cpp=0.13.0
-    - treelite=1.1.0
+    - transformers
+    - treelite=2.0.0
     - typing_extensions
     
     - umap-learn=0.5.1
+
+    - xz
+
+    - yasm
     
     - zeromq=4.3.3
     - zlib
     - zstd
-

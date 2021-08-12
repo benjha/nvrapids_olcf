@@ -9,5 +9,6 @@ else
    git clone https://github.com/rapidsai/cudf.git $CUDF_DIR
    cd $CUDF_DIR
    git checkout $1
+   export Arrow_DIR=$CONDA_PREFIX
    ./build.sh libcudf cudf dask_cudf
 fi

@@ -1,20 +1,18 @@
 #!/bin/bash
 
+echo $CUDA_HOME
+
 if [ "$1" == "" ]; then
     echo "Specify Arrow version"
     echo "example: "
     echo "    ./arrow.sh apache-arrow-1.0.1"
 else
     ARROW_DIR=$1
-    ARROW_BUILD_DIR=${ARROW_DIR}/cpp/build
+    ARROW_BUILD_DIR=cpp/build
 
-    # x86 disable the next lines
-    # git clone https://github.com/apache/arrow.git $ARROW_DIR
-    # cd $ARROW_DIR
-    # git checkout $1
-    
-    # ppc64le fix 
-    git clone -b fix/power9 --depth 1  https://github.com/williamBlazing/arrow $ARROW_DIR
+    git clone https://github.com/apache/arrow.git $ARROW_DIR
+    cd $ARROW_DIR
+    git checkout $1
 
     mkdir -p ${ARROW_BUILD_DIR}
     cd  ${ARROW_BUILD_DIR}
@@ -43,6 +41,7 @@ else
       -DARROW_PYTHON=ON \
       -DARROW_S3=OFF \
       -DARROW_CUDA=ON \
+      -DARROW_IPC=ON \
       -DARROW_SIMD_LEVEL=NONE \
       -DARROW_WITH_BROTLI=ON \
       -DARROW_WITH_BZ2=ON \
@@ -52,8 +51,19 @@ else
       -DARROW_WITH_ZSTD=ON \
       ..
 
+    if [ $? -ne 0 ]; then
+        echo '---------ARROW configuration error'
+        exit 1
+    fi
+
     make -j${PARALLEL_LEVEL}
+
+    if [ $? -ne 0 ]; then
+        echo '---------ARROW make error'
+        exit 1
+    fi
     make install
+
 
     cd ../../python
 
@@ -75,4 +85,8 @@ else
     python setup.py build_ext --inplace
     python setup.py install
 
+    if [ $? -ne 0 ]; then
+        echo '---------ARROW pybindings build error'
+        exit 1
+    fi
 fi

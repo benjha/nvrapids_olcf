@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# https://docs.cupy.dev/en/stable/reference/environment.html
+
 if [ "$1" == "" ]; then
     echo "Specify CuPy version"
     echo "example: "

@@ -10,5 +10,5 @@ else
    cd $CUML_DIR
    git checkout $1
    export CMAKE_GENERATOR="Unix Makefiles"
-   ./build.sh libcuml cuml --nvtx --singlegpu --buildfaiss
+   ./build.sh libcuml cuml --nvtx
 fi
