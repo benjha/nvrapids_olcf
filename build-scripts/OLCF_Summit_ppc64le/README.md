@@ -20,6 +20,16 @@ The scripts are getting some generalization to support deployments on `ppc64le`,
 
 To learn more about how this scipt works check the "Supervised deployment" section.
 
+### Automatic deployment cuCIM
+
+ciCIM 21.08 has different dependencies with respect to RAPIDS, thus it should be deployed in a different conda environment. To start its installation process use the next command:
+
+```
+./super_script_cucim.sh
+```
+
+For your own deployments, you'll need to modify the environment variables defined at the beginning of this script.
+
 ## Supervised deployment
 
 Clone this repository in a temporal directory an go to `OLCF_Summit_ppc64le` directory.

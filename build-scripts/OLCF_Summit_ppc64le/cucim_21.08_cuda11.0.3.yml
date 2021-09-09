@@ -1,0 +1,25 @@
+name: nvrapids_cucim_21.08_gcc_9.3.0
+channels:
+  - conda-forge
+dependencies:
+  - ipython 
+
+  - scikit-image=0.18.1
+  - openslide
+  - zlib
+  - jpeg
+  - xz
+  - zstd
+  - libwebp-base  # [linux or osx]
+  
+  - numpy
+  
+  - mamba
+
+  - scipy
+  - python=3.8
+  - click
+  - yasm # [x86_64]
+  - isort
+  - flake8
+

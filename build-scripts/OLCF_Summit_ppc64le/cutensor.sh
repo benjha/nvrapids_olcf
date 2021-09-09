@@ -12,7 +12,6 @@ else
 
     if [ $CUTENSOR_VER = '1.3.0' ]; then
         CUTENSOR_MIN_VER=3
-        wget https://developer.download.nvidia.com/compute/cutensor/${CUTENSOR_VER}/local_installers/libcutensor-linux-${PLATFORM}-${CUTENSOR_VER}.3.tar.gz
     elif [ $CUTENSOR_VER = '1.2.2' ]; then
         CUTENSOR_MIN_VER=5
     fi
