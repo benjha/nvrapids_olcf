@@ -22,7 +22,7 @@ To learn more about how this scipt works check the "Supervised deployment" secti
 
 ### Automatic deployment cuCIM
 
-ciCIM 21.08 has different dependencies with respect to RAPIDS, thus it should be deployed in a different conda environment. To start its installation process use the next command:
+cuCIM 21.08 has different dependencies with respect to RAPIDS, thus it should be deployed in a different conda environment. To start its installation process use the next command:
 
 ```
 ./super_script_cucim.sh
