@@ -1,6 +1,7 @@
 #!/bin/bash
 
 echo $CUDA_HOME
+export LD=/usr/bin/ld
 
 if [ "$1" == "" ]; then
     echo "Specify Arrow version"
@@ -20,6 +21,7 @@ else
     cmake .. \
       -DCMAKE_C_COMPILER=gcc \
       -DCMAKE_CXX_COMPILER=g++ \
+      -DCMAKE_LINKER=/usr/bin/ld \
       -DCMAKE_BUILD_TYPE=Release \
       -DCMAKE_INSTALL_LIBDIR="lib" \
       -DCMAKE_INSTALL_PREFIX=${CONDA_PREFIX} \
