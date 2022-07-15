@@ -5,27 +5,32 @@ dependencies:
     - abseil-cpp
 
     - binutils
-    - black=19.10
+    - black=22.3.0
     - boost
     - boost-cpp=1.74.0
+    - breathe
     - brotli
     - bz2file
 
     - cachetools
     - cffi>=1.10.0
-    - clang=11.0.0
-    - clang-tools=11.0.0
+    - clang=11.1.0
+    - clang-tools=11.1.0
     - click
     - cmake_setuptools>=0.1.3
     - cmake-format=0.6.11
+    - cmakelang=0.6.13
     - cppzmq=4.7.1
+    - cuda-python=11.5
+    - cupy=10.6.0
     - cysignals
     - cython>=0.29,<0.30
 
-    - dask>=2021.09.1
+    - dask==2022.05.2
+    - dask-glm
     - dask-ml
     - dask_labextension
-    - distributed>=2021.09.1
+    - distributed==2022.05.2
     - dlpack>=0.5,<0.6.0a0
     - double-conversion
     - doxygen>=1.8.20
@@ -36,6 +41,7 @@ dependencies:
     - flatbuffers=1.10.0
     - fsspec>=0.7.4
 
+    - gcovr>=5.0
     - gflags
     - gmock
     - gtest
@@ -61,7 +67,7 @@ dependencies:
 
     - mimesis<4.1
     - mypy=0.782
-    - mamba
+    - moto
 
     - nbsphinx
     - ncurses
@@ -70,25 +76,26 @@ dependencies:
     - nltk
     - nodejs
     - notebook>=0.5.0
-    - numba>=0.53.1
-    - numpy=1.19.5
+    - numba>=0.54
+    - numpy>=1.19
     - numpydoc
     - nvtx>=0.2.1
 
     - openslide
     - openblas
-    - orc=1.6.4
+    - orc=1.7.3
     - openjdk=11.0.9.1
 
     - packaging
-    - pandas>=1.0,<1.4444.0dev0
+    - pandoc
+    - pandas>=1.0,<1.5.0dev0
     - pip
-    - pre_commit
-    - protobuf=3.13.0
+    - pre-commit
+    - protobuf>=3.20.1,<3.21.0a0
     - pydata-sphinx-theme
     - pyhive=0.6.2 
-    - pynvml>=8.0.3
-    - python=3.7
+    - pynvml>=11.0.0
+    - python=3.8
     - pytest-cov
     - pytest-timeout
     - pytest=5.4.3
@@ -100,13 +107,16 @@ dependencies:
     - rapidjson=1.1.0
     - re2
     - recommonmark
-    
+
+    - scikit-build>=0.13.1
     - scikit-image=0.18.1
-    - scikit-learn>=0.23.1
+    - scikit-learn=0.24
     - scipy
     - seaborn
     - snappy
+    - sphinx
     - sphinxcontrib-websupport
+    - sphinx-autobuild
     - sphinx-copybutton
     - sphinx-markdown-tables
     - sphinx_rtd_theme
@@ -116,10 +126,10 @@ dependencies:
     
     - thrift-cpp=0.13.0
     - transformers<=4.10.3
-    - treelite=2.1.0
+    - treelite=2.4.0
     - typing_extensions
     
-    - umap-learn=0.5.1
+    - umap-learn
 
     - xz
 

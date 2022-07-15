@@ -1,8 +1,7 @@
 #!/bin/bash
 
-
 module load cmake/3.20.2
-module load cuda/11.0.3
+module load cuda/11.5.2
 module load gcc/9.3.0
 
 export CC=$(which gcc)
@@ -42,8 +41,8 @@ else
         --with-cuda="$CUDA_DIR" \
         --enable-mt \
 	--with-knem=$KNEM_DIR \
-        --with-rdmacm=/usr \
-        --with-verbs=/usr \
+        --with-rdmacm \
+        --with-verbs \
 
     make -j${PARALLEL_LEVEL}
     make install

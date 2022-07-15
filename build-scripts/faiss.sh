@@ -2,7 +2,7 @@
 
 
 module load cmake/3.20.2
-module load cuda/11.0.3
+module load cuda/11.5.2
 module load gcc/9.3.0
 
 export CC=$(which gcc)
@@ -20,9 +20,9 @@ if [ "$1" == "" ]; then
     echo "    ./faiss.sh v1.7.0"
 else
    FAISS_DIR=faiss_$1
-#   git clone https://github.com/facebookresearch/faiss.git $FAISS_DIR
+   git clone https://github.com/facebookresearch/faiss.git $FAISS_DIR
    cd $FAISS_DIR
-#   git checkout $1
+   git checkout $1
 
    mkdir -p build
    cd build
@@ -35,8 +35,9 @@ else
       -DCMAKE_INSTALL_PREFIX=${CONDAENV_LOCATION} \
       -DCMAKE_CUDA_ARCHITECTURES="70" \
       -DFAISS_ENABLE_PYTHON=OFF \
+      -DBUILD_TESTING=OFF \
       ..
 
-    make -j${PARALLEL_LEVEL}
+    make -j2
     make install
 fi

@@ -1,37 +1,37 @@
 #!/bin/bash
 
-export RAPIDS_VER=21.10
-export PLATFORM=${PLATFORM:-ppc64le}
-export BRANCH_VER=branch-$RAPIDS_VER
+export CONDA_PLATFORM=ppc64le
+export CONDA_VER=2022.05
 
 export ROOT_DIR=/sw/summit/ums/gen119/nvrapids
-export ANACONDA_DIR=$ROOT_DIR/bin/anaconda-base
+export CONDA_DIR=$ROOT_DIR/bin/anaconda-${CONDA_VER}
 
+export RAPIDS_VER=v22.06.00
 export CONDAENV_NAME=nvrapids-${RAPIDS_VER}
-export CONDAENV_LOCATION="${ANACONDA_DIR}/envs/${CONDAENV_NAME}"
+export CONDAENV_LOCATION="${CONDA_DIR}/envs/${CONDAENV_NAME}"
 
 export SRC_DIR=$ROOT_DIR/src/nvrapids_${RAPIDS_VER}_src
-export YAML_SPEC=rapids_${RAPIDS_VER}_cuda11.0.3.yml
-export UCX_VER=v1.11.x
-export UCX_PY_VER=v0.22.01
-export MAVEN_VER=3.6.3
+export YAML_SPEC=rapids_22.06_cuda_11.5.yml
+export UCX_VER=v1.12.1
+export UCX_PY_VER=v0.26.00
 export FAISS_VER=v1.7.0
-export ARROW_VER=apache-arrow-5.0.0
-export CUTENSOR_VER=1.3.0
+export ARROW_VER=release-8.0.0
+export CUTENSOR_VER=1.4.0
 export NCCL_VER=v2.9.9-1
-export CUPY_VER=v9.2.0
+export CUPY_VER=v10.6.0
 export MPI4PY_VER=3.1.1
-export RMM_VER=$BRANCH_VER
-export CUDF_VER=$BRANCH_VER
-export DASK_CUDA_VER=$BRANCH_VER
-export CUML_VER=$BRANCH_VER
-export CUGRAPH_VER=$BRANCH_VER
-export CUCIM_VER=$BRANCH_VER
-export BSQL_VER=$BRANCH_VER
+export RMM_VER=$RAPIDS_VER
+export CUDF_VER=$RAPIDS_VER
+export DASK_CUDA_VER=$RAPIDS_VER
+export CUML_VER=$RAPIDS_VER
+export CUGRAPH_VER=$RAPIDS_VER
+export RAFT_VER=$RAPIDS_VER
+export CUCIM_VER=$RAPIDS_VER
+export DASK_SQL_VER=2022.6.0
 
 echo '---------Setting-up Anaconda'
-#wget https://repo.anaconda.com/archive/Anaconda3-2021.05-Linux-${PLATFORM}.sh
-#bash Anaconda3-2021.05-Linux-${PLATFORM}.sh -b -p $ANACONDA_DIR
+#wget https://repo.anaconda.com/archive/Anaconda3-${CONDA_VER}-Linux-${CONDA_PLATFORM}.sh
+#bash Anaconda3-${CONDA_VER}-Linux-${CONDA_PLATFORM}.sh -b -p $CONDA_DIR
 
 echo '---------Creating conda environment from ' $YAML_SPEC
 #./create_conda_env.sh
@@ -59,6 +59,10 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
+echo
+read -p "---------Press <enter> to continue"
+echo
+
 echo '---------FAISS ' $FAISS_VER
 #./faiss.sh $FAISS_VER
 if [ $? -ne 0 ]; then
@@ -78,10 +82,10 @@ echo
 
 echo '---------UCX-PY ' $UCX_PY_VER
 #./ucx-py.sh $UCX_PY_VER
-
-echo '---------MAVEN ' $MAVEN_VER
-#./maven.sh $MAVEN_VER
-
+if [ $? -ne 0 ]; then
+    echo '---------UCX-PY build failed, cannot continue'
+    exit 1
+fi
 
 echo
 read -p "---------Press <enter> to continue"
@@ -90,7 +94,7 @@ echo
 echo '---------ARROW ' $ARROW_VER
 #./arrow.sh $ARROW_VER
 if [ $? -ne 0 ]; then
-    echo '---------ARROW failed, cannot continue' 
+    echo '---------ARROW build failed, cannot continue' 
     exit 1
 fi
 
@@ -106,7 +110,7 @@ if [ $? -ne 0 ]; then
 fi
 
 
-echo '---------NCCL $NCCL_VER '
+echo '---------NCCL ' $NCCL_VER
 #./nccl.sh $NCCL_VER
 if [ $? -ne 0 ]; then
     echo '---------NCCL failed, cannot continue'
@@ -134,6 +138,13 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
+echo '---------DASK-CUDA ' $DASK_CUDA_VER
+#./dask-cuda.sh $DASK_CUDA_VER
+if [ $? -ne 0 ]; then
+    echo '---------DASK CUDA build failed, cannot continue'
+    exit 1
+fi
+
 echo '---------CUDF ' $CUDF_VER
 #./cudf.sh $CUDF_VER
 if [ $? -ne 0 ]; then
@@ -146,13 +157,20 @@ echo
 read -p "---------Press <enter> to continue"
 echo
 
+echo '---------RAFT ' $RAFT_VER
+#./raft.sh $RAFT_VER
+if [ $? -ne 0 ]; then
+    echo '---------RAFT build failed, cannot continue'
+    exit 1
+fi
 
-echo '---------DASK-CUDA ' $DASK_CUDA_VER
-#./dask-cuda.sh $DASK_CUDA_VER
+echo
+read -p "---------Press <enter> to continue"
+echo
 
 
 echo '---------CUGRAPH ' $CUGRAPH_VER
-#./cugraph.sh $CUGRAPH_VER
+./cugraph.sh $CUGRAPH_VER
 if [ $? -ne 0 ]; then
     echo '---------CUGRAPH failed, cannot continue'
     exit 1
@@ -162,8 +180,8 @@ echo
 read -p "---------Press <enter> to continue"
 echo
 
-echo '---------BSQL ' $BSQL_VER
-#./blazingsql.sh $BSQL_VER
+echo '---------DASK-SQL ' $DASK_SQL_VER
+#./dask-sql.sh $BSQL_VER
 
 echo
 read -p "---------Press <enter> to continue"
@@ -171,7 +189,7 @@ echo
 
 
 echo '---------CUML ' $CUML_VER
-./cuml.sh $CUML_VER
+#./cuml.sh $CUML_VER
 
 echo
 read -p "---------Press <enter> to continue"

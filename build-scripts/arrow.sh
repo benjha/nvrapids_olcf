@@ -1,5 +1,7 @@
 #!/bin/bash
 
+
+
 echo $CUDA_HOME
 export LD=/usr/bin/ld
 
@@ -8,7 +10,7 @@ if [ "$1" == "" ]; then
     echo "example: "
     echo "    ./arrow.sh apache-arrow-1.0.1"
 else
-    ARROW_DIR=$1
+    ARROW_DIR=arrow_$1
     ARROW_BUILD_DIR=cpp/build
 
     git clone https://github.com/apache/arrow.git $ARROW_DIR
@@ -25,6 +27,7 @@ else
       -DCMAKE_BUILD_TYPE=Release \
       -DCMAKE_INSTALL_LIBDIR="lib" \
       -DCMAKE_INSTALL_PREFIX=${CONDA_PREFIX} \
+      -DARROW_DEPENDENCY_SOURCE=AUTO \
       -DARROW_BOOST_USE_SHARED=ON \
       -DARROW_BUILD_BENCHMARKS=OFF \
       -DARROW_BUILD_STATIC=OFF \

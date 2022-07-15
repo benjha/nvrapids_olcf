@@ -10,6 +10,7 @@ else
     cd $UCX_PY_DIR
     git checkout $1
     
-    python setup.py build_ext --inplace
-    pip install .
+    #python setup.py build_ext --inplace
+    #pip install .
+    pip install -v .
 fi
