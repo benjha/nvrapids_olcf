@@ -4,11 +4,11 @@ RAPIDS deployment involves three steps:
 
 - Create a conda environment from a base environment and install ppc64le RAPIDS dependencies available in the conda-forge channel.
 - Build from source and/or install RAPIDS dependencies that are not available in the conda-forge channel. Build from source and/or install RAPIDS dependencies that require optimizations.
-- Build from source and install CuPy, RAPIDS and BlazingSQL.
+- Build from source and install CuPy and RAPIDS.
 
 ### Automatic deployment
 
-`super_script.sh` packs all the scripts necessary to build from source and deploy RMM, cuDF, cuML, cuGRAPH, BLAZING SQL and CuPy. To start the installation process use the next command:
+`super_script.sh` packs all the scripts necessary to build from source and deploy RMM, cuDF, cuML, cuGRAPH, and CuPy. To start the installation process use the next command:
 
 ```
 ./super_script.sh
@@ -95,7 +95,7 @@ This is a requirement for RAPIDS.
 
 #### Build/Install UCX
 
-This is a requirement for RAPIDS and Blazing SQL.
+This is a requirement for RAPIDS.
 
 ```
 ./ucx.sh UCX_VER
@@ -103,7 +103,7 @@ This is a requirement for RAPIDS and Blazing SQL.
 
 #### Build/Install UCX-py
 
-This is a requirement for RAPIDS and Blazing SQL.
+This is a requirement for RAPIDS.
 
 ```
 ./ucx-py.sh $UCX_PY_VER
@@ -111,7 +111,7 @@ This is a requirement for RAPIDS and Blazing SQL.
 
 #### Install apache-maven
 
-This is a requirement for BlazingSQL.
+This is a requirement DASK-SQL.
 
 ```
 ./maven.sh $MAVEN_DIR
@@ -141,7 +141,7 @@ This is a requirement for RAPIDS.
 ./arrow.sh $ARROW_VER
 ```
 
-### Build and Install RAPIDS and BlazingSQL
+### Build and Install RAPIDS
 
 #### Build/Install RMM
 
@@ -173,8 +173,3 @@ This is a requirement for RAPIDS.
 ./dask-cuda.sh $DASK_CUDA_VER
 ```
 
-#### Build/Install BlazingSQL
-
-```
-./blazingsql.sh $BSQL_DIR
-```
